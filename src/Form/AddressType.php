@@ -27,12 +27,7 @@ class AddressType extends AbstractType
                 ])
             ->add('country', HiddenType::class, [
                 'data' => 'FR',
-                 ])
-            ->add('user_id', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-        ;
+                 ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
