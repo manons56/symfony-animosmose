@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ContactController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-success">{{ message }}</div>
+    {% endfor %}
+
+    {# Symfony lutte contre les failles XSS en échappant les variables dans twig(twig échappe les caractères spéciaux) #}
+    {{ form_start(contactForm) }}
+    {{ form_row(contactForm.nom) }}
+    {{ form_row(contactForm.email) }}
+    {{ form_row(contactForm.message) }}
+    {{ form_row(contactForm.envoyer) }}
+    {{ form_end(contactForm) }}
+
+
+{% endblock %}

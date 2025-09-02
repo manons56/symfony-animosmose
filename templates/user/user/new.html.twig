@@ -16,7 +16,9 @@
     {{ form_row(form.surname, {label: 'Prénom'}) }}
     {{ form_row(form.phone, {label: 'Numéro de téléphone'}) }}
     {{ form_row(form.email, {label: 'Email'}) }}
-    {{ form_row(form.plainPassword, {label: 'Mot de passe'}) }}
+    {{ form_label(form.plainPassword, 'Mot de passe') }}
+    {{ form_widget(form.plainPassword) }}
+   {{ form_errors(form.plainPassword) }}
     {{ form_row(form.address.street, {label: 'Adresse'}) }}
     {{ form_row(form.address.zipcode, {label: 'Code postal'}) }}
     {{ form_row(form.address.city, {label: 'Ville'}) }}

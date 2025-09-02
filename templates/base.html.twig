@@ -13,5 +13,35 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+
+
+       {#Combiner Twig et JS pour gestion des cookies: #}
+        {#twig va vérifier si le cookie existe, si non, affiche la banière#}
+        {#JS permet de cliquer sur accepter ou refuser, envoye le choix au serveur via fetch, masque ensuite la banière sans devoir recharger la page#}
+        {% if app.request.cookies.get('cookie') is not defined %}
+            <div id="cookie-banner">
+                Ce site utilise des cookies.
+                <button id="accept">Accepter</button>
+                <button id="reject">Refuser</button>
+            </div>
+        {% endif %}
+
+        <script>
+            // JS pour gérer le clic
+            document.getElementById('accept').addEventListener('click', () => sendConsent(true));
+            document.getElementById('reject').addEventListener('click', () => sendConsent(false));
+
+            function sendConsent(accept) {
+                fetch('/cookie', { // on envoie une requete HTTP à l'URL /cookie
+                    method: 'POST', //on envoie la requete en POST (on transmet des données)
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, // précise que le corps de la requete est encodé comme un formulaire, càd sous la forme clé=valeur
+                    body: 'accept=' + accept // le corps de la requete contient la donné accept avec la valeur du paramètre, si accept vaut true, accept=true, sinon accept=false
+                }).then(() => { // renvoie une promesse qui se résout quand la réponse du serveur arrive
+                    document.getElementById('cookie-banner').style.display = 'none'; // quand la réponse arrive, la banière de consentement va disparaitre car une réponse a été apportée
+                });
+            }
+        </script>
+
+
     </body>
 </html>

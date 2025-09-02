@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProductController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <a href="{{ path('app_shop_cart') }}">Voir mon panier</a>
+    <h1>Catalogue</h1>
+    <form method="GET" id="price-filter-form">
+        <label for="min-price">Prix minimum :</label>
+        <input type="number" name="min" id="min-price" value="{{ app.request.get('min') ?? 0 }}" min="0">
+
+        <label for="max-price">Prix maximum :</label>
+        <input type="number" name="max" id="max-price" value="{{ app.request.get('max') ?? 150 }}" min="0">
+
+        <button type="submit">Filtrer</button>
+    </form>
+
+    <ul>
+        {% for product in products %}
+            <li>
+                <a href="{{ path('app_product_show', {id: product.id}) }}">
+                    {{ product.name }}
+                    <img src="{{ asset(product.imgId.url) }}" alt="{{ product.name }}"/>
+
+
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

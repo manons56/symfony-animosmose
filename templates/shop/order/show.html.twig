@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande #{{ order.id }}{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Commande #{{ order.id }}</h1>
+    <p>Créée le : {{ order.date|date('d/m/Y H:i') }}</p>
+
+    <h3>Articles :</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Prix unitaire</th>
+            <th>Quantité</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in order.articles %}
+            <tr>
+                <td>{{ article.name }}</td>
+                <td>{{ article.price }} €</td>
+                <td>{{ article.quantity }}</td>
+                <td>{{ article.price * article.quantity }} €</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p><strong>Total de la commande : {{ order.total }} €</strong></p>
+
+    <a href="{{ path('app_product_list') }}">Retour au catalogue</a>
+</div>
+{% endblock %}

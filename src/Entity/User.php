@@ -22,11 +22,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotCompromisedPassword()]
-    #[Assert\PasswordStrength(minScore: Assert\PasswordStrength::STRENGTH_STRONG)]
-    #[Assert\Regex('/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,32}$/')]
+
     #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    private ?string $password = null; //mot de passe haché en base
+
+    // pas d'ORM\Column ici → ce champ n'est PAS stocké en BDD; mdp en clair juste temporaire
+    private ?string $plainPassword = null;
+
 
     #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
@@ -54,6 +56,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Orders::class, mappedBy: 'user_id')]
     private Collection $orders;
 
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -66,7 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return (string) $this->email;
     }
 
 
@@ -98,6 +105,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+
     }
 
     public function eraseCredentials(): void

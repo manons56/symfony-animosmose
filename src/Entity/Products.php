@@ -22,19 +22,19 @@ class Products
     #[ORM\JoinColumn(nullable: false)]
     private ?Pictures $img_id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
     private ?string $capacity = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private ?string $composition = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $analytics_components = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $nutritionnal_additive = null;
 
     #[ORM\Column(nullable: true)]

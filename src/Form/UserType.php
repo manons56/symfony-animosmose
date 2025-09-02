@@ -22,8 +22,31 @@ class UserType extends AbstractType
     {
         $builder
             ->add('plainPassword', PasswordType::class, [
-                'hash_property_path' => 'password',
                 'mapped' => false,
+                'label' => 'Mot de passe',
+                'attr' => ['autocomplete' => 'new-password'],
+                'constraints' => [
+                    new Assert\NotBlank([
+                        'message' => 'Veuillez saisir un mot de passe',
+                    ]),
+                    new Assert\Length([
+                        'min' => 8,
+                        'minMessage' => 'Votre mot de passe doit faire au moins {{ limit }} caractères',
+                        'max' => 32,
+                        'maxMessage' => 'Votre mot de passe ne peut pas dépasser {{ limit }} caractères',
+                    ]),
+                    new Assert\Regex([
+                        'pattern' => '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,32}$/',
+                        'message' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.',
+                    ]),
+                    /*new Assert\PasswordStrength([
+                        'minScore' => Assert\PasswordStrength::STRENGTH_MEDIUM,
+                        'message' => 'Votre mot de passe n’est pas assez fort.',
+                    ]),
+                    new Assert\NotCompromisedPassword([
+                        'message' => 'Ce mot de passe a été compromis dans des fuites de données.',
+                    ]), */
+                ],
                 ])
             ->add('name', TextType::class)
             ->add('surname',TextType::class)

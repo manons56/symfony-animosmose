@@ -2,6 +2,8 @@ security:
     # Hash des mots de passe
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+#Symfony utilise des services internes pour le hachage, par défaut c'est bcrypt ou argon1id
+
 
     # Providers : lecture des utilisateurs depuis l'entité User
     providers:
@@ -11,9 +13,9 @@ security:
                 property: email  # colonne utilisée comme identifiant
 
     # Firewalls : zones sécurisées et méthodes d'authentification
-    firewalls:
+    firewalls: #--> permet de définir les règles d'accès/authentification
         dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|images|js)/ #permet de définir quelles routes sont concernées
             security: false
         main:
             lazy: true
@@ -22,18 +24,24 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
+                #default_target_path: app_shop_cart_checkout
                 username_parameter: email
                 password_parameter: password
                 enable_csrf: true
             logout:
                 path: app_logout
                 # where to redirect after logout
-                # target: app_any_route
+                target: app_login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800   # 1 semaine
+                path: /
 
     # Contrôle d'accès (optionnel)
-    access_control:
-       # - { path: ^/admin, roles: ROLE_ADMIN }
-       #  - { path: ^/profile, roles: ROLE_USER }
+    access_control: #--> controle les roles utilisateurs par route
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/shop/order, roles: ROLE_USER }
+        - { path: ^/shop/cart/checkout, roles: ROLE_USER }
 
 # Configuration spécifique pour les tests (réduction des coûts de hash)
 when@test:

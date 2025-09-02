@@ -17,7 +17,7 @@ class Orders
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user_id = null;
+    private ?User $user = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $date = null;
@@ -29,16 +29,20 @@ class Orders
     #[ORM\JoinColumn(nullable: false)]
     private ?Address $address_id = null;
 
-    /**
-     * @var Collection<int, OrdersArticles>
-     */
-    #[ORM\OneToMany(targetEntity: OrdersArticles::class, mappedBy: 'order_id')]
-    private Collection $ordersArticles;
+    #[ORM\ManyToMany(targetEntity: Articles::class, inversedBy:"orders", cascade:["persist"])]
+    private Collection $articles;
+
+    #[ORM\Column(type:"decimal", precision:10, scale:2)]
+    private float $total;
 
     public function __construct()
     {
-        $this->ordersArticles = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+        $this->date = new \DateTimeImmutable();
+        $this->total = 0;
     }
+
+
 
     public function getId(): ?int
     {
@@ -47,12 +51,12 @@ class Orders
 
     public function getUserId(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): static
+    public function setUserId(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user_id = $user;
 
         return $this;
     }
@@ -93,33 +97,26 @@ class Orders
         return $this;
     }
 
-    /**
-     * @return Collection<int, OrdersArticles>
-     */
-    public function getOrdersArticles(): Collection
+    public function getArticles(): Collection  //renvoie la collection complète d’articles liés à cette commande.
     {
-        return $this->ordersArticles;
+        return $this->articles;
     }
 
-    public function addOrdersArticle(OrdersArticles $ordersArticle): static
+    public function addArticle(Articles $article): self  // permet d’ajouter un article à la commande.
     {
-        if (!$this->ordersArticles->contains($ordersArticle)) {
-            $this->ordersArticles->add($ordersArticle);
-            $ordersArticle->setOrderId($this);
+        if (!$this->articles->contains($article)) { //Vérifie si l’article est déjà dans la collection, si non, on l'ajoute
+            $this->articles[] = $article; //Ajoute l’article à la collection $articles.
+            $this->total += $article->getPrice() * $article->getQuantity();
+            $article->addOrder($this); //avec une relation bidirectionnelle entre Order et Article, il faut aussi dire à l’article qu’il appartient à cette commande.
+                                        // Donc on appelle addOrder() sur l’article.
         }
-
         return $this;
     }
 
-    public function removeOrdersArticle(OrdersArticles $ordersArticle): static
-    {
-        if ($this->ordersArticles->removeElement($ordersArticle)) {
-            // set the owning side to null (unless already changed)
-            if ($ordersArticle->getOrderId() === $this) {
-                $ordersArticle->setOrderId(null);
-            }
-        }
+    public function getTotal(): float { return $this->total; }
 
-        return $this;
-    }
+    // getTotal() permet simplement de lire le total
+    //Le total est géré automatiquement par la logique interne (addArticle()), donc il n’a pas besoin d’être modifiable directement.
+    // donc pas de setter nécessaire
+
 }

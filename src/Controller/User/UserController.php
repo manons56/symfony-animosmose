@@ -6,13 +6,14 @@ use App\Entity\User;
 use App\Entity\Address;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/user/user')]
-final class UserController extends AbstractController
+class UserController extends AbstractController
 {
     #[Route('', name: 'app_user_user')]
     public function index(): Response
@@ -23,7 +24,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $manager): Response
+    public function new(Request $request, EntityManagerInterface $manager,  UserPasswordHasherInterface $userPasswordHasher): Response
     {
 
         $user = new User();
@@ -51,7 +52,7 @@ final class UserController extends AbstractController
             $manager->persist($address); // on utilise l'adresse dans User donc il faut enregistrer l'adresse aussi dans la BDD depuis le UserController
             $manager->flush();
 
-
+            return $this->redirectToRoute('app_shop_order_show'); // redirection après création
 
         }
 

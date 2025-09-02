@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes{% endblock %}
+
+{% block body %}
+    <h1>Mes commandes</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Voir</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in order %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.date|date('d/m/Y H:i') }}</td>
+                <td>{{ order.total }} €</td>
+                <td><a href="{{ path('app_shop_order_show', {id: order.id}) }}">Voir</a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucune commande trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
