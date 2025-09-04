@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Orders>
      */
-    #[ORM\OneToMany(targetEntity: Orders::class, mappedBy: 'user_id')]
+    #[ORM\OneToMany(targetEntity: Orders::class, mappedBy: 'user')]
     private Collection $orders;
 
 

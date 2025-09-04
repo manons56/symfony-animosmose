@@ -52,7 +52,7 @@ class UserController extends AbstractController
             $manager->persist($address); // on utilise l'adresse dans User donc il faut enregistrer l'adresse aussi dans la BDD depuis le UserController
             $manager->flush();
 
-            return $this->redirectToRoute('app_shop_order_show'); // redirection après création
+            return $this->redirectToRoute('app_shop_order'); // redirection après création
 
         }
 

@@ -18,7 +18,7 @@ class AppFixtures extends Fixture
         $category->setName("Aliment chien");
 
         $image = new Pictures();
-        $image->setUrl("img/products/croquette_truite_canard.png")
+        $image->setUrl("croquette_truite_canard.png")
             ->setAlt("Paquet de croquette");
 
 

@@ -2,6 +2,8 @@
 
 namespace App\Controller\Shop;
 
+use App\Entity\User;
+use App\Entity\Address;
 use App\Entity\Orders;
 use App\Entity\Articles;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CartController extends AbstractController
 {
-    #[Route('/shop/cart', name: 'app_shop_cart')]
+    #[Route('/shop/cart', name: 'app_shop_cart')] // --> permet d'afficher le panier
         // Cette méthode sera accessible via /cart
         // Le nom de la route est "cart_index" (on s’en sert pour redirect ou path())
 
@@ -31,7 +33,7 @@ class CartController extends AbstractController
     }
 
 
-    #[Route('/shop/cart/add/{id}', name:'app_shop_cart_add')]
+    #[Route('/shop/cart/add/{id}', name:'app_shop_cart_add')] // --> permet d'ajouter un produit au panier
     // Route pour ajouter un produit/variant au panier
     // {id} est un paramètre de route (ex: /cart/add/5)
 
@@ -46,7 +48,7 @@ class CartController extends AbstractController
     }
 
 
-    #[Route('/shop/cart/remove/{id}', name:'app_shop_cart_remove')]
+    #[Route('/shop/cart/remove/{id}', name:'app_shop_cart_remove')] // --> permet de retirer un produit du panier
     // Route pour supprimer un produit/variant du panier
     // {id} correspond à l’identifiant du produit à retirer
 
@@ -61,7 +63,7 @@ class CartController extends AbstractController
     }
 
 
-    #[Route('/shop/cart/checkout', name:'app_shop_cart_checkout')]
+    #[Route('/shop/cart/checkout', name:'app_shop_cart_checkout')] // permet de valider le panier et transformer en commande
     public function checkout(CartService $cartService, EntityManagerInterface $manager): Response
     {
         $cartItems = $cartService->getCart(); //On récupère le contenu du panier depuis la session via le CartService.
@@ -73,20 +75,22 @@ class CartController extends AbstractController
 
         $order = new Orders();
         $order->setUser($this->getUser()); // ← ajoute l’utilisateur connecté
-
+        $address = $this->getUser()->getAddress(); // récupère l'adresse de l'utilisateur
+        $order->setAddressId($address);
 
         foreach ($cartItems as $item) { // on parcourt chaque item du panier
             $article = new Articles(); // on crée un article pour chaque item
-            $article->setVariant($item['variant'])
-                ->setLabel($item['variant']->getLabel())
+            $article->setVariantId($item['variant'])
                 ->setPrice($item['variant']->getPrice())
-                ->setQuantity($item['quantity']);
+                ->setQuantity($item['quantity'])
+                ->setOrder($order); // Important pour relier l’article à la commande
+                //Sans setOrder() sur l’article, Doctrine ne sait pas quel order_id mettre → les articles ne sont pas liés → $order->getArticles() reste vide.
 
-            $manager->persist($article); // doctrine gère l'insertion en base de l'article
             $order->addArticle($article); // on ajoute l'article à la commande via addArticle() créé dans Orders.php
+
         }
 
-        $manager->persist($order); // doctrine gère l'insertion en base de la commande
+        $manager->persist($order); // Avec cascade: persist, $manager->persist($order) suffit à Doctrine pour insérer à la fois la commande et tous les articles liés.
         $manager->flush(); // Doctrine exécute toutes les requêtes SQL en base : Création des Articles, Création de la commande, Liaison ManyToMany entre Order et Articles
 
 
@@ -94,10 +98,9 @@ class CartController extends AbstractController
         $this->addFlash('success', 'Commande créée avec succès !');
 
 
-        return $this->redirectToRoute('app_shop_order_show', ['id' => $order->getId()]);
-        //Redirection vers la page de détail de la commande, en passant l’ID de l’Order pour l’affichage.
+        return $this->redirectToRoute('app_shop_order');
+        //Redirection vers la page de la commande.
         //L’utilisateur voit donc un récapitulatif avec tous les articles et le total.
     }
-
 
 }

@@ -19,6 +19,8 @@ class Products
     private ?string $name = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    //persist → on enregistre (persist) un produit, Doctrine enregistre l’image associée si elle est nouvelle.
+    //remove → on supprime(remove) un produit, Doctrine supprime aussi l’image associée automatiquement.
     #[ORM\JoinColumn(nullable: false)]
     private ?Pictures $img_id = null;
 
@@ -50,7 +52,7 @@ class Products
     /**
      * @var Collection<int, Variants>
      */
-    #[ORM\OneToMany(targetEntity: Variants::class, mappedBy: 'product_id')]
+    #[ORM\OneToMany(targetEntity: Variants::class, mappedBy: 'product_id', cascade: ['persist', 'remove'])]
     private Collection $variants;
 
     public function __construct()

@@ -44,10 +44,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Produits', 'fas fa-box', Products::class);
 
         // Gestion des variantes
-        yield MenuItem::linkToCrud('Variantes', 'fas fa-tag', Variants::class);
+     //   yield MenuItem::linkToCrud('Variantes', 'fas fa-tag', Variants::class);
 
         // Gestion des images
-        yield MenuItem::linkToCrud('Images', 'fas fa-image', Pictures::class);
+      //  yield MenuItem::linkToCrud('Images', 'fas fa-image', Pictures::class);
 
         // Gestion des catégories
         yield MenuItem::linkToCrud('Catégories', 'fas fa-folder', Categories::class);

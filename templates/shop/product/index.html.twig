@@ -3,10 +3,6 @@
 {% block title %}Hello ProductController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
 <div class="example-wrapper">
     <a href="{{ path('app_shop_cart') }}">Voir mon panier</a>
@@ -21,17 +17,91 @@
         <button type="submit">Filtrer</button>
     </form>
 
-    <ul>
+    <div id="product-list" class="product-grid">
         {% for product in products %}
-            <li>
-                <a href="{{ path('app_product_show', {id: product.id}) }}">
-                    {{ product.name }}
-                    <img src="{{ asset(product.imgId.url) }}" alt="{{ product.name }}"/>
-
-
-                </a>
-            </li>
+            <a href="{{ path('app_product_show', {'id': product.id}) }}">
+            <div class="product-card">
+                <img src="{{  asset(product.imgId.url) }}" alt="{{ product.name }}" class="product-image">
+                <h3 class="product-name">{{ product.name }}</h3>
+            </div>
+          </a>
         {% endfor %}
-    </ul>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search');
+            const products = document.querySelectorAll('.product-card');
+
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                products.forEach(card => {
+                    const name = card.querySelector('.product-name').textContent.toLowerCase();
+                    card.style.display = name.includes(query) ? 'block' : 'none';
+                });
+            });
+        });
+    </script>
+
+
+
+    <style>
+        /* Styles simples pour les cartes et la barre de recherche */
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-input {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .product-name {
+            margin: 10px 0 5px;
+            font-size: 16px;
+        }
+
+        .product-price {
+            color: #333;
+            font-weight: bold;
+        }
+
+        a {
+            display: block;
+            text-decoration: none; /* pas de soulignement */
+            color: inherit; /* garde la couleur du texte */
+        }
+    </style>
+
+
 </div>
 {% endblock %}

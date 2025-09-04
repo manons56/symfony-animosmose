@@ -17,7 +17,8 @@
         <thead>
         <tr>
             <th>Produit</th>
-            <th>Prix unitaire</th>
+            <th>Variant</th>
+            <th>Prix</th>
             <th>Quantité</th>
             <th>Total</th>
         </tr>
@@ -25,7 +26,11 @@
         <tbody>
         {% for article in order.articles %}
             <tr>
-                <td>{{ article.name }}</td>
+                <td>{{ article.variantId.productId.name }}</td>
+                {# article.variantId → récupère le variant lié à l’article (getVariantId())
+                   variantId.product → récupère le produit lié au variant (getProduct())
+                    product.name → récupère le nom du produit #}
+                <td>{{ article.variantId.label }}</td>
                 <td>{{ article.price }} €</td>
                 <td>{{ article.quantity }}</td>
                 <td>{{ article.price * article.quantity }} €</td>

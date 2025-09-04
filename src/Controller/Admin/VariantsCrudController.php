@@ -4,7 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Variants;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
@@ -19,8 +21,9 @@ class VariantsCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
-            TextField::new('size', 'Taille'),
-            IntegerField::new('stock', 'Stock'),
+            TextField::new('label', 'Label'),
+            MoneyField::new('priceEuros', 'Prix')->setCurrency('EUR'),
+            BooleanField::new('isDefault', 'Par défaut'),
         ];
     }
 }

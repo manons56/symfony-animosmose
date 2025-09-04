@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\OrderStatus;
 use App\Repository\OrdersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,23 +24,26 @@ class Orders
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    private ?OrderStatus $status = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Address $address_id = null;
 
-    #[ORM\ManyToMany(targetEntity: Articles::class, inversedBy:"orders", cascade:["persist"])]
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: Articles::class, cascade:["persist", "remove"])]
     private Collection $articles;
 
     #[ORM\Column(type:"decimal", precision:10, scale:2)]
-    private float $total;
+    private string $total;
+
 
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->date = new \DateTimeImmutable();
         $this->total = 0;
+        $this->status = OrderStatus::Pending;
+
     }
 
 
@@ -49,14 +53,14 @@ class Orders
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUserId(?User $user): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user;
+        $this->user = $user;
 
         return $this;
     }
@@ -73,12 +77,12 @@ class Orders
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?OrderStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(OrderStatus $status): static
     {
         $this->status = $status;
 
@@ -106,9 +110,9 @@ class Orders
     {
         if (!$this->articles->contains($article)) { //Vérifie si l’article est déjà dans la collection, si non, on l'ajoute
             $this->articles[] = $article; //Ajoute l’article à la collection $articles.
+            $article->setOrder($this);
             $this->total += $article->getPrice() * $article->getQuantity();
-            $article->addOrder($this); //avec une relation bidirectionnelle entre Order et Article, il faut aussi dire à l’article qu’il appartient à cette commande.
-                                        // Donc on appelle addOrder() sur l’article.
+
         }
         return $this;
     }

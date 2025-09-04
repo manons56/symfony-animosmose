@@ -13,7 +13,7 @@ class Variants
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'variants')]
+    #[ORM\ManyToOne(targetEntity: Products::class, inversedBy: 'variants')]
     private ?Products $product_id = null;
 
     #[ORM\Column(length: 255)]
@@ -54,6 +54,11 @@ class Variants
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->label ?? 'Variant';
+    }
+
     public function getPrice(): ?int
     {
         return $this->price;
@@ -66,10 +71,18 @@ class Variants
         return $this;
     }
 
-    public function getFormattedPrice(): ?string
+    public function getPriceEuros(): float
     {
-        return number_format($this->price / 100, 2, ',', ' ') . '€';
+        return $this->price / 100;
     }
+
+    // Setter pour stocker en centimes
+    public function setPriceEuros(float $priceEuros): static
+    {
+        $this->price = (int)round($priceEuros * 100);
+        return $this;
+    }
+
 
     public function isDefault(): ?bool
     {

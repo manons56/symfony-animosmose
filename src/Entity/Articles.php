@@ -24,16 +24,13 @@ class Articles
     private ?int $quantity = null;
 
     #[ORM\Column(type:"decimal", precision:10, scale:2)]
-    private ?float $price = null;
+    private ?string $price = null;
 
 
-    #[ORM\ManyToMany(targetEntity: Orders::class, mappedBy:"articles")]
-    private Collection $orders;
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Orders $order = null;
 
-    public function __construct()
-    {
-        $this->orders = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -64,33 +61,27 @@ class Articles
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice(): ?string
     {
         return $this->price;
     }
 
-    public function setPrice(float $price): static
+    public function setPrice(string $price): static
     {
         $this->price = $price;
 
         return $this;
     }
 
-    public function getOrders(): Collection
+    public function getOrder(): ?Orders
     {
-        return $this->orders;
+        return $this->order;
     }
 
-    public function addOrder(Orders $order): static
+    public function setOrder(?Orders $order): static
     {
-        if (!$this->orders->contains($order)) { //"Si cette commande n’est pas encore dans la collection, je l’ajoute."
-            $this->orders[] = $order;
-        }
+        $this->order = $order;
         return $this;
     }
-    //Si tu avais un setter classique,ça poserait un problème : on remplacerait toute la collection existante.
-    //on veut juste ajouter une commande à la collection sans écraser celles déjà présentes.
-    //D’où l’idée du addOrder : On ajoute une seule commande à la collection.
-    //On garde toutes les commandes déjà présentes
 
 }

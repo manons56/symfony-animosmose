@@ -11,7 +11,7 @@ class PicturesCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Picture::class;
+        return Pictures::class;
     }
 
     public function configureFields(string $pageName): iterable

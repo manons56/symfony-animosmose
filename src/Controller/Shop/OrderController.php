@@ -19,15 +19,15 @@ final class OrderController extends AbstractController
         $user = $this->getUser();
 
         // On récupère uniquement les commandes de l’utilisateur connecté
-        $order = $ordersRepository->findBy(['user' => $user]);
+        $orders = $ordersRepository->findBy(['user' => $user]);
 
 
         return $this->render('shop/order/index.html.twig', [
-            'order' => $order,
+            'orders' => $orders,
         ]);
     }
 
-    #[Route('shop/order/{id}', name:'app_shop_order_show')]
+    #[Route('/shop/order/{id}', name:'app_shop_order_show')]
     #[IsGranted('ROLE_USER')]
     public function show(Orders $order): Response
     {

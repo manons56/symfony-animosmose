@@ -24,7 +24,7 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
-                #default_target_path: app_shop_cart_checkout
+                default_target_path: app_shop_cart_checkout
                 username_parameter: email
                 password_parameter: password
                 enable_csrf: true
@@ -32,6 +32,7 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 target: app_login
+
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800   # 1 semaine
