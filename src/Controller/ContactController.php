@@ -26,11 +26,16 @@ final class ContactController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) { // Token CSRF vérifié ici
             $data = $form->getData();
 
+            if(!empty($form->get('website')->getData())) {
+                $this->addFlash('error','Spam détecté !');
+                return $this->redirectToRoute('app_contact');
+            }
+
             $email = (new Email())
                 ->from($data['email'])
-                ->to('animosmose@gmail.com') // email de l'admin
+                ->to('manon.sara@3wa.io') // email de l'admin
                 ->subject('Nouveau message depuis le formulaire de contact')
-                ->text("Nom : {$data['nom']}\nEmail : {$data['email']}\nMessage : {$data['message']}");
+                ->text("Nom : {$data['nom']}\nPrénom : {$data['prenom']}\nTéléphone : {$data['telephone']}\nEmail : {$data['email']}\nMessage : {$data['message']}");
 
             $mailer->send($email);
 

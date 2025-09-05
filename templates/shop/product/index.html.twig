@@ -4,9 +4,11 @@
 
 {% block body %}
 
+
 <div class="example-wrapper">
     <a href="{{ path('app_shop_cart') }}">Voir mon panier</a>
     <h1>Catalogue</h1>
+    {# Filtre de prix #}
     <form method="GET" id="price-filter-form">
         <label for="min-price">Prix minimum :</label>
         <input type="number" name="min" id="min-price" value="{{ app.request.get('min') ?? 0 }}" min="0">
@@ -16,6 +18,11 @@
 
         <button type="submit">Filtrer</button>
     </form>
+
+    {# Barre de recherche #}
+    <div class="search-container">
+        <input type="text" id="search" class="search-input" placeholder="Rechercher un produit...">
+    </div>
 
     <div id="product-list" class="product-grid">
         {% for product in products %}
@@ -34,11 +41,14 @@
             const searchInput = document.getElementById('search');
             const products = document.querySelectorAll('.product-card');
 
-            searchInput.addEventListener('input', function() {
-                const query = this.value.toLowerCase();
-                products.forEach(card => {
-                    const name = card.querySelector('.product-name').textContent.toLowerCase();
+            searchInput.addEventListener('input', function() { //À chaque fois que l’utilisateur tape (ou efface) un caractère dans le champ de recherche, la fonction se déclenche.
+                const query = this.value.toLowerCase(); //récupère le texte saisi dans l’input et met tout en minuscules pour éviter les problèmes de casse
+                products.forEach(card => { //Pour chaque carte produit :
+                    const name = card.querySelector('.product-name').textContent.toLowerCase(); //On récupère son nom (élément avec .product-name).
                     card.style.display = name.includes(query) ? 'block' : 'none';
+                    //On compare ce nom avec la recherche (query).
+                    // Si le nom contient la recherche → la carte reste visible (display = 'block').
+                    // Sinon elle est cachée (display = 'none').
                 });
             });
         });
@@ -97,7 +107,7 @@
 
         a {
             display: block;
-            text-decoration: none; /* pas de soulignement */
+            text-decoration: none;
             color: inherit; /* garde la couleur du texte */
         }
     </style>

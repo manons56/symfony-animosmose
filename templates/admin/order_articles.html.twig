@@ -1,0 +1,22 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Produit</th>
+        <th>Variant</th>
+        <th>Quantité</th>
+        <th>Prix unitaire</th>
+        <th>Sous-total</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for article in field.value %}
+        <tr>
+            <td>{{ article.getVariantId().getProductId.getName() }}</td>
+            <td>{{ article.getVariantId().getLabel() }}</td>
+            <td>{{ article.getQuantity() }}</td>
+            <td>{{ article.getPrice() }} €</td>
+            <td>{{ article.getPrice() * article.getQuantity() }} €</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

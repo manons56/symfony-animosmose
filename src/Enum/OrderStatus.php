@@ -13,10 +13,10 @@ enum OrderStatus: string
     public function getLabel(): string
     {
         return match ($this) {
-            self::pending => 'En attente de paiement',
-            self::paid => 'Payée',
-            self::delivered => 'Livrée',
-            self::canceled => 'Annulée',
+            self::Pending => 'En attente de paiement',
+            self::Paid => 'Payée',
+            self::Delivered => 'Livrée',
+            self::Canceled => 'Annulée',
         };
     }
 }

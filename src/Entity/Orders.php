@@ -36,6 +36,8 @@ class Orders
     #[ORM\Column(type:"decimal", precision:10, scale:2)]
     private string $total;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $archived = false;
 
     public function __construct()
     {
@@ -122,5 +124,17 @@ class Orders
     // getTotal() permet simplement de lire le total
     //Le total est géré automatiquement par la logique interne (addArticle()), donc il n’a pas besoin d’être modifiable directement.
     // donc pas de setter nécessaire
+
+    public function isArchived(): bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): self
+    {
+        $this->archived = $archived;
+        return $this;
+    }
+
 
 }
