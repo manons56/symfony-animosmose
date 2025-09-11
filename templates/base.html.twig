@@ -1,47 +1,90 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="Animosmose">
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
+    {# --- POLICES & ICONES --- #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="{{ asset('build/images/logonavigateur.png')}}">
+
+    {# --- CSS PRINCIPAL COMPILÉ PAR ENCORE --- #}
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+<header class="header">
+    <img src="{{ asset('build/images/logo-animosmose.png')}}" alt='logo animosmose'/>
+    <section>
+        <nav>
+            <ul>
+                <li class="black-underline"><a class="li-text-black" href="{{ path('app_home') }}" aria-current="{% if current_page =='home' %}page{% endif %}">Accueil</a></li>
+                <li class="black-underline"><a class="li-text-black" href="{{ path('app_breeding') }}" aria-current="{%  if current_page =='breeding' %}page{% endif %}">Élevage cocker</a></li>
+                <li class="black-underline"><a class="li-text-black" href="{{ path('app_pension') }}" aria-current="{%  if current_page =='pension' %}page{% endif %}">Pension et éducation</a></li>
+                <li class="black-underline"><a class="li-text-black" href="{{ path('app_stable') }}" aria-current="{%  if current_page =='stable' %}page{% endif %}">Écurie</a></li>
+                <li class="black-underline"><a class="li-text-black" href="{{ path('app_contact') }}" aria-current="{%  if current_page =='contact' %}page{% endif %}">Contact</a></li>
+                <li class="white-underline"><a class="li-text-white" href="{{ path('app_product_list') }}" aria-current="{%  if current_page =='product' %}page{% endif %}">Notre boutique</a></li>
+            </ul>
+        </nav>
+    </section>
+</header>
+
+{# --- CONTENU DES PAGES --- #}
+{% block body %}{% endblock %}
+
+{# --- BANNIÈRE COOKIE --- #}
+{# % if app.request.cookies.get('cookie') is not defined %}
+    <div id="cookie-banner">
+        Ce site utilise des cookies.
+        <button id="accept">Accepter</button>
+        <button id="reject">Refuser</button>
+    </div>
+{% endif %}#}
 
 
-       {#Combiner Twig et JS pour gestion des cookies: #}
-        {#twig va vérifier si le cookie existe, si non, affiche la banière#}
-        {#JS permet de cliquer sur accepter ou refuser, envoye le choix au serveur via fetch, masque ensuite la banière sans devoir recharger la page#}
-        {% if app.request.cookies.get('cookie') is not defined %}
-            <div id="cookie-banner">
-                Ce site utilise des cookies.
-                <button id="accept">Accepter</button>
-                <button id="reject">Refuser</button>
+<footer class="footer">
+    <div class="footer-flex">
+        <div class="footer-col-left">
+            <img src="{{ asset('build/images/logo-animosmose.png')}}" alt='logo animosmose'/>
+            <div class="footer-flex-reseaux">
+                <a href='https://www.instagram.com/animosmose/'><i class="fa-brands fa-square-instagram fa-xl" style="color: #000000;"></i></a>
+                <a href='https://www.facebook.com/animosmose56'><i class="fa-brands fa-square-facebook fa-xl" style="color: #000000;"></i></a>
             </div>
-        {% endif %}
+            <span class="copyright">Copyright 2025 © Animosmose</span>
+        </div>
 
-        <script>
-            // JS pour gérer le clic
-            document.getElementById('accept').addEventListener('click', () => sendConsent(true));
-            document.getElementById('reject').addEventListener('click', () => sendConsent(false));
+        <p class="footer-nav shop-link"><a href="{{ path('app_product_list') }}">La boutique</a></p>
+        <div class="footer-nav">
+            <p><a href="{{ path('app_breeding') }}">Élevage</a></p>
+            <p><a href="{{ path('app_pension') }}">Pension</a></p>
+            <p><a href="{{ path('app_stable') }}">Écurie</a></p>
+            <p><a href="{{ path('app_contact') }}">Contact</a></p>
+            <p><a href="{{ path('app_interview') }}">On parle de nous !</a></p>
+        </div>
+        <div class="footer-nav">
+            <p>5 Le Petit Bodo</p>
+            <p>56230 Berric</p>
+            <p>06 25 81 48 45</p>
+            <p>animosmose@gmail.com</p>
 
-            function sendConsent(accept) {
-                fetch('/cookie', { // on envoie une requete HTTP à l'URL /cookie
-                    method: 'POST', //on envoie la requete en POST (on transmet des données)
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, // précise que le corps de la requete est encodé comme un formulaire, càd sous la forme clé=valeur
-                    body: 'accept=' + accept // le corps de la requete contient la donné accept avec la valeur du paramètre, si accept vaut true, accept=true, sinon accept=false
-                }).then(() => { // renvoie une promesse qui se résout quand la réponse du serveur arrive
-                    document.getElementById('cookie-banner').style.display = 'none'; // quand la réponse arrive, la banière de consentement va disparaitre car une réponse a été apportée
-                });
-            }
-        </script>
+        </div>
+        <div class="footer-nav">
+            <p><a href=''>CGV</a></p>
+            <p><a href=''>FAQ</a></p>
+            <p><a href=''>Mentions légales</a></p>
+        </div>
+    </div>
+</footer>
 
-
-    </body>
+{# --- SCRIPTS PRINCIPAUX (APP.JS) --- #}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
 </html>

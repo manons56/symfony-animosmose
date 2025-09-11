@@ -1,0 +1,71 @@
+@use "../abstracts" as *;
+
+
+/* s'assure que le conteneur ne génère pas d'overflow inattendu */
+.img-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;               /* images collées (pas d'espace entre elles) */
+    width: 100%;          /* prend toute la largeur disponible du parent */
+    max-width: 100%;      /* n'excède jamais la largeur du parent */
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;     /* coupe tout dépassement résiduel */
+}
+
+/* Variante A — chaque image occupe exactement 1/3 de la largeur */
+.img-container img {
+    flex: 0 0 calc(100% / 3); /* largeur fixe : 1/3 du conteneur */
+    width: 100%;              /* l'image remplit son "bloc" */
+    height: auto;             /* conserve les proportions */
+    display: block;           /* évite l'espace blanc sous les images */
+    min-width: 0;             /* important pour permettre de réduire en flex */
+    object-fit: cover;        /* garde visuellement plein cadre — coupe si nécessaire */
+}
+
+
+.section-flex{
+    display:flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content:center;
+    gap: 2em;
+    margin: 1em auto;
+    padding: 3em 0
+
+}
+
+
+.section-flex img{
+    flex: 1;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-width: 300px;  /* limite la taille max de l’image */
+
+}
+
+
+.section-flex .background-beige {
+    flex: 1; /* chaque élément prend la même largeur */
+
+    display: flex; /* active flex pour la div */
+    flex-direction: column; /* empile texte et bouton verticalement */
+    justify-content: center; /* centre verticalement */
+    align-items: center; /* centre horizontalement */
+    text-align: center; /* centre le texte à l’intérieur */
+    max-height: 100%;
+}
+
+.section-flex .background-beige p{
+    margin:2em;
+}
+
+
+.section-container{
+        width: 85%;
+        max-width: 1300px;
+        margin: 0 auto;
+
+}

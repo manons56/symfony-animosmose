@@ -1,0 +1,66 @@
+@use "../abstracts" as *;
+
+/* ..............HEADER...............*/
+
+
+nav {
+    font-family: $font-family-nav ;
+    background-color: $color-green;
+    width:100%;
+}
+
+.header{
+    text-align:center;
+
+}
+
+.header img {
+    width:30em;
+}
+
+ul{
+    list-style:none;
+    padding:1em;
+}
+
+
+.header nav ul{
+    display : flex;
+    justify-content:space-around;
+}
+
+
+.header nav{
+    padding:1em;
+}
+
+
+.header li {
+    color : $font-black;
+    text-decoration: none;
+}
+
+
+.black-underline:hover{
+    text-decoration: underline;
+}
+
+.white-underline:hover{
+    text-decoration: underline;
+    text-decoration-color: white;
+}
+
+.header li a[aria-current="page"]{
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.li-text-black{
+    color: $font-black ;
+    text-decoration:none;
+}
+
+.li-text-white{
+    color : $font-white;
+    text-decoration:none;
+}

@@ -30,6 +30,7 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername, // le terme username est défini par symfony, c'est dans le yaml ensuite qu'on lui dit que le username, c'est pour ce projet, l'email dont on se sert pour la connexion
             'error' => $error,
+            'current_page' => 'login',
         ]);
     }
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion{% endblock %}
 
 {% block body %}
     <form method="post" action="{{ path('app_login') }}">
@@ -12,7 +12,7 @@
             </div>
         {% endif %}
 
-        <h1>Please sign in</h1>
+        <h1>Veuillez vous connecter</h1>
 
         <label for="username">Email</label>
         <input type="email" value="{{ last_username }}"
@@ -37,6 +37,10 @@
         </div>
 
         <button type="submit">Se connecter</button>
+        <p>
+            Mot de passe oublié ?
+            <a href="{{ path('app_forgot_password_request') }}">Cliquer ici</a> pour changer votre mot de passe.
+        </p>
 
         <p>
             Vous n'avez pas encore de compte ?

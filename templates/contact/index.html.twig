@@ -1,36 +1,89 @@
 {% extends 'base.html.twig' %}
-
+{% set current_page = 'contact' %}
 {% block title %}Prise de contact{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('contact') }}
+{% endblock %}
 
 {% block body %}
+<main>
+    <section >
+        <h2>Nous contacter</h2>
+        <div class=contact-flex>
+        <div>
+            <iframe class=google-map src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2688.9417232352935!2d-2.542400823939874!3d47.62726407119166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4808cd630850a265%3A0xf3edc05fccb463a9!2sAnimOsmose%20%26%20Alim&#39;Osmose!5e0!3m2!1sfr!2sfr!4v1748786123953!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class=info-contact>
+            <p> <i class="fa-solid fa-location-dot fa-2xl" style="color: #da6a47;"></i> 5 Le Petit Bodo, 56230 Berric</p> <br/>
+            <p> <i class="fa-solid fa-phone fa-2xl" style="color: #da6a47;"></i> 06.25.81.48.45</p></br>
+            <p> <i class="fa-solid fa-square-envelope fa-2xl" style="color: #da6a47;"></i> animosmose@gmail.com</p><br/><br/><br/>
 
-    <h1>Contactez nous</h1>
-    <p>Envoyez-nous un message via ce formulaire :</p>
-
-    {% for message in app.flashes('success') %}
-        <div class="flash-success">{{ message }}</div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="flash-danger">{{ message }}</div>
-    {% endfor %}
-
-
-
-    {# Symfony lutte contre les failles XSS en échappant les variables dans twig(twig échappe les caractères spéciaux) #}
-    {{ form_start(contactForm) }}
-    {{ form_row(contactForm.nom) }}
-    {{ form_row(contactForm.prenom) }}
-    {{ form_row(contactForm.telephone) }}
-    {{ form_row(contactForm.email) }}
-    {{ form_row(contactForm.message) }}
-
-    {# Champ honeypot invisible #}
-    <div style="display:none">
-        {{ form_row(contactForm.website) }}
-    </div>
-
-    <button type="submit">Envoyer</button>
-    {{ form_end(contactForm) }}
+            <p>Retrouvez toutes nos actualités sur Facebook et Instagram !</p>
+            <a href='https://www.facebook.com/animosmose56'><i class="fa-brands fa-square-facebook fa-2xl" style="color: #da6a47;"></i></a>
+            <a href='https://www.instagram.com/animosmose/'><i class="fa-brands fa-square-instagram fa-2xl" style="color: #da6a47;"></i></a>
+        </div>
+        </div>
+    </section>
 
 
+    <section class='background-beige'>
+        <h4>Envoyez-nous un message via ce formulaire :</h4>
+
+        {% for message in app.flashes('success') %}
+            <div class="flash-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="flash-danger">{{ message }}</div>
+        {% endfor %}
+
+
+        <div class="form-container">
+        {# Symfony lutte contre les failles XSS en échappant les variables dans twig(twig échappe les caractères spéciaux) #}
+        {{ form_start(contactForm) }}
+        <div class="field">
+            {{ form_label(contactForm.nom) }}
+            {{ form_widget(contactForm.nom) }}
+            {{ form_errors(contactForm.nom) }}
+        </div>
+
+        <div class="field">
+            {{ form_label(contactForm.prenom) }}
+            {{ form_widget(contactForm.prenom) }}
+            {{ form_errors(contactForm.prenom) }}
+        </div>
+
+        <div class="field">
+            {{ form_label(contactForm.telephone) }}
+            {{ form_widget(contactForm.telephone) }}
+            {{ form_errors(contactForm.telephone) }}
+        </div>
+
+        <div class="field">
+            {{ form_label(contactForm.email) }}
+            {{ form_widget(contactForm.email) }}
+            {{ form_errors(contactForm.email) }}
+        </div>
+
+        <div class="field">
+            {{ form_label(contactForm.message) }}
+            {{ form_widget(contactForm.message) }}
+            {{ form_errors(contactForm.message) }}
+        </div>
+
+        {# Champ honeypot invisible pour bots #}
+        <div>
+            {{ form_widget(contactForm.website) }}
+        </div>
+        <div class="toolbar">
+            <button type="submit">Envoyer</button>
+        </div>
+        {{ form_rest(contactForm) }} {# important pour inclure le token et champs restants #}
+        {{ form_end(contactForm, {'render_rest': false}) }}
+        {#le form end ajoute automatiquement un bouton envoyer, mais on ne peut pas le personnaliser #}
+        {# donc render rest false le désactive et on ajoute nous meme le bouton envoyer pour le personnaliser #}
+        </div>
+    </section>
+
+</main>
 {% endblock %}

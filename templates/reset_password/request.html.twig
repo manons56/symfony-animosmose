@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialisation du mot de passe{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+    <h1>Réinitialisation du mot de passe</h1>
+
+    {{ form_start(requestForm) }}
+        {{ form_row(requestForm.email) }}
+        <div>
+            <small>
+                Veuillez renseigner votre adresse email avec laquelle vous avez fait votre inscription.
+                Nous allons vous envoyer un lien pour réinitialiser votre mot de passe.
+            </small>
+        </div>
+
+        <button class="btn btn-primary">Confirmer</button>
+    {{ form_end(requestForm) }}
+{% endblock %}
+
+
+{# Rôle : Formulaire “mot de passe oublié”.
+Fonction : Afficher le ResetPasswordRequestFormType pour que l’utilisateur entre son email. #}
+
+
+
+{# L’utilisateur clique sur “Mot de passe oublié” → formulaire request.html.twig avec ResetPasswordRequestFormType.
+Il soumet son email → ResetPasswordRequest est créé, un token est généré.
+Après soumission → page check_email.html.twig pour informer l’utilisateur.
+Email envoyé → email.html.twig contient le lien avec token.
+L’utilisateur clique sur le lien → formulaire reset.html.twig avec ChangePasswordFormType.
+Nouveau mot de passe validé → hashé et enregistré, token supprimé. #}

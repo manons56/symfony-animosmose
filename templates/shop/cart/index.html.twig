@@ -1,14 +1,20 @@
 {% extends 'base.html.twig' %}
+{% set current_page = 'cart' %}
 
 {% block title %}Mon panier{% endblock %}
-
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('product') }}
+{% endblock %}
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
+
+<div>
+    <div class="icones-user-shop">
+        <a href="{{ path('app_shop_cart') }}"><i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i></a>
+        <a href="{{ path('app_login') }}"><i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i></a>
+    </div>
+
     <h1>Votre panier</h1>
 
     <table>
@@ -38,7 +44,7 @@
 
     <h2>Total : {{ total }} €</h2>
 
-    <a href="{{ path('app_product_list') }}">Continuer mes achats</a>
-    <a href="{{ path('app_login') }}">Passer commande</a>
+    <a href="{{ path('app_product_list') }}"><button type="button"> Continuer mes achats</button></a>
+    <a href="{{ path('app_login') }}"><button type="button">Passer commande</button></a>
 </div>
 {% endblock %}

@@ -1,0 +1,72 @@
+@use "../abstracts" as *;
+
+
+.footer{
+    background-color: $color-green;
+    font-family:$font-family-nav ;
+
+
+}
+
+.footer-flex{
+    display : flex;
+    justify-content:space-between;
+    padding: 1em 2em;
+    gap:1em
+}
+
+
+.footer-col-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre les éléments à l’intérieur du bloc */
+    width: 20%;
+    gap: 1em;
+    margin-right: 4em;
+    margin-left:2em;
+}
+
+.footer-flex-reseaux{
+    display : flex;
+    justify-content:center;
+    gap: 1em;
+
+}
+
+.footer img {
+    width : 100%;
+    max-width: 150px; /* taille souhaitée à taille normale */
+    min-width: 100px; /* évite qu’il devienne trop petit */
+    height: auto;
+}
+
+.copyright{
+    font-size:1rem;
+}
+
+.footer-nav {
+    flex: 1;
+    min-width: 150px;
+    font-size:1.3rem;
+    margin-top:1.5em;
+}
+
+
+.footer-nav p {
+    margin-bottom: 0.4em;
+}
+
+
+.footer a{
+    color: $font-black ;
+    text-decoration:none;
+}
+
+.footer a:hover {
+    text-decoration:underline;
+    font-weight:bold;
+}
+
+.shop-link {
+    margin-top: 3.5em; /* ajuste selon la hauteur des logos */
+}

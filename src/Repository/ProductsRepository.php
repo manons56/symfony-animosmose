@@ -20,7 +20,8 @@ class ProductsRepository extends ServiceEntityRepository
     public function findByPriceRange(float $min, float $max): array
     {
         return $this->createQueryBuilder('p') //SELECT * FROM products p
-            ->join('p.variants', 'v') //INNER JOIN variants v ON v.product_id = p.id
+            ->distinct() // éviter les doublons
+            ->innerjoin('p.variants', 'v') //INNER JOIN variants v ON v.product_id = p.id
             //On relie chaque produit à ses variants.
             //v est l’alias pour variants.
             //La colonne product_id correspond à la relation OneToMany de Products.

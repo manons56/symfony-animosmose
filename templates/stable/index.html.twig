@@ -1,20 +1,108 @@
 {% extends 'base.html.twig' %}
+{% set current_page = 'stable' %}
 
-{% block title %}Hello StableController!{% endblock %}
+{% block title %}Les écuries{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }} {# conserve app.css #}
+    {{ encore_entry_link_tags('stable') }} {# ajoute stable.scss compilé #}
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="video-container">
+        <video autoplay muted loop playsinline>
+            <source src="{{ asset('build/videos/video.mp4') }}" type="video/mp4">
+            Votre navigateur ne supporte pas les vidéos HTML5.
+        </video>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<section class="background-beige content-wrapper">
+    <h2>Pension équine</h2>
+    <div class="description">
+        <p>À seulement 20 minutes de Vannes, découvrez Animosmose, une petite pension familiale dédiée au respect, au bien-être.</p>
+        <div class="flex">
+            <div class="text">
+                <p>“Cavalier depuis plus de 35 ans, passionné par les chevaux et engagé dans la cause animale depuis 15 ans, j’ai souhaité créer un lieu où l’on respecte les besoins fondamentaux des chevaux. Animosmose est née de cette volonté : proposer un environnement paisible, fonctionnel et intimiste.”</p></br>
+                <p> Chez nous, le cheval est considéré comme un être sensible, social, doté d’émotions et de besoins naturels incontournables. Nous mettons un point d’honneur à offrir un cadre de vie en adéquation avec ses instincts et ses codes sociaux.</p></br>
+                <p> Après notre installation en 2020 avec nos propres équidés, nous avons décidé d’ouvrir notre petit paradis à des propriétaires partageant la même vision du bien être que nous, loin de l’agitation et des clubs hippiques. Nous accueillons également poneys, ânes et shetlands.</p></br>
+            </div>
+            <img src="{{ asset('build/images/shet.jpg')}}" alt='shetland'/>
+        </div>
+        <p>Nous proposons également des formules en demi-pension, idéales pour celles et ceux qui souhaitent tisser une relation durable avec un équidé bien dans ses sabots.</p></br>
+        <p>Que vous soyez cavalier de loisir, adepte de l’équitation éthologique ou simplement soucieux du bonheur de votre cheval, vous trouverez ici un cadre propice à l’épanouissement de votre relation.</p>
+    </div>
+    <button data-modal-target="#myModal">Nos tarifs</button>
+</section>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/Users/manon.sara/symfony-animosmose/src/Controller/StableController.php</code></li>
-        <li>Your template at <code>/Users/manon.sara/symfony-animosmose/templates/stable/index.html.twig</code></li>
-    </ul>
-</div>
+
+<section>
+    <h2>Nos équipements</h2>
+    <div class="equipement-flex">
+        <div class="description-flex">
+            <img class="big-icon" src="{{ asset('build/images/fercheval.png')}}" alt='fer à cheval'/>
+
+            <div class="font-weight-bold">Écurie équipée</div>
+            <p>4 boxes avec abreuvoir automatiques, double exposition et trappe pour distribution des aliments </p>
+        </div>
+        <div>
+            <img class="small-icon" src="{{ asset('build/images/equestrian.png')}}" alt='dessin cavalier'/>
+            <div class="font-weight-bold">Carrière</div>
+            <p>Carrière 50x50 en sable de Carnac stabilisée, draînée et clôturée. </p>
+        </div>
+        <div>
+            <img class="small-icon" src="{{ asset('build/images/saddle.png')}}" alt='selle'/>
+            <div class="font-weight-bold">Sellerie & Pansage</div>
+            <p>Aire de pansage couverte. </br>
+                Sellerie/graineterie avec évier</p>
+        </div>
+        <div>
+            <img class="big-icon" src="{{ asset('build/images/shower.png')}}" alt='douche'/>
+            <div class="font-weight-bold">Douche</div>
+            <p>Aire de douche extérieure</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Reconversion</h2>
+</section>
+
+
+    <div class="modal" id="myModal">
+        <div class="modal-header">
+            <div class="title">Tarifs pension équidés</div>
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Pension box nuit / pré journée ................................................... 400€
+                (Prix mensuel)</p>
+            <p>Pension mixte : </br>
+                5 mois box / 7 mois pré       ................................................... 285€
+                (Prix mensuel) </p>
+            <p>Poneys + ânes (équidés -1m20)  ................................................... 200€
+                (Prix mensuel)</p>
+            <p>Distribution granulés</br>
+               fournis par propriétaire       ................................................... 30€
+                (Prix mensuel) </p>
+            <p>Pansage 4 fois par mois        ................................................... 30€
+                (Prix mensuel) </p>
+            <p>Supplément soins               ......................................   Nous consulter</p>
+            <p>Supplément box                 ................................................... 25€
+                (Prix à la nuitée) </p>
+            <p>Demi-pension                   ................................................... 120€
+                (Prix mensuel, selon disponbilités ) </p>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+
 {% endblock %}
+
+
+
+
+
+
+
+
+

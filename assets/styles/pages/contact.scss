@@ -1,0 +1,72 @@
+@use "../abstracts" as *;
+
+
+
+.contact-flex{
+    display:flex;
+
+}
+
+.google-map{
+    margin : 3em;
+
+}
+
+.info-contact{
+    margin-top : 6em;
+    margin-left: 3em;
+}
+
+
+.info-contact .fa-solid{
+    margin-right: 0.5em;
+}
+
+
+
+// FORM
+.input {
+    padding: 0.5em 1em;
+    box-sizing: border-box;
+    width:100%
+}
+
+
+.textarea {
+    width: 100%;
+    height: 210px;
+    resize: none;
+    padding: 1em;
+    margin: 1em;
+    box-sizing: border-box;
+}
+
+
+.field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+
+::placeholder {
+    font-style: italic;
+    font-size: 1.2rem;
+}
+
+
+.toolbar {
+    display: flex;
+    justify-content: center;
+    margin-top:1em
+}
+
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2em;
+    display:flex;
+    flex-direction: column;
+}
+

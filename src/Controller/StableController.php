@@ -12,7 +12,7 @@ final class StableController extends AbstractController
     public function index(): Response
     {
         return $this->render('stable/index.html.twig', [
-            'controller_name' => 'StableController',
+            'current_page' => 'stable',
         ]);
     }
 }

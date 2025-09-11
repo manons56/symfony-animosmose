@@ -1,0 +1,137 @@
+@use "../abstracts" as *;
+
+/* ..............MAIN...............*/
+
+.team-picture{
+    width: 100vw;
+    height: 115vh;
+    background-image: url("../../img/photo-equipe.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.home-container{
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 ;
+}
+
+.section-h1{
+    width: 90%;
+    max-width: 1300px;
+    margin: 0 auto;
+
+
+}
+
+.home-container img{
+    padding-top :2em;
+}
+
+
+
+
+.home-article-s2 {
+    width: 80%;
+    max-width: 1300px;
+    margin: 1em auto;
+    border: solid 3px $color-orange;
+    border-radius:20px;
+    font-weight: bold;
+}
+
+
+.font-family-title{
+    font-family: $font-family-title;
+    font-size: $font-size-h2;
+}
+
+.home-container article {
+    display : flex;
+    align-items: flex-start; /* aligne le haut des images et des textes */
+    gap: 1rem; /* espace entre la photo et le texte */
+}
+
+.home-container .personne {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px; /* taille fixe pour la colonne image/nom */
+}
+
+.home-container  .description {
+    padding:1em;
+    flex: 1; /* prend le reste de l’espace */
+    line-height:2;
+}
+
+
+
+
+.side-activities {
+    display: flex;
+    justify-content: space-between; /* espace régulier entre les 3 articles */
+    width: 80%;
+    max-width: 1300px;
+    margin: 1em auto; /* même marge que les articles du dessus */
+    gap: 1rem; /* espace entre chaque article (optionnel, ajoute si tu veux) */
+
+}
+
+
+.side-activities article.home-article-s2 {
+    flex: 1 1 32%; /* largeur ~1/3 de la ligne, flexible */
+    min-width: 250px; /* optionnel, limite la réduction trop petite */
+    max-width: 32%;
+    box-sizing: border-box;
+    margin: 0; /* enlève la marge si tu en as */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* centre le texte dans le <p> */
+
+    gap: 1rem; /* espace vertical entre img, p et button */
+    padding: 1em; /* optionnel : pour un peu d’air à l’intérieur */
+
+}
+
+
+
+.logo-alimosmose{
+    width:10%;
+    padding-top: 0 !important;
+
+}
+
+
+
+
+.separation-border{
+    border-bottom : $color-green 3px solid;
+
+}
+
+
+.article-flex {
+    display: flex;
+    align-items: center; /* aligne verticalement au centre */
+    justify-content: space-around; /* garde les espaces existants */
+    padding: 1em;
+    width: 80%;
+    max-width: 1300px;
+    margin: 1em auto;
+    gap: 2rem; /* pour espace régulier entre éléments */
+}
+
+
+.p-intro {
+    padding-top:2em;
+    text-align:center;
+    letter-spacing:1px;
+    line-height:2;
+}
+
+
+
+

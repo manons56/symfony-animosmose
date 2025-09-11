@@ -59,6 +59,7 @@ class UserController extends AbstractController
 
         return $this->render('user/user/new.html.twig', [
             'form' => $form,
+            'current_page' => 'new'
         ]);
 
 

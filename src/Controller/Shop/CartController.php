@@ -29,6 +29,7 @@ class CartController extends AbstractController
             // On passe la liste des articles du panier au template sous le nom "items"
             'total' => $cartService->getTotal(),
             // On passe aussi le total du panier
+            'current_page' => 'cart',
         ]);
     }
 

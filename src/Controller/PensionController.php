@@ -12,7 +12,7 @@ final class PensionController extends AbstractController
     public function index(): Response
     {
         return $this->render('pension/index.html.twig', [
-            'controller_name' => 'PensionController',
+            'current_page' => 'pension',
         ]);
     }
 }

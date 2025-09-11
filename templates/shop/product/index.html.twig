@@ -1,13 +1,37 @@
 {% extends 'base.html.twig' %}
+{% set current_page = 'product' %}
 
-{% block title %}Hello ProductController!{% endblock %}
+{% block title %}La boutique{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('product') }}
+{% endblock %}
 
 {% block body %}
 
+<div>
+    <div class="icones-user-shop">
+        <a href="{{ path('app_shop_cart') }}"><i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i></a>
+        <a href="{{ path('app_login') }}"><i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i></a>
+    </div>
+    <h2>Bienvenue sur notre boutique</h2>
 
-<div class="example-wrapper">
-    <a href="{{ path('app_shop_cart') }}">Voir mon panier</a>
-    <h1>Catalogue</h1>
+    <div class="description-flex">
+        <div>
+            <div class="font-weight-bold">Des gammes premium</div>
+            <p>Nous vous proposons des gammes d’aliments premium pour vos animaux tout en respectant votre porte-monnaie.</p>
+        </div>
+        <div class="description-border">
+            <div class="font-weight-bold">Une livraison facile</div>
+            <p>Nous vous proposons plusieurs points de retrait en Bretagne sous 3 à 5 jours ouvrés après validation de votre commande.</p>
+        </div>
+        <div>
+            <div class="font-weight-bold">Un devoir de conseil</div>
+            <p>Nous restons joignables facilement afin de trouver l’alimentation parfaite correspondant au profil de votre compagnon à 4 pattes.</p>
+        </div>
+    </div>
+
+
     {# Filtre de prix #}
     <form method="GET" id="price-filter-form">
         <label for="min-price">Prix minimum :</label>
@@ -24,16 +48,44 @@
         <input type="text" id="search" class="search-input" placeholder="Rechercher un produit...">
     </div>
 
+
+    <br>
+        <li>Nouveautés</li> </br>
+        <li>Accessoires</li>
+            <ul>
+                <li>Bon cadeau</li>
+                <li>Colliers</li>
+                <li>Laisses</li>
+                <li>Peluches</li>
+                <li>Vêtements</li>
+            </ul>
+        <li>Alicaments</li>
+        <li>Aliments chiens</li>
+            <ul>
+                <li>BARF</li>
+                <li>Pâtés</li>
+                <li>Croquettes</li>
+                <li>Friandises</li>
+            </ul>
+        <li>Aliments chats</li>
+            <ul>
+                <li>Croquettes</li>
+                <li>Pâtés</li>
+            </ul>
+    </ul>
+
+
     <div id="product-list" class="product-grid">
         {% for product in products %}
             <a href="{{ path('app_product_show', {'id': product.id}) }}">
-            <div class="product-card">
-                <img src="{{  asset(product.imgId.url) }}" alt="{{ product.name }}" class="product-image">
-                <h3 class="product-name">{{ product.name }}</h3>
-            </div>
-          </a>
+                <div class="product-card">
+                    <img src="{{  asset(product.imgId.url) }}" alt="{{ product.name }}" class="product-image">
+                    <h3 class="product-name">{{ product.name }}</h3>
+                </div>
+            </a>
         {% endfor %}
     </div>
+
 
 
     <script>
@@ -53,65 +105,5 @@
             });
         });
     </script>
-
-
-
-    <style>
-        /* Styles simples pour les cartes et la barre de recherche */
-        .search-container {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .search-input {
-            width: 50%;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
-            border: 1px solid #eee;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .product-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        .product-name {
-            margin: 10px 0 5px;
-            font-size: 16px;
-        }
-
-        .product-price {
-            color: #333;
-            font-weight: bold;
-        }
-
-        a {
-            display: block;
-            text-decoration: none;
-            color: inherit; /* garde la couleur du texte */
-        }
-    </style>
-
-
 </div>
 {% endblock %}

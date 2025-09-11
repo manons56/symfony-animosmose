@@ -18,33 +18,48 @@ final class ContactController extends AbstractController
     {
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request); // symfony vérifie le token pour POST
-
         // on appelle la méthode handleRequest($request), symfony récupère la valeur du champ _token dans le POST
         //puis compare cette valeur avec le token qu'il a généré en interne(via le servie CsrfTokenManagerInterface)
         //si le token ne correspond pas, le formulaire est invalide
 
-        if ($form->isSubmitted() && $form->isValid()) { // Token CSRF vérifié ici
-            $data = $form->getData();
 
-            if(!empty($form->get('website')->getData())) {
-                $this->addFlash('error','Spam détecté !');
-                return $this->redirectToRoute('app_contact');
+        if ($form->isSubmitted()) {
+            // Honeypot
+            if (!empty($form->get('website')->getData())) {
+                $this->addFlash('error', 'Spam détecté !');
             }
 
-            $email = (new Email())
-                ->from($data['email'])
-                ->to('manon.sara@3wa.io') // email de l'admin
-                ->subject('Nouveau message depuis le formulaire de contact')
-                ->text("Nom : {$data['nom']}\nPrénom : {$data['prenom']}\nTéléphone : {$data['telephone']}\nEmail : {$data['email']}\nMessage : {$data['message']}");
+            // Formulaire valide
+            if ($form->isValid() /* Token CSRF vérifié ici*/ && empty($form->get('website')->getData())) {
+                $data = $form->getData();
 
-            $mailer->send($email);
+                $email = (new Email())
+                    ->from('manon.sara@3wa.io')
+                    ->to('manon.sara96@gmail.com') // email de l'admin
+                    ->replyTo($data['email'])
+                    ->subject('Nouveau message depuis le formulaire de contact')
+                    ->text(
+                        "Nom : {$data['nom']}\n" .
+                        "Prénom : {$data['prenom']}\n" .
+                        "Téléphone : {$data['telephone']}\n" .
+                        "Email : {$data['email']}\n" .
+                        "Message : {$data['message']}"
+                    );
 
-            $this->addFlash('success', 'Message envoyé avec succès ! Nous reviendrons vers vous au plus vite !');
+                try {
+                    $mailer->send($email);
+                    $this->addFlash('success', 'Message envoyé avec succès ! Nous reviendrons vers vous dès que possible.');
+                } catch (\Throwable $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'envoi du mail : ' . $e->getMessage());
+                }
 
-            return $this->redirectToRoute('contact');
+                return $this->redirectToRoute('app_contact');
+            }
         }
 
+        //Rendu du formulaire, toujours exécuté même si formulaire pas soumis ou invalide
         return $this->render('contact/index.html.twig', [
+            'current_page' => 'contact',
             'contactForm' => $form->createView(),
         ]);
     }

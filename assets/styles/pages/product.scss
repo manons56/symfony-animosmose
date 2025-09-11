@@ -1,0 +1,87 @@
+@use "../abstracts" as *;
+
+
+/* Styles simples pour les cartes et la barre de recherche */
+.search-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.search-input {
+    width: 50%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.product-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.product-name {
+    margin: 10px 0 5px;
+    font-size: 16px;
+}
+
+.product-price {
+    color: #333;
+    font-weight: bold;
+}
+
+a {
+    display: block;
+    text-decoration: none;
+    color: inherit; /* garde la couleur du texte */
+}
+
+
+.font-weight-bold{
+    font-weight: 600;
+}
+
+.description-border{
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    padding-left:1em;
+    padding-right:1em;
+    margin-right:1em;
+    margin-left:1em;
+}
+
+.description-flex{
+    display:flex;
+    flex-direction: row;
+    padding:1em;
+    margin:2em;
+}
+
+
+.icones-user-shop{
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap:1em;
+    padding:1em;
+}
+

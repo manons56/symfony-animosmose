@@ -1,0 +1,38 @@
+@use "../abstracts" as *;
+
+button{
+    color : $font-white;
+    background-color : $color-orange;
+    border: $color-orange solid 1px;
+    border-radius:40px;
+    padding:1em;
+    margin-bottom :1em;
+    cursor: pointer;
+    font-size: $font-size-button;
+}
+
+button:hover {
+    background-color: #b15116; /* change légèrement la couleur au survol */
+}
+
+
+
+.button-shop{
+    background-color : $background-color;
+    color : $color-green ;
+    border: $color-green 1px solid;
+    border-radius:40px;
+    padding:1em;
+    display: block;
+    margin: 0 auto;
+    font-size: $font-size-p;
+
+}
+
+
+.button-shop:hover{
+    background-color :$color-green ;
+    color : $background-color ;
+    border: $color-green 1px solid;
+
+}
