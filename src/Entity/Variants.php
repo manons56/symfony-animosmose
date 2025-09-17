@@ -14,7 +14,8 @@ class Variants
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Products::class, inversedBy: 'variants')]
-    private ?Products $product_id = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Products $product = null;
 
     #[ORM\Column(length: 255)]
     private ?string $label = null;
@@ -30,17 +31,18 @@ class Variants
         return $this->id;
     }
 
-    public function getProductId(): ?Products
+    public function getProduct(): ?Products
     {
-        return $this->product_id;
+        return $this->product;
     }
 
-    public function setProductId(?Products $product_id): static
+    public function setProduct(?Products $product): self
     {
-        $this->product_id = $product_id;
-
+        $this->product = $product;
         return $this;
     }
+
+
 
     public function getLabel(): ?string
     {

@@ -14,37 +14,38 @@ class Pictures
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $url = null;
+    private ?string $filename = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $alt = null;
+    #[ORM\ManyToOne(targetEntity: Products::class, inversedBy: 'images')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Products $product = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUrl(): ?string
+    public function getFilename(): ?string
     {
-        return $this->url;
+        return $this->filename;
     }
 
-    public function setUrl(string $url): static
+    public function setFilename(string $filename): self
     {
-        $this->url = $url;
-
+        $this->filename = $filename;
         return $this;
     }
 
-    public function getAlt(): ?string
+
+    public function getProduct(): ?Products
     {
-        return $this->alt;
+        return $this->product;
     }
 
-    public function setAlt(string $alt): static
+    public function setProduct(?Products $product): self
     {
-        $this->alt = $alt;
-
+        $this->product = $product;
         return $this;
     }
+
 }

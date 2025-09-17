@@ -1,8 +1,12 @@
 {% extends 'base.html.twig' %}
+{% set current_page = 'order' %}
 
 {% block title %}Mes commandes{% endblock %}
 
 {% block body %}
+
+    <a href="{{ path('app_shop_cart') }}" class="btn btn-secondary">← Retour au panier</a>
+
     <h1>Mes commandes</h1>
 
     <table>
@@ -11,7 +15,7 @@
             <th>ID</th>
             <th>Date</th>
             <th>Total</th>
-            <th>Voir</th>
+            <th>Actions</th> {# Regroupe "Voir" et "Supprimer" #}
         </tr>
         </thead>
         <tbody>
@@ -20,7 +24,19 @@
                 <td>{{ order.id }}</td>
                 <td>{{ order.date|date('d/m/Y H:i') }}</td>
                 <td>{{ order.total }} €</td>
-                <td><a href="{{ path('app_shop_order_show', {id: order.id}) }}">Voir</a></td>
+                <td>
+                    <a href="{{ path('app_shop_order_show', {id: order.id}) }}">Voir</a>
+
+                    {% if order.status == constant('App\\Enum\\OrderStatus::Pending') %}
+                        <form method="post"
+                              action="{{ path('app_shop_order_delete', {'id': order.id}) }}"
+                              style="display:inline;"
+                              onsubmit="return confirm('Supprimer cette commande ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_order_' ~ order.id) }}">
+                            <button type="submit">Supprimer</button>
+                        </form>
+                    {% endif %}
+                </td>
             </tr>
         {% else %}
             <tr>
@@ -29,5 +45,6 @@
         {% endfor %}
         </tbody>
     </table>
+
 
 {% endblock %}

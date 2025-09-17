@@ -1,20 +1,89 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Hello CgvController!{% endblock %}
+{% set current_page = 'cgv' %}
+{% block title %}Conditions générales de vente{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div>
+    <h2>Conditions générales de vente</h2>
 
-    This friendly message is coming from:
+    <h3>1. Objet</h3>
+    <p>Les présentes Conditions Générales de Vente (ci-après « CGV ») régissent les ventes de produits proposés sur le site Alimosmose, édité par :</p>
+    <p>ALIMOSMOSE, entreprise individuelle, SIRET : 901 568 337 00017, dont le siège social est situé 5 Le Petit Bodo, 56230 Berric.</p>
+    <p>Toute commande effectuée sur le Site implique l’acceptation pleine et entière des présentes CGV.</p>
+
+    <h3>2. Produits</h3>
+    <p>Les produits proposés à la vente sont ceux figurant sur le Site, dans la limite des stocks disponibles.</p>
+    <p>Le Vendeur apporte le plus grand soin à la description des produits (photos, descriptions, compositions, recommandations d’utilisation). Toutefois, les images et textes n’ont qu’une valeur indicative et ne sauraient engager la responsabilité du Vendeur en cas d’erreur.</p>
+    <p>Clause importante : Les huiles essentielles et produits de bien-être proposés ne constituent pas des médicaments et ne remplacent en aucun cas un avis vétérinaire. Le Client est invité à consulter un professionnel de santé animale avant toute utilisation.</p>
+
+    <h3>3. Prix</h3>
+    <p>Les prix sont indiqués en euros, toutes taxes comprises (TTC), hors frais de livraison.</p>
+    <p>Le Vendeur se réserve le droit de modifier ses prix à tout moment, mais les produits seront facturés sur la base du tarif en vigueur au moment de la commande.</p>
+
+    <h3>4. Commande</h3>
+    <p>Le Client sélectionne les produits qu’il souhaite acheter et valide sa commande après avoir vérifié son panier.</p>
+    <p>La commande devient définitive après :</p>
     <ul>
-        <li>Your controller at <code>/Users/manon.sara/symfony-animosmose/src/Controller/content/CgvController.php</code></li>
-        <li>Your template at <code>/Users/manon.sara/symfony-animosmose/templates/content/cgv/index.html.twig</code></li>
+        <li>acceptation des CGV,</li>
+        <li>validation du paiement,</li>
+        <li>réception de l’e-mail de confirmation envoyé par le Vendeur.</li>
     </ul>
+    <p>Le Vendeur se réserve le droit d’annuler toute commande en cas de litige antérieur avec le Client ou de suspicion de fraude.</p>
+
+    <h3>5. Paiement</h3>
+    <p>Les paiements peuvent être effectués par :</p>
+    <ul>
+        <li>Payline (carte bancaire en ligne),</li>
+        <li>Virement bancaire,</li>
+        <li>Espèces,</li>
+        <li>Chèque.</li>
+    </ul>
+    <p>La commande ne sera expédiée qu’après encaissement effectif du paiement.</p>
+
+    <h3>6. Livraison</h3>
+    <p>Les produits sont livrés à l’adresse indiquée par le Client lors de la commande.</p>
+    <p>Modes de livraison disponibles :</p>
+    <ul>
+        <li>Mondial Relay : livraison partout en France selon les délais indiqués par le transporteur.</li>
+        <li>Livraison à domicile : uniquement dans les départements 56, 35 et 44, avec une fréquence d’une fois par mois.</li>
+    </ul>
+    <p>En cas de retard de livraison supérieur à [X jours], le Client peut demander l’annulation de la commande et le remboursement des sommes versées.</p>
+    <p>Les frais de livraison sont précisés lors de la commande.</p>
+
+    <h3>7. Droit de rétractation</h3>
+    <p>Conformément à l’article L.221-18 du Code de la Consommation, le Client dispose d’un délai de 14 jours à compter de la réception de la commande pour exercer son droit de rétractation.</p>
+    <p><>Exceptions :</p>
+    <ul>
+        <li>Les produits descellés ne peuvent être retournés pour des raisons d’hygiène ou de protection de la santé (alimentation, huiles essentielles, etc.).</li>
+        <li>Les produits personnalisés ne sont pas remboursables.</li>
+    </ul>
+
+    <h3>8. Retour et remboursement</h3>
+    <p>En cas d’exercice du droit de rétractation, les produits doivent être renvoyés dans leur état d’origine, complets et non ouverts.</p>
+    <p>Les frais de retour sont à la charge du Client, sauf en cas d’erreur imputable au Vendeur (produit défectueux ou non conforme).</p>
+    <p>Le remboursement sera effectué dans un délai de 14 jours après réception des produits retournés.</p>
+
+    <h3>9. Garanties</h3>
+    <p>Les produits bénéficient de la garantie légale de conformité (articles L.217-3 et suivants du Code de la Consommation) et de la garantie contre les vices cachés (articles 1641 et suivants du Code civil).</p>
+
+    <h3>10. Responsabilité</h3>
+    <p>Le Vendeur ne pourra être tenu responsable de :</p>
+    <ul>
+        <li>l’utilisation inappropriée des produits,</li>
+        <li>la négligence du Client,</li>
+        <li>les dommages indirects ou pertes de données.</li>
+    </ul>
+
+    <h3>11. Données personnelles</h3>
+    <p>Les informations collectées lors de la commande sont nécessaires à la gestion de celle-ci.</p>
+    <p>Elles sont traitées conformément à la <a href="[lien vers politique de confidentialité]">Politique de Confidentialité</a> et au RGPD.</p>
+    <p>Le Client peut exercer ses droits d’accès, de rectification et de suppression en contactant : animosmose@gmail.com.</p>
+
+    <h3>12. Droit applicable & litiges</h3>
+    <p>Les présentes CGV sont soumises au droit français.</p>
+    <p>En cas de litige, une solution amiable sera recherchée avant toute action judiciaire.</p>
+    <p>À défaut d’accord amiable, les tribunaux compétents seront ceux du ressort de Vannes(ou du domicile du Client, conformément au Code de la consommation pour les particuliers).</p>
+
 </div>
 {% endblock %}

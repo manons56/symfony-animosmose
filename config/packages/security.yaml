@@ -28,6 +28,8 @@ security:
                 username_parameter: email
                 password_parameter: password
                 enable_csrf: true
+                csrf_token_id: authenticate
+
             logout:
                 path: app_logout
                 # where to redirect after logout

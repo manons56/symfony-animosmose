@@ -18,16 +18,20 @@ class Products
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    //persist → on enregistre (persist) un produit, Doctrine enregistre l’image associée si elle est nouvelle.
-    //remove → on supprime(remove) un produit, Doctrine supprime aussi l’image associée automatiquement.
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Pictures $img_id = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+
+    /**
+     * @var Collection<int, Pictures>
+     */
+    #[ORM\OneToMany(targetEntity: Pictures::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
+    private Collection $images;
 
     #[ORM\Column(type: 'text')]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $capacity = null;
 
     #[ORM\Column(type: 'text')]
@@ -47,19 +51,25 @@ class Products
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Categories $category_id = null;
+    private ?Categories $category = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isOutOfStock = null;
+
 
     /**
      * @var Collection<int, Variants>
      */
-    #[ORM\OneToMany(targetEntity: Variants::class, mappedBy: 'product_id', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Variants::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
     private Collection $variants;
 
     public function __construct()
     {
         $this->variants = new ArrayCollection();
+        $this->images = new ArrayCollection(); // initialisation
     }
 
+    // ---------- Getters / Setters classiques ----------
     public function getId(): ?int
     {
         return $this->id;
@@ -72,22 +82,45 @@ class Products
 
     public function setName(string $name): static
     {
-        $this->name = $name;
+        $this->name = $name; return $this;
+    }
 
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
         return $this;
     }
 
-    public function getImgId(): ?Pictures
-    {
-        return $this->img_id;
-    }
+    /**
+     * @return Collection<int, Pictures>
+     */
+    public function getImages(): Collection { return $this->images; }
 
-    public function setImgId(Pictures $img_id): static
+    public function addImage(Pictures $image): self
     {
-        $this->img_id = $img_id;
-
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setProduct($this);
+        }
         return $this;
     }
+
+    public function removeImage(Pictures $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            if ($image->getProduct() === $this) {
+                $image->setProduct(null);
+            }
+        }
+        return $this;
+    }
+
+
 
     public function getDescription(): ?string
     {
@@ -96,9 +129,7 @@ class Products
 
     public function setDescription(string $description): static
     {
-        $this->description = $description;
-
-        return $this;
+        $this->description = $description; return $this;
     }
 
     public function getCapacity(): ?string
@@ -106,10 +137,9 @@ class Products
         return $this->capacity;
     }
 
-    public function setCapacity(string $capacity): static
+    public function setCapacity(?string $capacity): static
     {
         $this->capacity = $capacity;
-
         return $this;
     }
 
@@ -121,7 +151,6 @@ class Products
     public function setComposition(string $composition): static
     {
         $this->composition = $composition;
-
         return $this;
     }
 
@@ -133,7 +162,6 @@ class Products
     public function setAnalyticsComponents(?string $analytics_components): static
     {
         $this->analytics_components = $analytics_components;
-
         return $this;
     }
 
@@ -145,7 +173,6 @@ class Products
     public function setNutritionnalAdditive(?string $nutritionnal_additive): static
     {
         $this->nutritionnal_additive = $nutritionnal_additive;
-
         return $this;
     }
 
@@ -157,7 +184,6 @@ class Products
     public function setIsNew(?bool $isNew): static
     {
         $this->isNew = $isNew;
-
         return $this;
     }
 
@@ -169,49 +195,71 @@ class Products
     public function setIsBestseller(?bool $isBestseller): static
     {
         $this->isBestseller = $isBestseller;
-
         return $this;
     }
 
-    public function getCategoryId(): ?Categories
+    public function getCategory(): ?Categories
     {
-        return $this->category_id;
+        return $this->category;
     }
 
-    public function setCategoryId(?Categories $category_id): static
+    public function setCategory(?Categories $category): static
     {
-        $this->category_id = $category_id;
-
+        $this->category = $category;
         return $this;
     }
+
+    public function isOutOfStock(): ?bool
+    {
+        return $this->isOutOfStock;
+    }
+
+    public function setIsOutOfStock(?bool $isOutOfStock): static
+    {
+        $this->isOutOfStock = $isOutOfStock;
+        return $this;
+    }
+
 
     /**
      * @return Collection<int, Variants>
      */
-    public function getVariants(): Collection
-    {
-        return $this->variants;
-    }
+    public function getVariants(): Collection { return $this->variants; }
 
     public function addVariant(Variants $variant): static
     {
         if (!$this->variants->contains($variant)) {
             $this->variants->add($variant);
-            $variant->setProductId($this);
+            $variant->setProduct($this);
         }
-
         return $this;
     }
 
     public function removeVariant(Variants $variant): static
     {
         if ($this->variants->removeElement($variant)) {
-            // set the owning side to null (unless already changed)
-            if ($variant->getProductId() === $this) {
-                $variant->setProductId(null);
+            if ($variant->getProduct() === $this) {
+                $variant->setProduct(null);
             }
         }
+        return $this;
+    }
 
+    // ---------- Champ temporaire pour EasyAdmin ----------
+    /**
+     * Champ temporaire pour la catégorie principale (non mappé)
+     * @var int|null
+     */
+    private ?int $categoryParent = null;
+
+    public function getCategoryParent(): ?int
+    {
+        return $this->categoryParent;
+    }
+
+    public function setCategoryParent(?int $categoryParent): self
+    {
+        $this->categoryParent = $categoryParent;
         return $this;
     }
 }

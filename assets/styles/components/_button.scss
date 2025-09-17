@@ -17,22 +17,52 @@ button:hover {
 
 
 
-.button-shop{
-    background-color : $background-color;
-    color : $color-green ;
-    border: $color-green 1px solid;
-    border-radius:40px;
-    padding:1em;
+.button-shop {
+    background-color: $background-color;
+    color: $color-green;
+    border: 1px solid $color-green;
+    border-radius: 10px;
+    padding: 1em;
     display: block;
-    margin: 0 auto;
+    margin: 0 auto 2em;
     font-size: $font-size-p;
+    text-decoration: none;
+    width: 10em;
+    text-align: center;
+    animation: pulse-color 4s ease-in-out infinite alternate; //alternate fait un aller-retour au lieu de recommencer toujours depuis le début
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
 
+//animation → contrôle un changement automatique et continu basé sur @keyframes.
+//transition → contrôle le changement déclenché par hover et le rend fluide.
+
+
+@keyframes pulse-color {
+    0% {
+        background-color: $background-color;
+        color: $color-green;
+        transform: scale(1); /* taille normale */
+    }
+    50% {
+        background-color: $color-green;
+        color: $background-color;
+        transform: scale(1.1); /* zoom léger */
+    }
+    100% {
+        background-color: $background-color;
+        color: $color-green;
+        transform: scale(1);
+    }
 }
 
 
-.button-shop:hover{
-    background-color :$color-green ;
-    color : $background-color ;
-    border: $color-green 1px solid;
-
+.button-shop:hover {
+    animation-play-state: paused; /* stoppe l’animation */
+    background-color: $color-green;
+    color: $background-color;
+    transform: scale(1.1);
+    text-decoration: underline;
 }
+
+
+

@@ -8,38 +8,130 @@
 {% endblock %}
 
 {% block body %}
-<div>
-    <div class="icones-user-shop">
-        <a href="{{ path('app_shop_cart') }}"><i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i></a>
-        <a href="{{ path('app_login') }}"><i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i></a>
+    <div>
+        <div class="icones-user-shop">
+            <a href="{{ path('app_shop_cart') }}"><i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i></a>
+            <a href="{{ path('app_login') }}"><i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i></a>
+        </div>
+
+        <h2>
+            {{ product.name }}
+            {% if product.isNew %}
+                <span class="badge badge-success" style="margin-left:10px; font-size:0.8em; padding:5px 8px;">Nouveau</span>
+            {% endif %}
+        </h2>
+
+        <section class="descriptif-flex background-beige">
+            <div class="product-slider">
+                {# Image principale du slider #}
+                <div class="main-image-container">
+                    {% if product.images|length > 0 %}
+                        <img id="main-product-image" src="{{ asset('img/products/' ~ product.images|first.filename) }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img id="main-product-image" src="{{ asset('img/default-product.jpg') }}" alt="Produit par défaut">
+                    {% endif %}
+                </div>
+
+                {# Flèches navigation #}
+                <button id="prev-image" class="slider-arrow">&#10094;</button>
+                <button id="next-image" class="slider-arrow">&#10095;</button>
+
+                {# Miniatures #}
+                <div class="thumbnail-container">
+                    {% for image in product.images %}
+                        <img class="thumbnail" src="{{ asset('img/products/' ~ image.filename) }}" alt="{{ product.name }}" data-index="{{ loop.index0 }}">
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div>
+                <h3>Description</h3>
+                <p>{{ product.description }}</p></br>
+                <h3>Contenance </h3>
+                <div class="variants-container">
+                    {% for variant in variants %}
+                        <div class="variant-card" data-variant-id="{{ variant.id }}">
+                            {{ variant.label }} - {{ variant.price }} €
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="btn-container">
+                    {# Formulaire toujours présent, même si le produit est en rupture #}
+                    <form id="add-to-cart-form" method="post" action="{% if variants|length > 0 %}{{ path('app_shop_cart_add', {'id': variants[0].id}) }}{% endif %}">
+                        {# Génération du token CSRF basé sur l'ID du premier variant #}
+                        {% if variants|length > 0 %}
+                            <input type="hidden" name="_token" id="csrf-token" value="{{ csrf_token('cart_add_' ~ variants[0].id) }}">
+                        {% endif %}
+
+                        {# Bouton désactivé si le produit est en rupture #}
+                        <button type="submit"
+                                class="btn-add-cart"
+                                {% if product.isOutOfStock or variants|length == 0 %}disabled style="background-color:#d6d5d5;color:black;cursor:not-allowed;"{% endif %}>
+                            {% if product.isOutOfStock %}
+                                Produit indisponible
+                            {% else %}
+                                Ajouter au panier
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    {# Badge visible si rupture #}
+                    {% if product.isOutOfStock %}
+                        <span class="rupture-stock-badge" style="background-color:#c0392b;color:white;padding:5px 10px;border-radius:5px;display:inline-block;margin-top:5px;">
+                        Produit en rupture de stock
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="composition-flex">
+            <h3>Composition</h3>
+            <p>{{ product.composition }}</p>
+            <h3>Composants analytiques</h3>
+            <p>{{ product.analyticsComponents }}</p>
+            <h3>Additifs nutritionnels par kg</h3>
+            <p>{{ product.nutritionnalAdditive }}</p>
+        </section>
     </div>
 
-    <h1>{{ product.name }}</h1>
-    <img src="{{ asset(product.imgId.url) }}" alt="{{ product.name }}"/>
-    <h3>Description</h3>
-    <p>{{ product.description }}</p>
-    <h3>Contenance :</h3>
-    <ul>
-        {% for variant in variants %}
-            <li>
-                {{ variant.label }} - {{ variant.price }} €
-                <a href="{{ path('app_shop_cart_add', {id: variant.id}) }}"> Ajouter au panier</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const variantCards = document.querySelectorAll('.variant-card');
+            const addToCartForm = document.getElementById('add-to-cart-form');
 
-    <h3>Composition</h3>
-    <p>{{ product.composition }}</p>
-    <h3>Composants analytiques</h3>
-    <p>{{ product.analyticsComponents }}</p>
-    <h3>Additifs</h3>
-    <p>{{ product.nutritionnalAdditive }}</p>
+            if (variantCards.length === 0 || !addToCartForm) return; // sécurité si pas de variants
 
+            const csrfTokenInput = document.getElementById('csrf-token');
+            const addToCartButton = addToCartForm.querySelector('button');
 
+            // URL template avec placeholder 'IDPLACEHOLDER' pour l'id du variant
+            const urlTemplate = "{{ path('app_shop_cart_add', {'id': 'IDPLACEHOLDER'}) }}";
 
+            let selectedVariantId = variantCards[0].dataset.variantId; // premier variant par défaut
+            variantCards[0].classList.add('selected');
 
+            // Empêche l'envoi du formulaire si le bouton est désactivé
+            addToCartForm.addEventListener('submit', (e) => {
+                if (addToCartButton.disabled) {
+                    e.preventDefault();
+                    alert("Ce produit est actuellement en rupture de stock.");
+                }
+            });
 
+            // Mise à jour du formulaire lors du clic sur un variant
+            variantCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    variantCards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedVariantId = card.dataset.variantId;
 
-
-</div>
+                    // Mise à jour de l'action du formulaire et du token CSRF
+                    addToCartForm.action = urlTemplate.replace('IDPLACEHOLDER', selectedVariantId);
+                    csrfTokenInput.value = "{{ csrf_token('cart_add_') }}" + selectedVariantId;
+                });
+            });
+        });
+    </script>
 {% endblock %}

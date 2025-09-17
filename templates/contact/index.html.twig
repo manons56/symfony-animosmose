@@ -39,50 +39,59 @@
 
 
         <div class="form-container">
-        {# Symfony lutte contre les failles XSS en échappant les variables dans twig(twig échappe les caractères spéciaux) #}
-        {{ form_start(contactForm) }}
-        <div class="field">
-            {{ form_label(contactForm.nom) }}
-            {{ form_widget(contactForm.nom) }}
-            {{ form_errors(contactForm.nom) }}
+            {# Symfony lutte contre les failles XSS en échappant les variables dans twig(twig échappe les caractères spéciaux) #}
+            {{ form_start(contactForm) }}
+            <div class="field-flex">
+
+                <div class="left-fields">
+                    <div class="field">
+                        {{ form_label(contactForm.nom) }}
+                        {{ form_widget(contactForm.nom) }}
+                        {{ form_errors(contactForm.nom) }}
+                    </div>
+
+                    <div class="field">
+                        {{ form_label(contactForm.prenom) }}
+                        {{ form_widget(contactForm.prenom) }}
+                        {{ form_errors(contactForm.prenom) }}
+                    </div>
+
+                    <div class="field">
+                        {{ form_label(contactForm.telephone) }}
+                        {{ form_widget(contactForm.telephone) }}
+                        {{ form_errors(contactForm.telephone) }}
+                    </div>
+
+                    <div class="field">
+                        {{ form_label(contactForm.email) }}
+                        {{ form_widget(contactForm.email) }}
+                        {{ form_errors(contactForm.email) }}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="field">
+                        {{ form_label(contactForm.message) }}
+                        {{ form_widget(contactForm.message) }}
+                        {{ form_errors(contactForm.message) }}
+                    </div>
+                </div>
+            </div>
+            {# Champ honeypot invisible pour bots #}
+            <div style="display: none;">
+                {{ form_widget(contactForm.website) }}
+            </div>
+
+            <div class="toolbar">
+                <button type="submit">Envoyer</button>
+            </div>
+
+            {{ form_rest(contactForm) }} {# important pour inclure le token et champs restants #}
+            {{ form_end(contactForm, {'render_rest': false}) }}
+            {#le form end ajoute automatiquement un bouton envoyer, mais on ne peut pas le personnaliser #}
+            {# donc render rest false le désactive et on ajoute nous meme le bouton envoyer pour le personnaliser #}
         </div>
 
-        <div class="field">
-            {{ form_label(contactForm.prenom) }}
-            {{ form_widget(contactForm.prenom) }}
-            {{ form_errors(contactForm.prenom) }}
-        </div>
-
-        <div class="field">
-            {{ form_label(contactForm.telephone) }}
-            {{ form_widget(contactForm.telephone) }}
-            {{ form_errors(contactForm.telephone) }}
-        </div>
-
-        <div class="field">
-            {{ form_label(contactForm.email) }}
-            {{ form_widget(contactForm.email) }}
-            {{ form_errors(contactForm.email) }}
-        </div>
-
-        <div class="field">
-            {{ form_label(contactForm.message) }}
-            {{ form_widget(contactForm.message) }}
-            {{ form_errors(contactForm.message) }}
-        </div>
-
-        {# Champ honeypot invisible pour bots #}
-        <div>
-            {{ form_widget(contactForm.website) }}
-        </div>
-        <div class="toolbar">
-            <button type="submit">Envoyer</button>
-        </div>
-        {{ form_rest(contactForm) }} {# important pour inclure le token et champs restants #}
-        {{ form_end(contactForm, {'render_rest': false}) }}
-        {#le form end ajoute automatiquement un bouton envoyer, mais on ne peut pas le personnaliser #}
-        {# donc render rest false le désactive et on ajoute nous meme le bouton envoyer pour le personnaliser #}
-        </div>
     </section>
 
 </main>

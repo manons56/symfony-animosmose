@@ -7,6 +7,7 @@
  */
 
 require('./js/stablemodale.js');
+require('./js/slider-img-products.js');
 //require('./js/cookie.js');
 require('./styles/app.scss');
 

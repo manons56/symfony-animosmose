@@ -21,12 +21,23 @@ class Categories
     /**
      * @var Collection<int, Products>
      */
-    #[ORM\OneToMany(targetEntity: Products::class, mappedBy: 'category_id')]
+    #[ORM\OneToMany(targetEntity: Products::class, mappedBy: 'category')]
     private Collection $products;
+
+
+    // Relation vers la catégorie parente (nullable pour les catégories principales)
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: "subcategories")]
+    private ?self $parent = null;
+
+    // Relation vers les sous-catégories
+    #[ORM\OneToMany(mappedBy: "parent", targetEntity: self::class)]
+    private $subcategories;
+
 
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->subcategories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,6 +62,24 @@ class Categories
         return $this->name ?? 'Catégorie';
     }
 
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): static
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+
+    public function getSubcategories(): Collection
+    {
+        return $this->subcategories;
+    }
 
     /**
      * @return Collection<int, Products>

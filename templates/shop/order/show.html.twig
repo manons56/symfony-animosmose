@@ -1,46 +1,97 @@
 {% extends 'base.html.twig' %}
+{% set current_page = 'order' %}
 
 {% block title %}Commande #{{ order.id }}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Commande #{{ order.id }}</h1>
-    <p>Créée le : {{ order.date|date('d/m/Y H:i') }}</p>
+    <a href="{{ path('app_shop_cart') }}" class="btn btn-secondary">← Retour au panier</a>
 
-    <h3>Articles :</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>Produit</th>
-            <th>Variant</th>
-            <th>Prix</th>
-            <th>Quantité</th>
-            <th>Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for article in order.articles %}
+    <div>
+        <h2>Livraison</h2>
+
+        <h3>Votre commande :</h3>
+        <table>
+            <thead>
             <tr>
-                <td>{{ article.variantId.productId.name }}</td>
-                {# article.variantId → récupère le variant lié à l’article (getVariantId())
-                   variantId.product → récupère le produit lié au variant (getProduct())
-                    product.name → récupère le nom du produit #}
-                <td>{{ article.variantId.label }}</td>
-                <td>{{ article.price }} €</td>
-                <td>{{ article.quantity }}</td>
-                <td>{{ article.price * article.quantity }} €</td>
+                <th>Produit</th>
+                <th>Contenance</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Total</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for article in order.articles %}
+                <tr>
+                    <td>{{ article.variantId.productId.name }}</td>
+                    <td>{{ article.variantId.label }}</td>
+                    <td>{{ article.price }} €</td>
+                    <td>{{ article.quantity }}</td>
+                    <td>{{ (article.price * article.quantity)|number_format(2, '.', ' ') }} €</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <p><strong>Total de la commande : {{ order.total }} €</strong></p>
+        {# Utilise order.total à la place de totalProduits #}
 
-    <a href="{{ path('app_product_list') }}">Retour au catalogue</a>
-</div>
+
+        <p>Total produits : <strong id="base-total">{{ order.total|number_format(2, '.', ' ') }}</strong> €</p>
+
+
+
+        <p>Total final : <strong id="final-total">{{ order.total|number_format(2, '.', ' ') }} €</strong></p>
+
+        {{ form_start(form) }}
+        <div>
+            {% for child in form.delivery_method %}
+                {% set key = child.vars.value %}
+                <label>
+                    {{ form_widget(child, { attr: {'data-price': deliveryOptions[key].price} }) }}
+                    {{ child.vars.label }}
+                </label><br>
+                <small style="color: #666; margin-left: 24px;">{{ deliveryOptions[key].description }}</small>
+                <br>
+            {% endfor %}
+        </div>
+        <p>Pour les livraisons à domicile et les retraits sur place, les paiements peuvent s'effectuer par virements, espèce ou chèque</p>
+        <p>Frais de livraison : <strong id="delivery-price">0.00</strong> €</p>
+        <p><strong>Total de la commande : {{ order.total|number_format(2, '.', ' ') }} €</strong></p>
+        <p>
+            En cochant, vous acceptez nos
+            <a href="{{ path('app_content_cgv') }}" target="_blank">conditions générales de vente</a>.
+        </p>
+        {{ form_row(form.cgv) }}
+
+        <button class="btn btn-primary">Valider ma commande</button>
+        {{ form_end(form) }}
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // un groupe de boutons radio (tes choix de livraison) :
+                const radios = document.querySelectorAll('input[name="delivery_type[delivery_method]"]');
+
+                //baseTotal  contient le total de la commande (sans frais de livraison), récupéré ici :
+                const baseTotal = parseFloat(document.getElementById('base-total').textContent.replace(/\s/g, ''));
+
+                radios.forEach(radio => {
+                    radio.addEventListener('change', function () {
+                        // on changes le bouton radio (radio.addEventListener('change', ...))
+                        // on récupère le prix des frais de livraison dans l’attribut data-price du bouton radio sélectionné :
+                        const price = parseFloat(this.dataset.price);
+
+                        // mise à jour le texte dans la page pour afficher les frais de livraison :
+                        document.getElementById('delivery-price').textContent = price.toFixed(2);
+
+                        // Somme total + frais livraison
+                        const finalTotal = (baseTotal + price).toFixed(2);
+
+                        document.getElementById('final-total').textContent = finalTotal + ' €';
+                    });
+                });
+            });
+        </script>
+
+    </div>
 {% endblock %}

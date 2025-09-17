@@ -21,11 +21,11 @@ class ProductsRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p') //SELECT * FROM products p
             ->distinct() // éviter les doublons
-            ->innerjoin('p.variants', 'v') //INNER JOIN variants v ON v.product_id = p.id
+            ->leftjoin('p.variants', 'v') //LEFT JOIN va inclure tous les produits, même ceux sans variantes.
             //On relie chaque produit à ses variants.
             //v est l’alias pour variants.
-            //La colonne product_id correspond à la relation OneToMany de Products.
-            ->andWhere('v.price BETWEEN :min AND :max') //WHERE v.price BETWEEN :min AND :max
+            //La colonne product correspond à la relation OneToMany de Products.
+            ->andWhere('v.price BETWEEN :min AND :max OR v.id IS NULL') //WHERE v.price BETWEEN :min AND :max
             ->setParameter('min', $min)
             ->setParameter('max', $max)
         //-- Ici on remplace les paramètres par leurs valeurs

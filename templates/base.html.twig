@@ -19,6 +19,7 @@
     {% endblock %}
 </head>
 <body>
+
 <header class="header">
     <img src="{{ asset('build/images/logo-animosmose.png')}}" alt='logo animosmose'/>
     <section>
@@ -75,7 +76,7 @@
 
         </div>
         <div class="footer-nav">
-            <p><a href=''>CGV</a></p>
+            <p><a href='{{ path('app_content_cgv') }}'>CGV</a></p>
             <p><a href=''>FAQ</a></p>
             <p><a href=''>Mentions légales</a></p>
         </div>

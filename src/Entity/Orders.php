@@ -39,6 +39,9 @@ class Orders
     #[ORM\Column(type: 'boolean')]
     private bool $archived = false;
 
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $deliveryMethod = null;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -136,5 +139,16 @@ class Orders
         return $this;
     }
 
+    public function getDeliveryMethod(): ?string
+    {
+        return $this->deliveryMethod;
+    }
+
+    public function setDeliveryMethod(?string $deliveryMethod): self
+    {
+        $this->deliveryMethod = $deliveryMethod;
+
+        return $this;
+    }
 
 }

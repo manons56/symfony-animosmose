@@ -149,9 +149,22 @@ button{
 .equipement-flex{
     display:flex;
     flex-direction:row;
+    gap:1em;
+    margin:1em;
+}
+
+.equipement-flex div {
+    flex: 1; /* chaque div prend la même largeur */
+    text-align: center;
+
+}
+
+.equipement-flex div p{
+    font-size: smaller;
 }
 
 
 .font-weight-bold{
     font-weight: 600;
+
 }

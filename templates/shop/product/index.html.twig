@@ -2,108 +2,106 @@
 {% set current_page = 'product' %}
 
 {% block title %}La boutique{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('product') }}
 {% endblock %}
 
 {% block body %}
-
-<div>
-    <div class="icones-user-shop">
-        <a href="{{ path('app_shop_cart') }}"><i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i></a>
-        <a href="{{ path('app_login') }}"><i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i></a>
-    </div>
-    <h2>Bienvenue sur notre boutique</h2>
-
-    <div class="description-flex">
-        <div>
-            <div class="font-weight-bold">Des gammes premium</div>
-            <p>Nous vous proposons des gammes d’aliments premium pour vos animaux tout en respectant votre porte-monnaie.</p>
+    <div>
+        <div class="icones-user-shop">
+            <a href="{{ path('app_shop_cart') }}"><i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i></a>
+            <a href="{{ path('app_login') }}"><i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i></a>
         </div>
-        <div class="description-border">
-            <div class="font-weight-bold">Une livraison facile</div>
-            <p>Nous vous proposons plusieurs points de retrait en Bretagne sous 3 à 5 jours ouvrés après validation de votre commande.</p>
+
+        <h2>Bienvenue sur notre boutique</h2>
+
+        <div class="description-flex">
+            <div>
+                <div class="font-weight-bold">Des gammes premium</div>
+                <p>Nous vous proposons des gammes d’aliments premium pour vos animaux tout en respectant votre porte-monnaie.</p>
+            </div>
+            <div class="description-border">
+                <div class="font-weight-bold">Une livraison facile</div>
+                <p>Nous vous proposons plusieurs points de retrait en Bretagne sous 3 à 5 jours ouvrés après validation de votre commande.</p>
+            </div>
+            <div>
+                <div class="font-weight-bold">Un devoir de conseil</div>
+                <p>Nous restons joignables facilement afin de trouver l’alimentation parfaite correspondant au profil de votre compagnon à 4 pattes.</p>
+            </div>
         </div>
-        <div>
-            <div class="font-weight-bold">Un devoir de conseil</div>
-            <p>Nous restons joignables facilement afin de trouver l’alimentation parfaite correspondant au profil de votre compagnon à 4 pattes.</p>
+
+        {# Filtre de prix #}
+        <form method="GET" id="price-filter-form">
+            <label for="min-price">Prix minimum :</label>
+            <input type="number" name="min" id="min-price" value="{{ app.request.get('min') ?? 0 }}" min="0">
+
+            <label for="max-price">Prix maximum :</label>
+            <input type="number" name="max" id="max-price" value="{{ app.request.get('max') ?? 150 }}" min="0">
+
+            <button type="submit">Filtrer</button>
+        </form>
+
+        {# Barre de recherche #}
+        <div class="search-container">
+            <input type="text" id="search" class="search-input" placeholder="Rechercher un produit...">
         </div>
-    </div>
 
-
-    {# Filtre de prix #}
-    <form method="GET" id="price-filter-form">
-        <label for="min-price">Prix minimum :</label>
-        <input type="number" name="min" id="min-price" value="{{ app.request.get('min') ?? 0 }}" min="0">
-
-        <label for="max-price">Prix maximum :</label>
-        <input type="number" name="max" id="max-price" value="{{ app.request.get('max') ?? 150 }}" min="0">
-
-        <button type="submit">Filtrer</button>
-    </form>
-
-    {# Barre de recherche #}
-    <div class="search-container">
-        <input type="text" id="search" class="search-input" placeholder="Rechercher un produit...">
-    </div>
-
-
-    <br>
-        <li>Nouveautés</li> </br>
-        <li>Accessoires</li>
+        {# Menu catégories et sous-catégories #}
+        <nav class="category-menu">
             <ul>
-                <li>Bon cadeau</li>
-                <li>Colliers</li>
-                <li>Laisses</li>
-                <li>Peluches</li>
-                <li>Vêtements</li>
+                {% for cat in categories %}
+                    <li>
+                        <a href="{{ path('app_product_category', {id: cat.id}) }}">
+                            {{ cat.name }}
+                        </a>
+                        {% if cat.subcategories|length > 0 %}
+                            <ul>
+                                {% for sub in cat.subcategories %}
+                                    <li>
+                                        <a href="{{ path('app_product_category', {id: sub.id}) }}">
+                                            {{ sub.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
             </ul>
-        <li>Alicaments</li>
-        <li>Aliments chiens</li>
-            <ul>
-                <li>BARF</li>
-                <li>Pâtés</li>
-                <li>Croquettes</li>
-                <li>Friandises</li>
-            </ul>
-        <li>Aliments chats</li>
-            <ul>
-                <li>Croquettes</li>
-                <li>Pâtés</li>
-            </ul>
-    </ul>
+        </nav>
+        {# Liste des produits #}
+        <div id="product-list" class="product-grid">
+            {% for product in products %}
+                <a href="{{ path('app_product_show', {'id': product.id}) }}">
+                    <div class="product-card">
+                        {% if product.isNew %}
+                            <span class="badge badge-success">Nouveau</span>
+                        {% endif %}
+                        <img src="{{ product.image ? asset('img/products/' ~ product.image) : asset('img/default-product.png') }}"  alt="{{ product.name }}" class="product-image">
+                        <h3 class="product-name">{{ product.name }}</h3>
+                    </div>
+                </a>
+            {% else %}
+                <p>Aucun produit trouvé pour cette catégorie / ces filtres.</p>
+            {% endfor %}
+        </div>
 
+        {# Script recherche en temps réel #}
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const searchInput = document.getElementById('search');
+                const products = document.querySelectorAll('.product-card');
 
-    <div id="product-list" class="product-grid">
-        {% for product in products %}
-            <a href="{{ path('app_product_show', {'id': product.id}) }}">
-                <div class="product-card">
-                    <img src="{{  asset(product.imgId.url) }}" alt="{{ product.name }}" class="product-image">
-                    <h3 class="product-name">{{ product.name }}</h3>
-                </div>
-            </a>
-        {% endfor %}
-    </div>
-
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('search');
-            const products = document.querySelectorAll('.product-card');
-
-            searchInput.addEventListener('input', function() { //À chaque fois que l’utilisateur tape (ou efface) un caractère dans le champ de recherche, la fonction se déclenche.
-                const query = this.value.toLowerCase(); //récupère le texte saisi dans l’input et met tout en minuscules pour éviter les problèmes de casse
-                products.forEach(card => { //Pour chaque carte produit :
-                    const name = card.querySelector('.product-name').textContent.toLowerCase(); //On récupère son nom (élément avec .product-name).
-                    card.style.display = name.includes(query) ? 'block' : 'none';
-                    //On compare ce nom avec la recherche (query).
-                    // Si le nom contient la recherche → la carte reste visible (display = 'block').
-                    // Sinon elle est cachée (display = 'none').
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.toLowerCase();
+                    products.forEach(card => {
+                        const name = card.querySelector('.product-name').textContent.toLowerCase();
+                        card.style.display = name.includes(query) ? 'block' : 'none';
+                    });
                 });
             });
-        });
-    </script>
-</div>
+        </script>
+    </div>
 {% endblock %}

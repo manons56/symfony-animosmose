@@ -17,12 +17,13 @@
 
     <h1>Votre panier</h1>
 
-    <table>
+    <table class="table-cart">
         <thead>
         <tr>
+            <th>Produit</th>
             <th>Contenance</th>
-            <th>Prix</th>
             <th>Quantité</th>
+            <th>Prix</th>
             <th>Total</th>
             <th></th>
         </tr>
@@ -30,11 +31,17 @@
         <tbody>
         {% for item in items %}
             <tr>
+                <td>{{ item.variant.productId.name }}</td>
                 <td>{{ item.variant.label }}</td>
-                <td>{{ item.variant.price }} €</td>
                 <td>{{ item.quantity }}</td>
+                <td>{{ item.variant.price }} €</td>
                 <td>{{ item.total }} €</td>
-                <td><a href="{{ path('app_shop_cart_remove', {id: item.variant.id}) }}">❌</a></td>
+                <td>
+                    <form method="post" action="{{ path('app_shop_cart_remove', {id: item.variant.id}) }}" onsubmit="return confirm('Supprimer cet article ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('cart_remove_' ~ item.variant.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                </td>
             </tr>
         {% else %}
             <tr><td colspan="5">Votre panier est vide.</td></tr>
@@ -45,6 +52,9 @@
     <h2>Total : {{ total }} €</h2>
 
     <a href="{{ path('app_product_list') }}"><button type="button"> Continuer mes achats</button></a>
-    <a href="{{ path('app_login') }}"><button type="button">Passer commande</button></a>
+    <form method="post" action="{{ path('app_shop_cart_checkout') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
+        <button type="submit">Passer commande</button>
+    </form>
 </div>
 {% endblock %}
