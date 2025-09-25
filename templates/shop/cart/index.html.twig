@@ -11,11 +11,33 @@
 
 <div>
     <div class="icones-user-shop">
-        <a href="{{ path('app_shop_cart') }}"><i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i></a>
-        <a href="{{ path('app_login') }}"><i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i></a>
-    </div>
+        <a href="{{ path('app_shop_cart') }}">
+            <i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i>
+        </a>
 
-    <h1>Votre panier</h1>
+        <div class="user-menu-wrapper">
+            {% if app.user %}
+                <button id="user-menu-toggle" class="user-icon-button">
+                    <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
+                </button>
+                <div id="user-menu" class="user-dropdown">
+                    <form method="post" action="{{ path('app_logout') }}">
+                        <button type="submit" class="user-menu-link">Se déconnecter</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{{ path('app_login') }}">
+                    <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <a href="{{ path('app_product_list') }}">
+        <img src="{{ asset('build/images/back_arrow.png') }}" alt="Flèche retour" class="back_arrow">
+    </a>
+
+
+        <h1>Votre panier</h1>
 
     <table class="table-cart">
         <thead>
@@ -31,7 +53,7 @@
         <tbody>
         {% for item in items %}
             <tr>
-                <td>{{ item.variant.productId.name }}</td>
+                <td>{{ item.variant.product.name }}</td>
                 <td>{{ item.variant.label }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.variant.price }} €</td>
@@ -44,17 +66,43 @@
                 </td>
             </tr>
         {% else %}
-            <tr><td colspan="5">Votre panier est vide.</td></tr>
+            <tr><td colspan="6">Votre panier est vide.</td></tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <h2>Total : {{ total }} €</h2>
+    <div class="cart-mobile">
+        {% for item in items %}
+            <div class="cart-item">
+                <div class="cart-item-header font-weight-bold">
+                    {{ item.variant.product.name }} ({{ item.variant.label }})
+                </div>
+                <div>Quantité : {{ item.quantity }}</div>
+                <div>Prix unitaire : {{ item.variant.price }} €</div>
+                <div>Total : {{ item.total }} €</div>
 
-    <a href="{{ path('app_product_list') }}"><button type="button"> Continuer mes achats</button></a>
-    <form method="post" action="{{ path('app_shop_cart_checkout') }}">
-        <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
-        <button type="submit">Passer commande</button>
-    </form>
+                <form method="post" action="{{ path('app_shop_cart_remove', {id: item.variant.id}) }}" onsubmit="return confirm('Supprimer cet article ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('cart_remove_' ~ item.variant.id) }}">
+                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                </form>
+            </div>
+        {% else %}
+            <p>Votre panier est vide.</p>
+        {% endfor %}
+    </div>
+
+
+    <h2>Total : {{ total }} €</h2>
+    <div class="cart-button">
+        <a href="{{ path('app_product_list') }}"><button type="button"> Continuer mes achats</button></a>
+        <form method="post" action="{{ path('app_shop_cart_checkout') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
+            <button type="submit">Passer commande</button>
+        </form>
+    </div>
 </div>
+
+
+
+
 {% endblock %}

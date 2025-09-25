@@ -10,9 +10,31 @@
 {% block body %}
     <div>
         <div class="icones-user-shop">
-            <a href="{{ path('app_shop_cart') }}"><i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i></a>
-            <a href="{{ path('app_login') }}"><i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i></a>
+            <a href="{{ path('app_shop_cart') }}">
+                <i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i>
+            </a>
+
+            <div class="user-menu-wrapper">
+                {% if app.user %}
+                    <button id="user-menu-toggle" class="user-icon-button">
+                        <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
+                    </button>
+                    <div id="user-menu" class="user-dropdown">
+                        <form method="post" action="{{ path('app_logout') }}">
+                            <button type="submit" class="user-menu-link">Se déconnecter</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <a href="{{ path('app_login') }}">
+                        <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
+                    </a>
+                {% endif %}
+            </div>
         </div>
+        <a href="{{ path('app_product_list') }}">
+            <img src="{{ asset('build/images/back_arrow.png') }}" alt="Flèche retour" class="back_arrow">
+        </a>
+
 
         <h2>
             {{ product.name }}
@@ -46,7 +68,8 @@
 
             <div>
                 <h3>Description</h3>
-                <p>{{ product.description }}</p></br>
+                <p>{{ product.description|nl2br|raw }}</p>
+                </br>
                 <h3>Contenance </h3>
                 <div class="variants-container">
                     {% for variant in variants %}
@@ -87,51 +110,21 @@
         </section>
 
         <section class="composition-flex">
-            <h3>Composition</h3>
-            <p>{{ product.composition }}</p>
-            <h3>Composants analytiques</h3>
-            <p>{{ product.analyticsComponents }}</p>
-            <h3>Additifs nutritionnels par kg</h3>
-            <p>{{ product.nutritionnalAdditive }}</p>
+            {% if product.composition is not empty %}
+                <h3>Composition</h3>
+                <p>{{ product.composition }}</p>
+            {% endif %}
+
+            {% if product.analyticsComponents is not empty %}
+                <h3>Composants analytiques</h3>
+                <p>{{ product.analyticsComponents }}</p>
+            {% endif %}
+
+            {% if product.nutritionnalAdditive is not empty %}
+                <h3>Additifs nutritionnels par kg</h3>
+                <p>{{ product.nutritionnalAdditive }}</p>
+            {% endif %}
         </section>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const variantCards = document.querySelectorAll('.variant-card');
-            const addToCartForm = document.getElementById('add-to-cart-form');
-
-            if (variantCards.length === 0 || !addToCartForm) return; // sécurité si pas de variants
-
-            const csrfTokenInput = document.getElementById('csrf-token');
-            const addToCartButton = addToCartForm.querySelector('button');
-
-            // URL template avec placeholder 'IDPLACEHOLDER' pour l'id du variant
-            const urlTemplate = "{{ path('app_shop_cart_add', {'id': 'IDPLACEHOLDER'}) }}";
-
-            let selectedVariantId = variantCards[0].dataset.variantId; // premier variant par défaut
-            variantCards[0].classList.add('selected');
-
-            // Empêche l'envoi du formulaire si le bouton est désactivé
-            addToCartForm.addEventListener('submit', (e) => {
-                if (addToCartButton.disabled) {
-                    e.preventDefault();
-                    alert("Ce produit est actuellement en rupture de stock.");
-                }
-            });
-
-            // Mise à jour du formulaire lors du clic sur un variant
-            variantCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    variantCards.forEach(c => c.classList.remove('selected'));
-                    card.classList.add('selected');
-                    selectedVariantId = card.dataset.variantId;
-
-                    // Mise à jour de l'action du formulaire et du token CSRF
-                    addToCartForm.action = urlTemplate.replace('IDPLACEHOLDER', selectedVariantId);
-                    csrfTokenInput.value = "{{ csrf_token('cart_add_') }}" + selectedVariantId;
-                });
-            });
-        });
-    </script>
 {% endblock %}

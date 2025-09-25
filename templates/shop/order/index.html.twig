@@ -7,6 +7,29 @@
 
     <a href="{{ path('app_shop_cart') }}" class="btn btn-secondary">← Retour au panier</a>
 
+    <div class="icones-user-shop">
+        <a href="{{ path('app_shop_cart') }}">
+            <i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i>
+        </a>
+
+        <div class="user-menu-wrapper">
+            {% if app.user %}
+                <button id="user-menu-toggle" class="user-icon-button">
+                    <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
+                </button>
+                <div id="user-menu" class="user-dropdown">
+                    <form method="post" action="{{ path('app_logout') }}">
+                        <button type="submit" class="user-menu-link">Se déconnecter</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{{ path('app_login') }}">
+                    <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
     <h1>Mes commandes</h1>
 
     <table>

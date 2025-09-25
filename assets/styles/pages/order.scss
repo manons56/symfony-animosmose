@@ -1,0 +1,191 @@
+//Bouton se déconnecter
+.user-menu-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.user-icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 5px 10px;
+
+}
+
+.user-dropdown.visible {
+    display: block;
+}
+
+.user-menu-link {
+    background: none;
+    border: none;
+    color: #333;
+    text-align: left;
+    padding: 8px 12px;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.user-menu-link:hover {
+    background-color: #f0f0f0;
+}
+
+.icones-user-shop .user-icon-button:hover {
+    background-color: transparent;
+}
+
+
+
+.icones-user-shop{
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    vertical-align: middle;
+    gap:1em;
+    padding:1em;
+}
+
+
+
+.add-padding{
+    padding-left:2em;
+    padding-right:2em;
+}
+
+/* ===== Table des produits ===== */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* espace sous le tableau */
+
+}
+
+.order-table th,
+.order-table td {
+    border: 1px solid #ddd;
+    padding: 12px 15px; /* plus d'espace dans les cellules */
+    text-align: left;
+}
+
+.order-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+/* ===== Totaux ===== */
+.order-totals{
+    padding-top:2em;
+}
+
+
+.order-totals p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.order-totals strong {
+    font-weight: 600;
+}
+
+/* ===== Formulaire livraison ===== */
+.delivery-methods {
+   margin-bottom: 20px;
+}
+
+.delivery-methods label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.delivery-methods input[type="radio"] {
+    margin-right: 8px;
+}
+
+.delivery-methods small {
+    color: #666;
+    margin-left: 24px;
+    display: block;
+    font-size: 14px;
+}
+
+/* ===== Conditions générales de vente ===== */
+.cgv-container {
+    font-size: 13px;
+    color: #888; /* gris clair */
+    margin-bottom: 15px;
+}
+
+.cgv-container a {
+    color: #000; /* lien noir */
+    text-decoration: underline;
+}
+
+
+
+/* ===== Espacement général ===== */
+body {
+    line-height: 1.6;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+
+button {
+   margin-top:2em;
+}
+
+
+
+/* Par défaut : on masque la version mobile */
+.order-mobile {
+    display: none;
+}
+
+.order-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1em;
+    margin: 1em 0;
+    background: #f9f9f9;
+    //font-size: 1.1rem;
+}
+
+.order-item-header {
+    font-size: 1.4rem;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+    .order-table {
+        display: none;
+    }
+
+    .order-mobile {
+        display: block;
+    }
+}
+
+

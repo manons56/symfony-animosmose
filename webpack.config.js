@@ -13,6 +13,7 @@ Encore
     // Entrée SCSS globale et par page
     .addEntry('app', './assets/app.js')
     .addEntry('home', './assets/styles/pages/home.scss')
+    .addEntry('order', './assets/styles/pages/order.scss')
     .addEntry('contact', './assets/styles/pages/contact.scss')
     .addEntry('pension', './assets/styles/pages/pension.scss')
     .addEntry('stable', './assets/styles/pages/stable.scss')

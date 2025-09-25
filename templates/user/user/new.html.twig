@@ -3,30 +3,153 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
+    <div class="example-wrapper">
+        <h2>Inscription</h2>
+
+        {{ form_start(form) }}
+
+        <div class="form-row">
+            {{ form_row(form.email, {label: 'Email'}) }}
+        </div>
+        <div class="form-row">
+            {{ form_label(form.plainPassword, 'Mot de passe') }}
+            {{ form_widget(form.plainPassword) }}
+            {{ form_errors(form.plainPassword) }}
+        </div>
+        </br>
+
+        <div class="form-row">
+        <div class="form-row">
+            {{ form_row(form.name, {label: 'Nom'}) }}
+        </div>
+        <div class="form-row">
+            {{ form_row(form.surname, {label: 'Prénom'}) }}
+        </div>
+        <div class="form-row">
+            {{ form_row(form.phone, {label: 'Numéro de téléphone'}) }}
+        </div>
+
+            {{ form_row(form.address.street, {label: 'Adresse'}) }}
+        </div>
+        <div class="form-row">
+            {{ form_row(form.address.zipcode, {label: 'Code postal'}) }}
+        </div>
+        <div class="form-row">
+            {{ form_row(form.address.city, {label: 'Ville'}) }}
+        </div>
+        <div class="form-row">
+            {{ form_row(form.address.countryLabel, {label: 'Pays'}) }}
+        </div>
+        <div class="form-row">
+            {{ form_row(form.address.country) }} {# champ caché #}
+        </div>
+        <div class="form-row">
+            {{ form_row(form.certification) }}
+        </div>
+
+        <button type="submit">S'inscrire</button>
+
+        {{ form_end(form) }}
+    </div>
+
+
+
+
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
+    h2{
+        margin: 1em 0;
+    }
+
+
+    body {
+
+        color: #333;
+        margin: 0;
+    }
+
+    .example-wrapper {
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+
+    .form-row {
+        margin: 2.5em 0;
+    }
+
+    .form-row label {
+        display: block;
+        margin-bottom: 0.3em;
+        font-weight: 500;
+        color: #555;
+
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+        width: 100%;
+        padding: 0.7em 1em;
+        border: 1.2px solid #ccc;
+        background: transparent;
+        transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+        border-color: #9aa584;
+        outline: none;
+
+    }
+
+    button[type="submit"] {
+        font-weight: 600;
+        padding: 0.85em;
+        width: 100%;
+        border: none;
+        border-radius: 8px;
+    }
+
+
+
+    .form-errors {
+        color: #d93025;
+        font-size: 0.85rem;
+        margin-top: 0.3em;
+    }
+
+    /* Champ caché */
+    input[type="hidden"] {
+        display: none;
+    }
+
+
+    @media (max-width: 600px) {
+
+
+        .example-wrapper {
+            padding: 0 1.5em;
+        }
+
+        .form-row {
+            margin: 2em 0;
+        }
+
+        input,
+        select {
+
+            padding: 0.8em;
+        }
+
+        button[type="submit"] {
+            padding: 0.9em;
+        }
+    }
 </style>
 
-<div class="example-wrapper">
-    <h1>Inscription</h1>
 
-    {{ form_start(form) }}
-    {{ form_row(form.name, {label: 'Nom'}) }}
-    {{ form_row(form.surname, {label: 'Prénom'}) }}
-    {{ form_row(form.phone, {label: 'Numéro de téléphone'}) }}
-    {{ form_row(form.email, {label: 'Email'}) }}
-    {{ form_label(form.plainPassword, 'Mot de passe') }}
-    {{ form_widget(form.plainPassword) }}
-   {{ form_errors(form.plainPassword) }}
-    {{ form_row(form.address.street, {label: 'Adresse'}) }}
-    {{ form_row(form.address.zipcode, {label: 'Code postal'}) }}
-    {{ form_row(form.address.city, {label: 'Ville'}) }}
-    {{ form_row(form.address.countryLabel, {label: 'Pays'}) }}
-    {{ form_row(form.address.country) }} {# champ caché #}
-    {{ form_row(form.certification) }}
-    <button type="submit">S'inscrire</button>
-    {{ form_end(form) }}
-
-</div>
 {% endblock %}

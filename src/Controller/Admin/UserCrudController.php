@@ -48,6 +48,11 @@ class UserCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->remove(Crud::PAGE_INDEX, Action::NEW); // désactive "Créer" dans la liste
+            ->remove(Crud::PAGE_INDEX, Action::NEW) // désactive "Créer" dans la liste
+
+            // Supprimer l'action "delete" uniquement sur la page INDEX
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+
+            ->add(Crud::PAGE_EDIT, Action::DELETE);  // ajoute sur détail
     }
 }

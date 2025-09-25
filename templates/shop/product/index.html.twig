@@ -11,11 +11,29 @@
 {% block body %}
     <div>
         <div class="icones-user-shop">
-            <a href="{{ path('app_shop_cart') }}"><i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i></a>
-            <a href="{{ path('app_login') }}"><i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i></a>
+            <a href="{{ path('app_shop_cart') }}">
+                <i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i>
+            </a>
+
+            <div class="user-menu-wrapper">
+                {% if app.user %}
+                    <button id="user-menu-toggle" class="user-icon-button">
+                        <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
+                    </button>
+                    <div id="user-menu" class="user-dropdown">
+                        <form method="post" action="{{ path('app_logout') }}">
+                            <button type="submit" class="user-menu-link">Se déconnecter</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <a href="{{ path('app_login') }}">
+                        <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
+                    </a>
+                {% endif %}
+            </div>
         </div>
 
-        <h2>Bienvenue sur notre boutique</h2>
+        <h1>Bienvenue sur notre boutique</h1>
 
         <div class="description-flex">
             <div>
@@ -32,76 +50,154 @@
             </div>
         </div>
 
-        {# Filtre de prix #}
-        <form method="GET" id="price-filter-form">
-            <label for="min-price">Prix minimum :</label>
-            <input type="number" name="min" id="min-price" value="{{ app.request.get('min') ?? 0 }}" min="0">
+        <h2>Nos best-seller</h2>
+        {# Carrousel des best-sellers #}
+        {% set bestSellers = bestSellers %}
 
-            <label for="max-price">Prix maximum :</label>
-            <input type="number" name="max" id="max-price" value="{{ app.request.get('max') ?? 150 }}" min="0">
-
-            <button type="submit">Filtrer</button>
-        </form>
-
-        {# Barre de recherche #}
-        <div class="search-container">
-            <input type="text" id="search" class="search-input" placeholder="Rechercher un produit...">
-        </div>
-
-        {# Menu catégories et sous-catégories #}
-        <nav class="category-menu">
-            <ul>
-                {% for cat in categories %}
-                    <li>
-                        <a href="{{ path('app_product_category', {id: cat.id}) }}">
-                            {{ cat.name }}
+        {% if bestSellers is not empty %}
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    {% for product in bestSellers %}
+                        <a href="{{ path('app_product_show', {'id': product.id}) }}" class="carousel-card">
+                            <div class="product-card">
+                                {% if product.isNew %}
+                                    <span class="badge badge-success">Nouveau</span>
+                                {% endif %}
+                                <img src="{{ product.image ? asset('img/products/' ~ product.image) : asset('img/default-product.png') }}" alt="{{ product.name }}" class="product-image">
+                                <h3 class="product-name">{{ product.name }}</h3>
+                            </div>
                         </a>
-                        {% if cat.subcategories|length > 0 %}
-                            <ul>
-                                {% for sub in cat.subcategories %}
-                                    <li>
-                                        <a href="{{ path('app_product_category', {id: sub.id}) }}">
-                                            {{ sub.name }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        </nav>
-        {# Liste des produits #}
-        <div id="product-list" class="product-grid">
-            {% for product in products %}
-                <a href="{{ path('app_product_show', {'id': product.id}) }}">
-                    <div class="product-card">
-                        {% if product.isNew %}
-                            <span class="badge badge-success">Nouveau</span>
-                        {% endif %}
-                        <img src="{{ product.image ? asset('img/products/' ~ product.image) : asset('img/default-product.png') }}"  alt="{{ product.name }}" class="product-image">
-                        <h3 class="product-name">{{ product.name }}</h3>
-                    </div>
-                </a>
-            {% else %}
-                <p>Aucun produit trouvé pour cette catégorie / ces filtres.</p>
-            {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+
+        <div class="search-filter-container">
+            {# Barre de recherche #}
+            <div class="search-container">
+                <input type="text" id="search" class="search-input" placeholder="Rechercher un produit...">
+            </div>
+
+            {# Filtre de prix #}
+            <form method="GET" id="price-filter-form">
+                <label for="min-price">Prix min :</label>
+                <input type="number" name="min" id="min-price" value="{{ app.request.get('min') ?? 0 }}" min="0">
+                <label for="max-price">max :</label>
+                <input type="number" name="max" id="max-price" value="{{ app.request.get('max') ?? 150 }}" min="0">
+                <button type="submit">Filtrer</button>
+            </form>
         </div>
 
-        {# Script recherche en temps réel #}
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const searchInput = document.getElementById('search');
-                const products = document.querySelectorAll('.product-card');
 
-                searchInput.addEventListener('input', function() {
-                    const query = this.value.toLowerCase();
-                    products.forEach(card => {
-                        const name = card.querySelector('.product-name').textContent.toLowerCase();
-                        card.style.display = name.includes(query) ? 'block' : 'none';
-                    });
-                });
-            });
-        </script>
+
+
+
+
+        <div class="content-wrapper">
+            {# Menu latéral  #}
+            <nav class="category-menu">
+                <ul>
+                    <li>
+                        <a href="{{ path('app_product_new') }}" class="category-link no-toggle">Nouveau</a>
+                    </li>
+
+                    {% for cat in categories %}
+                        <li>
+                            {# Lien principal de la catégorie #}
+                            {% if cat.subcategories|length > 0 %}
+                                <a href="#" class="category-toggle" data-cat-id="cat-{{ cat.id }}">
+                                    {{ cat.name }}
+                                    <span class="arrow">▼</span>
+                                </a>
+                            {% else %}
+                                <a href="{{ path('app_product_category', {'id': cat.id}) }}" class="category-link no-toggle">
+                                    {{ cat.name }}
+                                </a>
+                            {% endif %}
+
+                            {# Sous-catégories #}
+                            {% if cat.subcategories|length > 0 %}
+                                <ul class="subcategory-list" id="cat-{{ cat.id }}">
+                                    {% for sub in cat.subcategories %}
+                                        <li>
+                                            <a href="{{ path('app_product_category', {id: sub.id}) }}">
+                                                {{ sub.name }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+
+
+
+            <div id="product-list" class="product-grid">
+                {% for product in products %}
+                    <a href="{{ path('app_product_show', {'id': product.id}) }}" class="product-item" data-index="{{ loop.index0 }}">
+                        <div class="product-card">
+                            {% if product.isNew %}
+                                <span class="badge badge-success">Nouveau</span>
+                            {% endif %}
+
+                            <img src="{{ product.image ? asset('img/products/' ~ product.image) : asset('img/default-product.png') }}" alt="{{ product.name }}" class="product-image">
+                            <h3 class="product-name">{{ product.name }}</h3>
+
+                            {# Bloc prix #}
+                            {% set variants = product.variants %}
+                            {% if variants|length == 1 %}
+                                <p class="product-price">{{ (variants[0].price)|number_format(2, '.', ' ') }} €</p>
+                            {% elseif variants|length > 1 %}
+                                <p class="product-price">À partir de {{ (variants[0].price)|number_format(2, '.', ' ') }} €</p>
+                            {% else %}
+                                <p class="product-price">Prix non disponible</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% else %}
+                    <p>Aucun produit trouvé pour cette catégorie / ces filtres.</p>
+                {% endfor %}
+            </div>
+
+
+
+
+        </div>
+        <div id="pagination-controls" class="pagination"></div>
+
     </div>
+
+    <script>
+        document.querySelectorAll('.category-menu > ul > li > a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const li = this.parentElement;
+                const submenu = li.querySelector('.subcategory-list');
+
+                // Seulement empêcher le comportement par défaut si un sous-menu existe
+                if (submenu) {
+                    e.preventDefault();
+
+                    // Toggle visible
+                    if (submenu.classList.contains('visible')) {
+                        submenu.classList.remove('visible');
+                        return;
+                    }
+
+                    // Masquer tous les autres menus ouverts
+                    document.querySelectorAll('.subcategory-list.visible').forEach(openMenu => {
+                        openMenu.classList.remove('visible');
+                    });
+
+                    submenu.classList.add('visible');
+                }
+            });
+        });
+
+
+    </script>
+
+
 {% endblock %}

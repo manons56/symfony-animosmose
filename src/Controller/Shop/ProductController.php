@@ -36,11 +36,13 @@ class ProductController extends AbstractController
 
         // Menu : catégories principales
         $categories = $categoriesRepository->findBy(['parent' => null]);
+        $bestSellers = $productRepository->findBy(['isBestseller' => true]);
 
         return $this->render('shop/product/index.html.twig', [
             'products' => $products,
             'categories' => $categories,
             'current_page' => 'product',
+            'bestSellers' => $bestSellers,
         ]);
     }
 
@@ -64,10 +66,14 @@ class ProductController extends AbstractController
             $products = $productRepository->findBy(['category' => $category]);
         }
 
+        $bestSellers = $productRepository->findBy(['isBestseller' => true]);
+
+
         return $this->render('shop/product/index.html.twig', [
             'products' => $products,
             'categories' => $categoriesRepo->findBy(['parent' => null]), // pour le menu
             'current_page' => 'product',
+            'bestSellers' => $bestSellers,
         ]);
     }
 
@@ -81,6 +87,23 @@ class ProductController extends AbstractController
         return $this->render('shop/product/index.html.twig', [
             'categories' => $categories,
             'current_page' => 'product',
+        ]);
+    }
+
+
+    #[Route('/shop/new', name: 'app_product_new')]
+    public function newProducts(ProductsRepository $productsRepository, CategoriesRepository $categoriesRepo): Response
+    {
+        $products = $productsRepository->findBy(['isNew' => true]);
+        $categories = $categoriesRepo->findBy(['parent' => null]); // pour le menu
+        $bestSellers = $productsRepository->findBy(['isBestseller' => true]);
+
+        return $this->render('shop/product/index.html.twig', [
+            'products' => $products,
+            'categories' => $categories,
+            'title' => 'Nouveaux produits',
+            'current_page' => 'product',
+            'bestSellers' => $bestSellers,
         ]);
     }
 

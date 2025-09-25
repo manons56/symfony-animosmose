@@ -3,95 +3,99 @@
 
 {% block title %}Commande #{{ order.id }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('order') }}
+{% endblock %}
+
 {% block body %}
 
-    <a href="{{ path('app_shop_cart') }}" class="btn btn-secondary">← Retour au panier</a>
-
-    <div>
-        <h2>Livraison</h2>
-
-        <h3>Votre commande :</h3>
-        <table>
-            <thead>
+    <h2>Livraison et paiement</h2>
+<div class="add-padding">
+    <table class="order-table">
+        <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Contenance</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in order.articles %}
             <tr>
-                <th>Produit</th>
-                <th>Contenance</th>
-                <th>Prix</th>
-                <th>Quantité</th>
-                <th>Total</th>
+                <td>{{ article.variantId.product.name }}</td>
+                <td>{{ article.variantId.label }}</td>
+                <td>{{ article.price }} €</td>
+                <td>{{ article.quantity }}</td>
+                <td>{{ (article.price * article.quantity)|number_format(2, '.', ' ') }} €</td>
             </tr>
-            </thead>
-            <tbody>
-            {% for article in order.articles %}
-                <tr>
-                    <td>{{ article.variantId.productId.name }}</td>
-                    <td>{{ article.variantId.label }}</td>
-                    <td>{{ article.price }} €</td>
-                    <td>{{ article.quantity }}</td>
-                    <td>{{ (article.price * article.quantity)|number_format(2, '.', ' ') }} €</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        {# Utilise order.total à la place de totalProduits #}
-
-
-        <p>Total produits : <strong id="base-total">{{ order.total|number_format(2, '.', ' ') }}</strong> €</p>
-
-
-
-        <p>Total final : <strong id="final-total">{{ order.total|number_format(2, '.', ' ') }} €</strong></p>
-
-        {{ form_start(form) }}
-        <div>
-            {% for child in form.delivery_method %}
-                {% set key = child.vars.value %}
-                <label>
-                    {{ form_widget(child, { attr: {'data-price': deliveryOptions[key].price} }) }}
-                    {{ child.vars.label }}
-                </label><br>
-                <small style="color: #666; margin-left: 24px;">{{ deliveryOptions[key].description }}</small>
-                <br>
-            {% endfor %}
-        </div>
-        <p>Pour les livraisons à domicile et les retraits sur place, les paiements peuvent s'effectuer par virements, espèce ou chèque</p>
-        <p>Frais de livraison : <strong id="delivery-price">0.00</strong> €</p>
-        <p><strong>Total de la commande : {{ order.total|number_format(2, '.', ' ') }} €</strong></p>
-        <p>
-            En cochant, vous acceptez nos
-            <a href="{{ path('app_content_cgv') }}" target="_blank">conditions générales de vente</a>.
-        </p>
-        {{ form_row(form.cgv) }}
-
-        <button class="btn btn-primary">Valider ma commande</button>
-        {{ form_end(form) }}
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // un groupe de boutons radio (tes choix de livraison) :
-                const radios = document.querySelectorAll('input[name="delivery_type[delivery_method]"]');
-
-                //baseTotal  contient le total de la commande (sans frais de livraison), récupéré ici :
-                const baseTotal = parseFloat(document.getElementById('base-total').textContent.replace(/\s/g, ''));
-
-                radios.forEach(radio => {
-                    radio.addEventListener('change', function () {
-                        // on changes le bouton radio (radio.addEventListener('change', ...))
-                        // on récupère le prix des frais de livraison dans l’attribut data-price du bouton radio sélectionné :
-                        const price = parseFloat(this.dataset.price);
-
-                        // mise à jour le texte dans la page pour afficher les frais de livraison :
-                        document.getElementById('delivery-price').textContent = price.toFixed(2);
-
-                        // Somme total + frais livraison
-                        const finalTotal = (baseTotal + price).toFixed(2);
-
-                        document.getElementById('final-total').textContent = finalTotal + ' €';
-                    });
-                });
-            });
-        </script>
-
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="order-mobile">
+        {% for article in order.articles %}
+            <div class="order-item">
+                <div class="order-item-header font-weight-bold">
+                    {{ article.variantId.product.name }} ({{ article.variantId.label }})
+                </div>
+                <div>Quantité : {{ article.quantity }}</div>
+                <div>Prix unitaire : {{ article.price }} €</div>
+                <div>Total : {{ (article.price * article.quantity)|number_format(2, '.', ' ') }} €</div>
+            </div>
+        {% else %}
+            <p>Aucun article dans cette commande.</p>
+        {% endfor %}
     </div>
+    </br>
+
+    {{ form_start(form) }}
+
+
+    {# Ce bloc sert à afficher la liste de méthodes de livraison sous forme de boutons radio ou de cases à cocher,
+     avec des données supplémentaires (prix et description) associées à chaque option. #}
+    <div class="delivery-methods">
+        {% for child in form.delivery_method %}
+            {% set key = child.vars.value %}
+            <label>
+                {{ form_widget(child, { attr: {'data-price': deliveryOptions[key].price} }) }}
+                {{ child.vars.label }}
+            </label>
+            <small>{{ deliveryOptions[key].description }}</small>
+            </br>
+        {% endfor %}
+    </div>
+    <p>Pour les livraisons à domicile ou le retrait sur place, les paiements peuvent s'effectuer par chèque, virement ou espèces.</p>
+    <div class="order-totals">
+        <p>Total produits : <strong id="base-total">{{ order.total|number_format(2, '.', ' ') }}</strong> €</p>
+        <p>Frais de livraison : <strong id="delivery-price">0.00</strong> €</p>
+        <p><strong>Total final : <span id="final-total">{{ order.total|number_format(2, '.', ' ') }}</span> €</strong></p>
+    </div>
+    </br>
+    <div class="cgv-container">
+        <label>
+            <span>
+                En cochant, vous acceptez nos
+                <a href="{{ path('app_content_cgv') }}" target="_blank">conditions générales de vente</a>.
+            </span>
+            {{ form_widget(form.cgv) }}
+        </label>
+    </div>
+
+
+
+    {# Bouton Payline – Mondial Relay seulement #}
+    {# Bouton Payline – toujours présent mais masqué par défaut #}
+    <a id="payline-button" href="{{ path('checkout_pay', {'orderId': order.id}) }}" class="btn" style="display:none;">
+        Payer avec Payline
+    </a>
+
+    <button type="submit" class="btn" id="submit-button">Valider ma commande</button>
+
+
+    {{ form_end(form) }}
+</div>
 {% endblock %}
+
+

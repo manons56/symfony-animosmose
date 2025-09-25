@@ -26,7 +26,7 @@ final class ContactController extends AbstractController
         if ($form->isSubmitted()) {
             // Honeypot
             if (!empty($form->get('website')->getData())) {
-                $this->addFlash('error', 'Spam détecté !');
+                $this->addFlash('contact_error', 'Spam détecté !');
             }
 
             // Formulaire valide
@@ -48,9 +48,9 @@ final class ContactController extends AbstractController
 
                 try {
                     $mailer->send($email);
-                    $this->addFlash('success', 'Message envoyé avec succès ! Nous reviendrons vers vous dès que possible.');
+                    $this->addFlash('contact_success', 'Message envoyé avec succès ! Nous reviendrons vers vous dès que possible.');
                 } catch (\Throwable $e) {
-                    $this->addFlash('error', 'Erreur lors de l\'envoi du mail : ' . $e->getMessage());
+                    $this->addFlash('contact_error', 'Erreur lors de l\'envoi du mail : ' . $e->getMessage());
                 }
 
                 return $this->redirectToRoute('app_contact');

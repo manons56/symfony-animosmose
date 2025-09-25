@@ -17,6 +17,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use App\Form\PicturesType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+
+
+
 
 class ProductsCrudController extends AbstractCrudController
 {
@@ -32,6 +37,14 @@ class ProductsCrudController extends AbstractCrudController
         return Products::class;
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            // Supprimer l'action "delete" uniquement sur la page INDEX
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+
+            ->add(Crud::PAGE_EDIT, Action::DELETE);  // ajoute sur détail
+    }
     public function configureFields(string $pageName): iterable
     {
         // Champ image unique (pour la photo principale)

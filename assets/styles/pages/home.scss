@@ -2,141 +2,251 @@
 
 /* ..............MAIN...............*/
 
-.team-picture{
+.team-picture {
     width: 100vw;
-    height: 115vh;
+    height: 90vh;
     background-image: url("../../img/photo-equipe.png");
     background-size: cover;
-    background-position: center;
+    background-position: top ;
     background-repeat: no-repeat;
 }
 
-.home-container{
+.home-container {
     width: 100%;
     margin: 0 auto;
-    padding: 0 ;
+    padding: 0;
 }
 
-.section-h1{
+.section-h1 {
     width: 90%;
     max-width: 1300px;
     margin: 0 auto;
-
-
 }
 
-.home-container img{
-    padding-top :2em;
+.home-container .personne img {
+    padding-top: 2em;
+    width:10em;
+    width:10em;
 }
 
-
-
-
-.home-article-s2 {
-    width: 80%;
-    max-width: 1300px;
-    margin: 1em auto;
-    border: solid 3px $color-orange;
-    border-radius:20px;
-    font-weight: bold;
-}
-
-.home-article-s2 img {
-    width: 10em;
-    max-height: 10em;
-}
-
-
-.font-family-title{
+.font-family-title {
     font-family: $font-family-title;
     font-size: $font-size-h2;
 }
 
 .home-container article {
-    display : flex;
-    align-items: flex-start; /* aligne le haut des images et des textes */
-    gap: 1rem; /* espace entre la photo et le texte */
+    display: flex;
+    align-items: flex-start;
+    gap: 2em;
 }
 
 .home-container .personne {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 120px; /* taille fixe pour la colonne image/nom */
+    min-width: 120px;
 }
 
-.home-container  .description {
-    padding:1em;
-    flex: 1; /* prend le reste de l’espace */
-    line-height:2;
+.home-container .description {
+    padding: 1em;
+    flex: 1;
+    line-height: 2;
+    text-align:justify;
+}
+
+.home-container .description-franck {
+    flex: 1;
+    line-height: 2;
+    text-align:justify;
 }
 
 
+.separation-border {
+    border-bottom: $color-green 1px solid;
+}
 
+.button-interview {
+    margin: 2em;
+}
 
-.side-activities {
+.background-beige {
+    padding-bottom: 4em;
+}
+
+/* ------- CAROUSEL -------- */
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding:4em 0;
+}
+
+.carousel-track {
     display: flex;
-    justify-content: space-between; /* espace régulier entre les 3 articles */
-    width: 80%;
-    max-width: 1300px;
-    margin: 1em auto; /* même marge que les articles du dessus */
-    gap: 1rem; /* espace entre chaque article (optionnel, ajoute si tu veux) */
-
+    gap: 2rem; // garde un bel espace entre les articles
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
 }
 
-
-.side-activities article.home-article-s2 {
-    flex: 1 1 32%; /* largeur ~1/3 de la ligne, flexible */
-    min-width: 250px; /* optionnel, limite la réduction trop petite */
-    max-width: 32%;
+.carousel-item {
+    height: 410px;
+    min-width: 300px;
+    max-width: 300px;
+    flex-shrink: 0;
+    padding: 1rem; // ajoute de l’air autour de chaque carte
     box-sizing: border-box;
-    margin: 0; /* enlève la marge si tu en as */
+    transition: transform 0.3s ease;
+}
+
+.carousel-item.active {
+    transform: scale(1.2);
+    z-index: 1;
+}
+
+.home-article-s2 {
+    border: 2px solid $color-orange;
+    border-radius: 20px;
+    padding: 2em;
+    text-align: center;
+    background-color: rgba(246, 241, 237, 0.59);
+    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center; /* centre le texte dans le <p> */
+    align-items: center; // centre tous les éléments
+    justify-content: space-between;
+    gap: 1rem; // espace vertical régulier
 
-    gap: 1rem; /* espace vertical entre img, p et button */
-    padding: 1em; /* optionnel : pour un peu d’air à l’intérieur */
 
+    img {
+        width: 80%;
+        max-height: 200px;
+        object-fit: cover;
+        margin: 0 auto;
+    }
+
+    p {
+        font-size: $font-size-p;
+        text-align:center;
+        font-weight: bold;
+        margin: 0; // évite les sauts d’espace involontaires
+    }
+
+    button {
+        margin-top: 0.5rem;
+    }
 }
 
-
-
-.logo-alimosmose{
-    width:10%;
-    padding-top: 0 !important;
-
-}
-
-
-
-
-.separation-border{
-    border-bottom : $color-green 3px solid;
-
-}
-
-
-.article-flex {
+.home-article-s2 a {
     display: flex;
-    align-items: center; /* aligne verticalement au centre */
-    justify-content: space-around; /* garde les espaces existants */
-    padding: 1em;
-    width: 80%;
-    max-width: 1300px;
-    margin: 1em auto;
-    gap: 2rem; /* pour espace régulier entre éléments */
+    justify-content: center;
+    width: 100%;
+    text-decoration:none;
 }
 
 
-.p-intro {
-    padding-top:2em;
-    text-align:center;
-    letter-spacing:1px;
-    line-height:2;
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: $color-orange;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.carousel-btn.prev {
+    left: 0;
+}
+
+.carousel-btn.next {
+    right: 0;
+}
+
+h2{
+    padding-bottom: 1em;
+}
+
+/* Par défaut : on cache la flèche */
+.toggle-arrow {
+    display: none;
 }
 
 
+
+@media (max-width: 768px) {
+    .carousel-item {
+        min-width: 60%;  // prend toute la largeur visible
+        max-width: 60%;  // idem
+        padding: 1rem;
+    }
+
+    .carousel-btn {
+        font-size: 1.5rem;
+        padding: 0.3em 0.6em;
+    }
+
+    .team-picture {
+        height: 50vh;  // hauteur réduite sur mobile pour que ça ne prenne pas trop de place
+        background-position: center center; // recentre l’image au milieu sur mobile
+    }
+
+    .home-container article {
+        display: block;  /* plus de flex, empilement vertical */
+    }
+
+    .home-container .personne {
+        margin-bottom: 1em;
+        min-width: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .home-container .description,
+    .home-container .description-franck {
+        width: 100%;
+        max-height: 9em; /* plus de lignes visibles (~6 lignes) */
+        overflow: hidden;
+        position: relative;
+        transition: max-height 0.3s ease;
+        /* retirer cursor pointer du texte pour éviter confusion */
+        cursor: default;
+        margin-bottom: 0.5em; /* espace entre texte et flèche */
+    }
+
+    .home-container .description.expanded,
+    .home-container .description-franck.expanded {
+        max-height: 1000px; /* tout afficher */
+    }
+
+    /* Conteneur pour la flèche */
+    .toggle-arrow {
+        display: block;              /* fait que le conteneur prenne toute la largeur */
+        text-align: center;          /* centre horizontalement le contenu */
+        font-size: 2.5rem;           /* flèche plus grosse */
+        color: $color-green;
+        cursor: pointer;
+        user-select: none;
+        transition: transform 0.3s ease;
+        margin-bottom: 2em;
+        transform: rotate(90deg);    /* flèche vers le bas par défaut */
+        line-height: 1;              /* évite un espace vertical supplémentaire */
+        font-weight: bold;
+    }
+
+    /* Flèche tournée vers le bas quand texte fermé, vers le haut quand ouvert */
+    .toggle-arrow.expanded {
+        transform: rotate(-90deg); /* flèche tournée vers le haut quand ouvert */
+    }
+
+
+}
 
 

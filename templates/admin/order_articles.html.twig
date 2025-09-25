@@ -11,7 +11,7 @@
     <tbody>
     {% for article in field.value %}
         <tr>
-            <td>{{ article.getVariantId().getProductId.getName() }}</td>
+            <td>{{ article.getVariantId().getProduct.getName() }}</td>
             <td>{{ article.getVariantId().getLabel() }}</td>
             <td>{{ article.getQuantity() }}</td>
             <td>{{ article.getPrice() }} €</td>

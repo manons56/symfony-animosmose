@@ -4,23 +4,25 @@
 .footer{
     background-color: $color-green;
     font-family:$font-family-nav ;
-
-
+    margin-top:4em;
 }
 
-.footer-flex{
-    display : flex;
-    justify-content:space-between;
+.footer-flex {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
     padding: 1em 2em;
-    gap:1em
+    gap: 1em;
 }
 
 
 .footer-col-left {
+    flex:1 1 20%;
     display: flex;
     flex-direction: column;
     align-items: center; /* Centre les éléments à l’intérieur du bloc */
     width: 20%;
+    min-width: 180px;
     gap: 1em;
     margin-right: 4em;
     margin-left:2em;
@@ -45,8 +47,8 @@
 }
 
 .footer-nav {
-    flex: 1;
-    min-width: 150px;
+    flex: 1 1 20%;
+    //min-width: 150px;
     font-size:1.3rem;
     margin-top:1.5em;
 }
@@ -62,11 +64,66 @@
     text-decoration:none;
 }
 
+
+/* Pour éviter que les colonnes se déforment trop */
+.footer-nav p,
+.footer-nav a {
+    word-break: break-word;
+}
+
+
+
 .footer a:hover {
     text-decoration:underline;
     font-weight:bold;
 }
 
-.shop-link {
-    margin-top: 3.5em; /* ajuste selon la hauteur des logos */
+@media (max-width: 767px) {
+    .footer-flex {
+        flex-wrap: wrap; /* Permet d'avoir plusieurs lignes */
+        justify-content: center;
+        gap: 1.5em;
+        padding: 1em;
+    }
+
+    /* Chaque colonne prend 45% de la largeur (2 colonnes par ligne) */
+    .footer-col-left,
+    .footer-nav {
+        flex: 1 1 45%;
+        margin: 0;
+        text-align: center;
+        font-size: 1rem;
+        min-width: 0; /* pour éviter le dépassement */
+        align-items: center; /* centre les éléments flex dans .footer-col-left */
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    .footer-nav{
+        padding-top:0.5em;
+    }
+    .footer-flex-reseaux {
+        justify-content: center;
+        gap: 0.8em;
+    }
+
+    .footer img {
+        max-width: 120px;
+        margin: 0 auto 1em 0;
+    }
+
+    .footer-col-left img {
+        margin: 0 auto;
+    }
+
+    .copyright{
+        font-size:0.7rem;
+    }
+
 }
+
+
+
+
+

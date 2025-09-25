@@ -27,6 +27,8 @@
     pointer-events: none;
     width: 80%;
     max-width: 800px; /* limite la largeur sur grand écran */
+    max-height: 90vh; /* limite la hauteur visible à 90% de l’écran */
+    overflow-y: auto; /* permet le scroll vertical à l’intérieur */
 }
 
 .modal.active {
@@ -57,7 +59,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #9aa584;
     padding-bottom: 10px;
     margin-bottom: 15px;
 }
@@ -65,7 +67,7 @@
 .modal-header .title {
     flex: 1;
     text-align: center;
-    font-size: $font-size-h3;
+    font-size: $font-size-h2;
     font-family: $font-family-title;
     font-weight: bold;
 }
@@ -75,16 +77,76 @@
     margin-bottom: 2em;
     line-height: 1.4;
     margin-left:2em;
+    display:flex;
+    flex-direction: column;
+    gap:1em;
 }
 
 .modal-header .close-button {
+    align-self: flex-start;
     cursor: pointer;
     border: none;
     background: none;
     font-size: 1.5rem;
     font-weight: bold;
     color: #555;
+    padding:0;
+    margin:0;
 }
+
+
+.tarif-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 1em 0;
+    font-family: Arial, sans-serif;
+}
+
+.tarif-item .description {
+    flex: 1;
+    padding-right: 1em;
+}
+
+.tarif-item .dots {
+    flex: 1;
+    border-bottom: 1px dotted #888;
+    margin: 0 1em;
+    height: 1em;
+}
+
+.tarif-item .price {
+    flex-shrink: 0;
+    font-weight: bold;
+    text-align: right;
+    min-width: 4em;
+}
+
+@media (max-width: 600px) {
+    .tarif-item {
+        flex-direction: column;
+        //align-items: flex-start;
+    }
+
+    .tarif-item .description,
+    .tarif-item .price {
+        padding: 0;
+        margin: 0;
+    }
+
+    .tarif-item .dots {
+        display: none;
+    }
+
+    .tarif-item .price {
+        margin-top: 0.3em;
+       // font-size: 1rem;
+    }
+}
+
 
 
 
@@ -104,32 +166,54 @@
     object-fit: cover;      /* : remplie le conteneur tout en gardant proportions */
 }
 
-
 .flex {
     display: flex;
     flex-direction: row;
-    align-items: flex-start; /* alignement en haut pour que l'image ne soit pas étirée */
-    gap: 2em;
-    margin: 1em auto;
-    padding: 1em 0;
-    max-width: 90%; /* limite la largeur totale */
+    align-items: flex-start;
+    gap: 3em;
+    padding: 3em 0;
+    max-width: 90%;
+
+    // Pour petits écrans
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center; // optionnel, pour centrer l'image et le texte
+        text-align: center;  // si tu veux centrer aussi le texte
+    }
 }
 
-.flex img {
-    padding-top:1em;
-    width: 15em;        /* taille fixe de l'image */
-    height: auto;
-    object-fit: cover;
-}
 
 .flex .text {
-    flex: 1;            /* texte prend tout l'espace restant */
-    min-width: 0;       /* nécessaire pour que le texte se réduise dans un flex */
+    flex: 1;
+    min-width: 0;
+
+    // Pour petits écrans
+    @media (max-width: 768px) {
+        width: 100%;       // prend toute la largeur
+        text-align: justify;
+    }
 }
+
+
+
+
+.flex img {
+    width:30%;
+    height: auto;
+    object-fit: cover;
+
+    @media (max-width: 768px) {
+        width: 70%;       // prend toute la largeur
+        text-align: justify;
+    }
+}
+
+
 
 
 .description{
     text-align: left;
+    padding-left:5em;
 }
 
 
@@ -146,25 +230,87 @@ button{
     width:5em;
 }
 
-.equipement-flex{
-    display:flex;
-    flex-direction:row;
-    gap:1em;
-    margin:1em;
+.equipement-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    margin: 2em 1em;
+    justify-content: center;
 }
 
-.equipement-flex div {
-    flex: 1; /* chaque div prend la même largeur */
+.equipement-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-
+    width: 250px;
+    flex: 1 1 200px;
 }
 
-.equipement-flex div p{
-    font-size: smaller;
+.equipement-item img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 0.5em;
+}
+
+.equipement-item .font-weight-bold {
+    font-weight: 600;
+    margin-top: 0.5em;
+}
+
+.equipement-item p {
+    text-align: center;
+}
+
+
+/* ✅ RESPONSIVE - Image à gauche, titre + texte à droite */
+@media (max-width: 768px) {
+    .equipement-flex {
+        flex-direction: column;
+        gap: 2em;
+    }
+
+    .equipement-item {
+        flex-direction: row;
+        align-items: flex-start;
+        width: 100%;
+        text-align: left;
+        gap: 1em;
+    }
+
+    .equipement-item img {
+        width: 5em;
+        flex-shrink: 0;
+    }
+
+    .equipement-item .right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .equipement-item .font-weight-bold {
+        font-weight: 600;
+        margin-bottom: 0.3em;
+        text-align:center;
+
+    }
+
+    .equipement-item p {
+        margin: 0;
+        text-align:left;
+        padding-left: 1em;
+    }
 }
 
 
 .font-weight-bold{
     font-weight: 600;
 
+
+}
+
+
+h2{
+    padding:1em;
 }

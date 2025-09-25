@@ -3,49 +3,177 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-    <form method="post" action="{{ path('app_login') }}">
+    <div class="example-wrapper">
 
         {% if app.user %}
             <div>
-                You are logged in as {{ app.user.userIdentifier }},
-                <a href="{{ path('app_logout') }}">Logout</a>
+                Vous êtes connecté en tant que {{ app.user.userIdentifier }},
+                <a href="{{ path('app_logout') }}">Se déconnecter</a>
             </div>
         {% endif %}
 
-        <h1>Veuillez vous connecter</h1>
+        <h2>Connexion</h2>
 
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}"
-               name="email" id="username" class="form-control"
-               autocomplete="email" required autofocus>
+        <form method="post" action="{{ path('app_login') }}">
 
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password"
-               class="form-control" autocomplete="current-password" required>
-
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        {# <input type="hidden" name="_target_path" value="{{ path('app_shop_order') }}"> #}
-
-        {% if error %}
-            <div>
-                {{ error.messageKey|trans(error.messageData, 'security') }}
+            <div class="form-row">
+                <label for="username">Email</label>
+                <input type="email" value="{{ last_username }}"
+                       name="email" id="username"
+                       autocomplete="email" required autofocus>
             </div>
-        {% endif %}
 
-        <div>
-            <input type="checkbox" name="_remember_me"> Se souvenir de moi
-        </div>
+            <div class="form-row">
+                <label for="password">Mot de passe</label>
+                <input type="password" name="password" id="password"
+                       autocomplete="current-password" required>
+                <p>
+                    Mot de passe oublié ?
+                    <a href="{{ path('app_forgot_password_request') }}">Cliquez ici</a> pour le réinitialiser.
+                </p>
+            </div>
 
-        <button type="submit">Se connecter</button>
-        <p>
-            Mot de passe oublié ?
-            <a href="{{ path('app_forgot_password_request') }}">Cliquer ici</a> pour changer votre mot de passe.
-        </p>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <p>
-            Vous n'avez pas encore de compte ?
-            <a href="{{ path('app_user_user_new') }}">Cliquer ici</a> pour vous inscrire
-        </p>
 
-    </form>
+            {% if error %}
+                <div class="form-errors">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            <div class="form-row">
+                <label>
+                    <input type="checkbox" name="_remember_me">
+                     Se souvenir de moi
+                </label>
+            </div>
+
+            <button type="submit">Se connecter</button>
+
+
+            <p>
+                Vous n'avez pas encore de compte ?
+                <a href="{{ path('app_user_user_new') }}">Cliquez ici</a> pour vous inscrire.
+            </p>
+
+        </form>
+    </div>
+
+    <style>
+
+        h2{
+            margin: 1em 0;
+        }
+
+
+        body {
+
+            color: #333;
+            margin: 0;
+        }
+
+        .footer{
+            margin-top: 8em;
+        }
+        .example-wrapper {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+
+        .form-row {
+            margin: 2.5em 0;
+        }
+
+        .form-row p{
+            font-size: smaller;
+            font-style: italic;
+        }
+
+        .form-row p a{
+              color:black;
+          }
+
+        p{
+            font-size: smaller;
+        }
+
+
+        .form-row label {
+            display: block;
+            margin-bottom: 0.3em;
+            font-weight: 500;
+            color: #555;
+
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 0.7em 1em;
+            border: 1.2px solid #ccc;
+            background: transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: #9aa584;
+            outline: none;
+
+        }
+
+        button[type="submit"] {
+            font-weight: 600;
+            padding: 1em;
+            margin-bottom: 3em;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+
+
+        .form-errors {
+            color: #d93025;
+            font-size: 0.85rem;
+            margin-top: 0.3em;
+        }
+
+        /* Champ caché */
+        input[type="hidden"] {
+            display: none;
+        }
+
+
+
+        @media (max-width: 600px) {
+
+
+            .example-wrapper {
+                padding: 0 1.5em;
+            }
+
+            .form-row {
+                margin: 2em 0;
+            }
+
+            input,
+            select {
+
+                padding: 0.8em;
+            }
+
+            button[type="submit"] {
+                padding: 0.9em;
+            }
+        }
+    </style>
+
+
 {% endblock %}

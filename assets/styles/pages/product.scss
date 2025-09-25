@@ -21,6 +21,7 @@
 }
 
 .product-card {
+    height:12em;
     border: 1px solid #eee;
     border-radius: 10px;
     padding: 10px;
@@ -86,9 +87,46 @@ a {
 }
 
 
+/* --- Carrousel des best-sellers --- */
+.carousel-container {
+    overflow: hidden;
+    width: 100%;
+    margin: 2em auto;
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    animation: scrollCarousel 30s linear infinite;
+}
+
+.carousel-card {
+    flex: 0 0 auto;
+    width: 180px; /* même taille que la grille */
+    text-decoration: none;
+    color: inherit;
+}
+
+@keyframes scrollCarousel {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Pause au survol */
+.carousel-container:hover .carousel-track {
+    animation-play-state: paused;
+}
+
+
+
+
 
 //Page CART
 .table-cart {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
     width: 100%;
     border-collapse: separate; /* pour pouvoir gérer les espacements */
     border-spacing: 0 10px;   /* espace vertical entre les lignes */
@@ -102,26 +140,79 @@ a {
 }
 
 
-.table-cart td:last-child {
+.table-cart td:last-child form button{
     width: 150px;         /* augmente l’espace pour le lien Supprimer */
     text-align: center;   /* centre le lien */
+    background-color: inherit;
+    color:$color-orange;
+    border:none;
+    font-weight: bold;
+    margin-top: 1em;
 }
 
-/* Style du lien Supprimer */
-.table-cart td:last-child a {
-    text-decoration: none;
-}
 
-.table-cart td:last-child a:hover {
+.table-cart td:last-child form button:hover {
     text-decoration: underline;
 }
 
-/* Style optionnel pour les en-têtes */
+/* Style pour les en-têtes */
 .table-cart th {
     background-color: #f5f5f5;
     font-weight: bold;
 }
 
+
+//Bouton se déconnecter
+.user-menu-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.user-icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 5px 10px;
+}
+
+.user-dropdown.visible {
+    display: block;
+}
+
+.user-menu-link {
+    background: none;
+    border: none;
+    color: #333;
+    text-align: left;
+    padding: 8px 12px;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.user-menu-link:hover {
+    background-color: #f0f0f0;
+}
+
+.icones-user-shop .user-icon-button:hover {
+    background-color: transparent;
+}
 
 
 // DETAIL PRODUIT
@@ -194,10 +285,26 @@ a {
 
 
 
-.category-menu{
-    background-color: #FFFDF7;
-}
 
+.category-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    font-weight: 600;
+    cursor: pointer;
+
+    .arrow {
+        display: none; // par défaut, invisible
+        font-size: 0.8em;
+        margin-left: 0.5em;
+        color: #666;
+        transition: transform 0.3s ease;
+    }
+
+    &.expanded .arrow {
+        transform: rotate(180deg); // ▲ flèche vers le haut
+    }
+}
 
 
 
@@ -260,3 +367,328 @@ a {
     opacity: 1;
     border: 2px solid #a0ab81;
 }
+
+
+
+//Pagination liste produits
+.content-wrapper {
+    display: flex;
+    gap: 2em;
+    padding: 1em 2em;
+}
+
+/* Menu à gauche, fixe en largeur */
+.category-menu {
+    flex: 0 0 220px; /* largeur fixe */
+    background-color: #FFFDF7;
+    padding: 1em;
+    border-radius: 8px;
+    height: 100%;
+}
+
+.category-menu ul {
+    list-style: none; /* supprime les puces */
+    padding-left: 0;  /* supprime padding global */
+    margin-left: 0;
+}
+
+.category-menu > ul > li {
+    margin-bottom: 0.7em;
+}
+
+.category-menu ul ul {
+    margin-top: 0.2em;       /* espace entre catégorie et sous-catégorie */
+    padding-left: 0;
+}
+
+.category-menu ul ul li {
+    margin-bottom: 0.3em;    /* un peu plus serré verticalement */
+}
+
+.category-menu ul ul li a {
+    font-size: 1.2rem;       /* taille de police plus petite */
+    color: #555;             /* couleur un peu plus claire */
+}
+
+/* Optionnel : ajouter un petit effet au hover pour les sous-catégories */
+.category-menu ul ul li a:hover {
+    color: #6f8748;
+    text-decoration: underline;
+}
+
+
+
+
+/* Grille produits à droite, prend le reste de la place */
+.products-wrapper {
+    flex: 1;
+}
+
+/* Grille 4 colonnes x 4 lignes */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: auto;
+    gap: 20px;
+}
+
+/* Pagination */
+.pagination {
+    margin: 20px 0px;
+    text-align: right;
+    padding-right:1em;
+}
+
+.pagination-link {
+    margin: 0 4px;
+    padding: 8px 12px;
+    background-color: #a0ab81;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-link:hover:not(:disabled) {
+    background-color: #7b8659;
+}
+
+.pagination-link:disabled {
+    background-color: #d3d3c2;
+    cursor: default;
+}
+
+
+// Redisposition barre de recherche et filtre de prix
+.search-filter-container {
+    display: flex;
+    justify-content: space-between; /* espace entre les deux blocs */
+    align-items: center; /* alignement vertical au centre */
+    gap: 30px; /* un peu d’espace entre les deux */
+}
+
+
+.search-container {
+    flex: 1; /* prend tout l’espace disponible à gauche */
+}
+
+#price-filter-form {
+    flex: 1; /* prend tout l’espace disponible à droite */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Pour que les inputs et labels dans le formulaire soient bien alignés */
+#price-filter-form label {
+    white-space: nowrap;
+}
+
+#price-filter-form input {
+   width:5em;
+}
+
+.search-input{
+    width:15em;
+}
+
+
+#price-filter-form button {
+    all: unset; /* Réinitialise presque tous les styles */
+    cursor: pointer; /* garde le curseur pointer */
+    color: inherit; /* couleur du texte héritée */
+    font-size: 1.2rem; /* police héritée */
+    text-decoration: underline;
+}
+
+
+.cart-button{
+    display: flex;
+    flex-direction: row;
+    gap:7em;
+    justify-content: center;
+    padding-top:6em;
+}
+
+
+.back_arrow{
+    width:2em;
+    margin-left:1em;
+}
+
+
+/* Version mobile du panier */
+.cart-mobile {
+    display: none;
+}
+
+.cart-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1em;
+    margin: 1em;
+    background: #f9f9f9;
+    font-size: 1.1rem;
+}
+
+.cart-item-header {
+    font-size: 1.3rem;
+    margin-bottom: 0.5em;
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr); // adapte la grille produit au mobile
+    }
+
+    .category-menu {
+        width: 100%;
+        flex: none;
+        margin-bottom: 1em;
+        flex: 1 1 100%;
+        white-space: nowrap;
+        padding: 0.5em;
+        background-color: #FFFDF7;
+        position: relative; /* nécessaire pour le positionnement absolu */
+        overflow-x: auto; /* autorise le débordement */
+        overflow-y: visible !important;
+        z-index: 1; /* basique */
+
+    }
+
+    .category-menu ul {
+        display: flex;
+        gap: 1em;
+        padding-left: 0;
+        margin: 0;
+    }
+
+    .category-menu ul li {
+        position: relative;
+        list-style: none;
+        flex-shrink: 0;
+    }
+
+    .category-menu > ul > li > a  {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3em;
+        padding: 0.5em 1em;
+        background-color: #e7e7d8;
+        border-radius: 20px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        white-space: nowrap;
+        font-size: smaller;
+
+
+        .arrow {
+            display: inline; // flèche visible seulement ici
+
+        }
+
+        &.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+    }
+    .category-menu .subcategory-list {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #e7e7d8;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        z-index: 99999;
+        min-width: max-content;
+        max-height:80vh;
+        padding: 0.5em;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        overflow-y: auto;
+    }
+
+    .category-menu .subcategory-list.visible {
+        display: block;
+    }
+
+    .carousel-track {
+        animation: scrollCarousel 10s linear infinite;
+    }
+
+    .description-flex{
+        display:inline-block;
+    }
+
+    .description-border{
+        border-right: none;
+        border-left:none;
+        border-bottom: 0.7px solid black;
+        border-top: 0.7px solid black;
+        padding-left:0;
+        padding-right:0;
+        margin-right:0;
+        margin-left:0;
+        margin-top:1em;
+        margin-bottom:1em;
+        padding-top:1em;
+        padding-bottom:1em;
+    }
+
+
+    .search-filter-container{
+        display: block;
+        margin: 1em 0;
+    }
+
+    #price-filter-form{
+        justify-content:center;
+        padding-top:1em;
+    }
+
+    .cart-button{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        padding: 6em 2em 0 2em;
+    }
+    .table-cart {
+        display: none;
+    }
+
+    .cart-mobile {
+        display: block;
+        margin-bottom: 2em;
+    }
+
+    .cart-mobile form button {
+        background-color: inherit;
+        color: $color-orange;
+        border: none;
+        font-weight: bold;
+        text-decoration: underline;
+        font-size:1.1rem;
+        padding: 2em 0;
+    }
+
+    .descriptif-flex {
+        flex-direction: column;
+        align-items: center; /* centre le contenu */
+        gap: 2em;            /* espace entre l’image et le texte */
+    }
+
+
+}
+
+
+
+

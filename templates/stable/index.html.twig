@@ -25,11 +25,11 @@
                 <p>“Cavalier depuis plus de 35 ans, passionné par les chevaux et engagé dans la cause animale depuis 15 ans, j’ai souhaité créer un lieu où l’on respecte les besoins fondamentaux des chevaux. Animosmose est née de cette volonté : proposer un environnement paisible, fonctionnel et intimiste.”</p></br>
                 <p> Chez nous, le cheval est considéré comme un être sensible, social, doté d’émotions et de besoins naturels incontournables. Nous mettons un point d’honneur à offrir un cadre de vie en adéquation avec ses instincts et ses codes sociaux.</p></br>
                 <p> Après notre installation en 2020 avec nos propres équidés, nous avons décidé d’ouvrir notre petit paradis à des propriétaires partageant la même vision du bien être que nous, loin de l’agitation et des clubs hippiques. Nous accueillons également poneys, ânes et shetlands.</p></br>
+                <p>Nous proposons également des formules en demi-pension, idéales pour celles et ceux qui souhaitent tisser une relation durable avec un équidé bien dans ses sabots.</p></br>
+                <p>Que vous soyez cavalier de loisir, adepte de l’équitation éthologique ou simplement soucieux du bonheur de votre cheval, vous trouverez ici un cadre propice à l’épanouissement de votre relation.</p>
             </div>
             <img src="{{ asset('build/images/shet.jpg')}}" alt='shetland'/>
         </div>
-        <p>Nous proposons également des formules en demi-pension, idéales pour celles et ceux qui souhaitent tisser une relation durable avec un équidé bien dans ses sabots.</p></br>
-        <p>Que vous soyez cavalier de loisir, adepte de l’équitation éthologique ou simplement soucieux du bonheur de votre cheval, vous trouverez ici un cadre propice à l’épanouissement de votre relation.</p>
     </div>
     <button data-modal-target="#myModal">Nos tarifs</button>
 </section>
@@ -38,32 +38,44 @@
 <section>
     <h2>Nos équipements</h2>
     <div class="equipement-flex">
-        <div>
-            <img class="big-icon" src="{{ asset('build/images/fercheval.png')}}" alt='fer à cheval'/>
-            <div class="font-weight-bold">Écurie équipée</div>
-            <p>4 boxes avec abreuvoir automatiques, double exposition et trappe pour distribution des aliments </p>
+        <div class="equipement-item">
+            <img class="big-icon" src="{{ asset('build/images/fercheval.png')}}" alt="fer à cheval" />
+            <div class="right">
+                <div class="font-weight-bold">Écurie équipée</div>
+                 <p>4 boxes avec abreuvoir automatiques, double exposition et trappe pour distribution des aliments.</p>
+            </div>
         </div>
-        <div>
-            <img class="small-icon" src="{{ asset('build/images/equestrian.png')}}" alt='dessin cavalier'/>
-            <div class="font-weight-bold">Carrière</div>
-            <p>Carrière 50x50 en sable de Carnac stabilisée, draînée et clôturée. </p>
+
+        <div class="equipement-item">
+                <img class="small-icon" src="{{ asset('build/images/equestrian.png')}}" alt="cavalier" />
+            <div class="right">
+                <div class="font-weight-bold">Carrière</div>
+                <p>Carrière 50x50 en sable de Carnac stabilisée, drainée et clôturée.</p>
+            </div>
         </div>
-        <div>
-            <img class="small-icon" src="{{ asset('build/images/saddle.png')}}" alt='selle'/>
-            <div class="font-weight-bold">Sellerie & Pansage</div>
-            <p>Aire de pansage couverte. </br>
-                Sellerie/graineterie avec évier</p>
+
+        <div class="equipement-item">
+            <img class="small-icon" src="{{ asset('build/images/saddle.png')}}" alt="selle" />
+            <div class="right">
+                <div class="font-weight-bold">Sellerie & Pansage</div>
+                <p>Aire de pansage couverte.<br>Sellerie/graineterie avec évier.</p>
+            </div>
         </div>
-        <div>
-            <img class="big-icon" src="{{ asset('build/images/shower.png')}}" alt='douche'/>
-            <div class="font-weight-bold">Douche</div>
-            <p>Aire de douche extérieure</p>
+
+        <div class="equipement-item">
+            <img class="big-icon" src="{{ asset('build/images/shower.png')}}" alt="douche" />
+            <div class="right">
+                <div class="font-weight-bold">Douche</div>
+                <p>Aire de douche extérieure.</p>
+            </div>
         </div>
-        <div>
-            <img class="small-icon" src="{{ asset('build/images/herbs.png')}}" alt='herbe'/>
-            <div class="font-weight-bold">Prairies clôturées</div>
-            <p>Lisses + portail + électricité. </br>
-                Disposent d’arrivées d’eau et d’abreuvoirs automatiques, d’une stabulation et 3 abris </p>
+
+        <div class="equipement-item">
+            <img class="small-icon" src="{{ asset('build/images/herbs.png')}}" alt="herbe" />
+            <div class="right">
+                <div class="font-weight-bold">Prairies clôturées</div>
+                 <p>Lisses + portail + électricité.<br>Disposent d’arrivées d’eau et d’abreuvoirs automatiques, d’une stabulation et 3 abris.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -79,23 +91,53 @@
             <button data-close-button class="close-button">&times;</button>
         </div>
         <div class="modal-body">
-            <p>Pension box nuit / pré journée ................................................... 400€
-                (Prix mensuel)</p>
-            <p>Pension mixte : </br>
-                5 mois box / 7 mois pré       ................................................... 285€
-                (Prix mensuel) </p>
-            <p>Poneys + ânes (équidés -1m20)  ................................................... 200€
-                (Prix mensuel)</p>
-            <p>Distribution granulés</br>
-               fournis par propriétaire       ................................................... 30€
-                (Prix mensuel) </p>
-            <p>Pansage 4 fois par mois        ................................................... 30€
-                (Prix mensuel) </p>
-            <p>Supplément soins               ......................................   Nous consulter</p>
-            <p>Supplément box                 ................................................... 25€
-                (Prix à la nuitée) </p>
-            <p>Demi-pension                   ................................................... 120€
-                (Prix mensuel, selon disponbilités ) </p>
+            <div class="tarif-item">
+                <span class="description">Pension box nuit / pré journée</span>
+                <span class="dots"></span>
+                <span class="price">400€</span>
+            </div>
+
+            <div class="tarif-item">
+                <span class="description">Pension mixte : 5 mois box / 7 mois pré</span>
+                <span class="dots"></span>
+                <span class="price">285€</span>
+            </div>
+
+            <div class="tarif-item">
+                <span class="description">Poneys + ânes (équidés -1m20)</span>
+                <span class="dots"></span>
+                <span class="price">200€</span>
+            </div>
+
+            <div class="tarif-item">
+                <span class="description">Distribution granulés (fournis par le propriétaire)</span>
+                <span class="dots"></span>
+                <span class="price">30€</span>
+            </div>
+
+            <div class="tarif-item">
+                <span class="description">Pansage 4 fois par mois</span>
+                <span class="dots"></span>
+                <span class="price">30€</span>
+            </div>
+
+            <div class="tarif-item">
+                <span class="description">Supplément soins</span>
+                <span class="dots"></span>
+                <span class="price">Nous consulter</span>
+            </div>
+
+            <div class="tarif-item">
+                <span class="description">Supplément box (par nuit)</span>
+                <span class="dots"></span>
+                <span class="price">25€</span>
+            </div>
+
+            <div class="tarif-item">
+                <span class="description">Demi-pension (selon disponibilités)</span>
+                <span class="dots"></span>
+                <span class="price">120€</span>
+            </div>
         </div>
     </div>
 

@@ -7,7 +7,10 @@ nav {
     font-family: $font-family-nav ;
     background-color: $color-green;
     width:100%;
+    font-size:1.8rem;
+    position: relative;
 }
+
 
 .header{
     text-align:center;
@@ -63,4 +66,75 @@ ul{
 .li-text-white{
     color : $font-white;
     text-decoration:none;
+}
+
+
+
+/* --- MENU HAMBURGER RESPONSIVE --- */
+
+#hamburger {
+    display: none; // caché desktop
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    box-sizing: border-box;
+
+    span {
+        width: 30px;
+        height: 3px;
+        background: $font-black;
+        border-radius: 2px;
+        transition: all 0.3s linear;
+        position: relative;
+    }
+}
+
+@media (max-width: 768px) {
+    .header img {
+        width:20em;
+    }
+
+    .header nav ul {
+        display: none; // cacher menu desktop sur mobile
+        flex-direction: column;
+        background-color: $color-green; // même que la nav
+        position: absolute;
+        top: 60px; // sous la nav (ajuste selon ta hauteur)
+        left: 0;
+        width: 100%;
+        padding: 1em 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .header nav ul.show {
+        display: flex;
+    }
+
+    .header nav ul li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    #hamburger {
+        display: flex;
+    }
+
+    /* Animation hamburger quand ouvert */
+    #hamburger.open span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    #hamburger.open span:nth-child(2) {
+        opacity: 0;
+    }
+
+    #hamburger.open span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
 }

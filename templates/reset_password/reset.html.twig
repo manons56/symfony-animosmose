@@ -3,12 +3,135 @@
 {% block title %}Nouveau mot de passe{% endblock %}
 
 {% block body %}
-    <h1>Nouveau mot de passe</h1>
+    <div class="example-wrapper">
 
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">Confirmer</button>
-    {{ form_end(resetForm) }}
+        <h2>Nouveau mot de passe</h2>
+
+        {{ form_start(resetForm) }}
+
+        <div class="form-row">
+            {{ form_row(resetForm.plainPassword, {
+                label: 'Nouveau mot de passe'
+            }) }}
+        </div>
+
+        <button type="submit">Réinitialiser le mot de passe</button>
+
+        {{ form_end(resetForm) }}
+
+    </div>
+
+    <style>
+
+        h2{
+            margin: 1em 0;
+            padding-bottom: 1em;
+        }
+
+
+        body {
+
+            color: #333;
+            margin: 0;
+        }
+
+        .footer{
+            margin-top: 8em;
+        }
+        .example-wrapper {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+
+        .form-row {
+            margin: 2.5em 0;
+        }
+
+        .form-row div{
+            padding-bottom: 2em;
+        }
+
+
+        .form-row label {
+            display: block;
+            margin-bottom: 0.3em;
+            font-weight: 500;
+            color: #555;
+
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 0.7em 1em;
+            border: 1.2px solid #ccc;
+            background: transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: #9aa584;
+            outline: none;
+
+        }
+
+        button[type="submit"] {
+            font-weight: 600;
+            padding: 1em;
+            margin-bottom: 3em;
+            margin-top: 2em;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+
+
+        .form-errors {
+            color: #d93025;
+            font-size: 0.85rem;
+            margin-top: 0.3em;
+        }
+
+        /* Champ caché */
+        input[type="hidden"] {
+            display: none;
+        }
+
+
+
+
+
+        @media (max-width: 600px) {
+
+
+            .example-wrapper {
+                padding: 0 1.5em;
+            }
+
+            .form-row {
+                margin: 2em 0;
+            }
+
+            input,
+            select {
+
+                padding: 0.8em;
+            }
+
+            button[type="submit"] {
+                padding: 0.9em;
+            }
+        }
+    </style>
+
+
 {% endblock %}
 
 

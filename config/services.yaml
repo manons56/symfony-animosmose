@@ -19,3 +19,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+
+    App\Service\PaylineService:
+        arguments:
+            $merchantId: '%env(PAYLINE_MERCHANT_ID)%'
+            $accessKey: '%env(PAYLINE_ACCESS_KEY)%'
+            $contractNumber: '%env(PAYLINE_CONTRACT_NUMBER)%'
+            $environment: '%env(PAYLINE_ENV)%'

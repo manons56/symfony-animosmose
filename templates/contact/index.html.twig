@@ -30,10 +30,10 @@
     <section class='background-beige'>
         <h4>Envoyez-nous un message via ce formulaire :</h4>
 
-        {% for message in app.flashes('success') %}
+        {% for message in app.flashes('contact_success') %}
             <div class="flash-success">{{ message }}</div>
         {% endfor %}
-        {% for message in app.flashes('error') %}
+        {% for message in app.flashes('contact_error') %}
             <div class="flash-danger">{{ message }}</div>
         {% endfor %}
 

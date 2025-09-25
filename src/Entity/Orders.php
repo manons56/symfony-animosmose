@@ -42,12 +42,19 @@ class Orders
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $deliveryMethod = null;
 
+
+    #[ORM\Column(length: 255, unique: true)] // unique:true permet de créer un index unique
+    private ?string $reference = null;
+
+
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->date = new \DateTimeImmutable();
         $this->total = 0;
         $this->status = OrderStatus::Pending;
+        $this->reference = uniqid('CMD-'); // Génère une référence unique automatiquement
 
     }
 
@@ -148,6 +155,17 @@ class Orders
     {
         $this->deliveryMethod = $deliveryMethod;
 
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): self
+    {
+        $this->reference = $reference;
         return $this;
     }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f60be95e56ed7ee90372e3ef38b75100",
+    "content-hash": "fa133d10e27795ed18b43458a8fccd08",
     "packages": [
         {
             "name": "composer/semver",
@@ -1375,6 +1375,66 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "monext/payline-sdk",
+            "version": "4.77",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PaylineByMonext/payline-php-sdk.git",
+                "reference": "be8e5d11ac63f02eb51d1a77e5e2ebcc8130f7e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PaylineByMonext/payline-php-sdk/zipball/be8e5d11ac63f02eb51d1a77e5e2ebcc8130f7e8",
+                "reference": "be8e5d11ac63f02eb51d1a77e5e2ebcc8130f7e8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "ext-soap": "*",
+                "monolog/monolog": "1.* || ~2.0 || ~3.0",
+                "php": ">=5.6",
+                "symfony/cache": ">=3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Payline\\": "src/Payline"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien SUAREZ",
+                    "email": "fabien.suarez@payline.com",
+                    "homepage": "http://www.payline.com"
+                },
+                {
+                    "name": "Vincent Pietri",
+                    "email": "vincent.pietri@tbdgroup.com",
+                    "homepage": "https://www.tbdgroup.com/"
+                }
+            ],
+            "description": "Payline library for PHP",
+            "keywords": [
+                "Monext",
+                "Payline",
+                "payment"
+            ],
+            "support": {
+                "docs": "http://support.payline.com",
+                "email": "support@payline.com",
+                "issues": "https://github.com/PaylineByMonext/payline-php-sdk/issues",
+                "source": "https://github.com/PaylineByMonext/payline-php-sdk/tree/4.77"
+            },
+            "abandoned": true,
+            "time": "2024-02-28T09:04:51+00:00"
         },
         {
             "name": "monolog/monolog",

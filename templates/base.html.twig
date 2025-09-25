@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><!-- Permet d'adapter la largeur de la page à la largeur de l'écran du device pour activer le responsive -->
     <title>{% block title %}{% endblock %}</title>
     <meta name="description" content="Animosmose">
 
@@ -22,18 +23,22 @@
 
 <header class="header">
     <img src="{{ asset('build/images/logo-animosmose.png')}}" alt='logo animosmose'/>
-    <section>
-        <nav>
-            <ul>
-                <li class="black-underline"><a class="li-text-black" href="{{ path('app_home') }}" aria-current="{% if current_page =='home' %}page{% endif %}">Accueil</a></li>
-                <li class="black-underline"><a class="li-text-black" href="{{ path('app_breeding') }}" aria-current="{%  if current_page =='breeding' %}page{% endif %}">Élevage cocker</a></li>
-                <li class="black-underline"><a class="li-text-black" href="{{ path('app_pension') }}" aria-current="{%  if current_page =='pension' %}page{% endif %}">Pension et éducation</a></li>
-                <li class="black-underline"><a class="li-text-black" href="{{ path('app_stable') }}" aria-current="{%  if current_page =='stable' %}page{% endif %}">Écurie</a></li>
-                <li class="black-underline"><a class="li-text-black" href="{{ path('app_contact') }}" aria-current="{%  if current_page =='contact' %}page{% endif %}">Contact</a></li>
-                <li class="white-underline"><a class="li-text-white" href="{{ path('app_product_list') }}" aria-current="{%  if current_page =='product' %}page{% endif %}">Notre boutique</a></li>
-            </ul>
-        </nav>
-    </section>
+    <nav>
+        <button id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="menu-list">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <ul id="menu-list">
+            <li class="black-underline"><a class="li-text-black" href="{{ path('app_home') }}" aria-current="{% if current_page =='home' %}page{% endif %}">Accueil</a></li>
+            <li class="black-underline"><a class="li-text-black" href="{{ path('app_breeding') }}" aria-current="{%  if current_page =='breeding' %}page{% endif %}">Élevage cocker</a></li>
+            <li class="black-underline"><a class="li-text-black" href="{{ path('app_pension') }}" aria-current="{%  if current_page =='pension' %}page{% endif %}">Pension et éducation</a></li>
+            <li class="black-underline"><a class="li-text-black" href="{{ path('app_stable') }}" aria-current="{%  if current_page =='stable' %}page{% endif %}">Écurie</a></li>
+            <li class="black-underline"><a class="li-text-black" href="{{ path('app_contact') }}" aria-current="{%  if current_page =='contact' %}page{% endif %}">Contact</a></li>
+            <li class="white-underline"><a class="li-text-white" href="{{ path('app_product_list') }}" aria-current="{%  if current_page =='product' %}page{% endif %}">Notre boutique</a></li>
+        </ul>
+    </nav>
 </header>
 
 {# --- CONTENU DES PAGES --- #}
@@ -51,6 +56,7 @@
 
 <footer class="footer">
     <div class="footer-flex">
+        <!-- Colonne gauche : Logo + réseaux -->
         <div class="footer-col-left">
             <img src="{{ asset('build/images/logo-animosmose.png')}}" alt='logo animosmose'/>
             <div class="footer-flex-reseaux">
@@ -60,28 +66,34 @@
             <span class="copyright">Copyright 2025 © Animosmose</span>
         </div>
 
-        <p class="footer-nav shop-link"><a href="{{ path('app_product_list') }}">La boutique</a></p>
+        <!-- Colonne navigation principale (boutique + pages) -->
         <div class="footer-nav">
+            <p><a href="{{ path('app_product_list') }}">La boutique</a></p>
             <p><a href="{{ path('app_breeding') }}">Élevage</a></p>
             <p><a href="{{ path('app_pension') }}">Pension</a></p>
             <p><a href="{{ path('app_stable') }}">Écurie</a></p>
             <p><a href="{{ path('app_contact') }}">Contact</a></p>
-            <p><a href="{{ path('app_interview') }}">On parle de nous !</a></p>
         </div>
+
+        <!-- Colonne contact + "On parle de nous" -->
         <div class="footer-nav">
             <p>5 Le Petit Bodo</p>
             <p>56230 Berric</p>
             <p>06 25 81 48 45</p>
             <p>animosmose@gmail.com</p>
-
+            <p><a href="{{ path('app_interview') }}">On parle de nous !</a></p>
         </div>
+
+        <!-- Colonne CGV, FAQ, Mentions légales -->
         <div class="footer-nav">
             <p><a href='{{ path('app_content_cgv') }}'>CGV</a></p>
             <p><a href=''>FAQ</a></p>
-            <p><a href=''>Mentions légales</a></p>
+            <p><a href='{{ path('app_content_legalnotices') }}'>Mentions légales</a></p>
         </div>
     </div>
 </footer>
+
+
 
 {# --- SCRIPTS PRINCIPAUX (APP.JS) --- #}
 {% block javascripts %}

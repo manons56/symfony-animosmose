@@ -69,3 +69,32 @@
         margin: 0 auto;
 
 }
+
+
+@media (max-width: 768px) {
+    .section-flex {
+        flex-direction: column;
+        gap: 1.5em; /* moins d'espace vertical */
+        padding: 2em 1em;
+    }
+
+    .section-flex img,
+    .section-flex .background-beige {
+        max-width: 100%; /* prennent toute la largeur */
+        flex: none; /* pour ne pas contraindre en flex */
+        width: 100%;
+        max-height: none; /* annule la limite de hauteur éventuelle */
+    }
+
+    .section-flex .background-beige p {
+        margin: 1em;
+    }
+
+    .section-flex .background-beige button {
+        width: 100%; /* bouton full width */
+        max-width: 300px; /* limite la largeur maxi pour ne pas faire trop large */
+        padding: 0.75em 1em;
+        font-size: 1.1rem;
+    }
+}
+

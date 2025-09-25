@@ -22,6 +22,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use App\Enum\OrderStatus;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+
 
 
 class OrdersCrudController extends AbstractCrudController
@@ -71,11 +75,17 @@ class OrdersCrudController extends AbstractCrudController
             ->setCssClass('btn btn-warning');
 
         return $actions
-            ->disable(Action::EDIT)                 // désactivation d'EDIT
+            ->update(Crud::PAGE_EDIT, Action::SAVE_AND_CONTINUE, function (Action $action) {
+                return $action->setLabel('Enregistrer et continuer');
+            })
             ->add(Crud::PAGE_INDEX, Action::DETAIL) // on garde l’action Détails
             ->add(Crud::PAGE_INDEX, $archive)     // on ajoute l’action Archiver
-            ->remove(Crud::PAGE_INDEX, Action::NEW); // désactive "Créer" dans la liste
+            ->remove(Crud::PAGE_INDEX, Action::NEW) // désactive "Créer" dans la liste
+            ->remove(Crud::PAGE_INDEX, Action::DELETE); // désactive "Supprimer" dans la liste
+
     }
+
+
 
 
     public function archiveOrder(AdminContext $context): RedirectResponse
@@ -112,13 +122,36 @@ class OrdersCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $statusChoices = [];
+        foreach (OrderStatus::cases() as $case) {
+            $statusChoices[$case->getLabel()] = $case; // label => valeur
+        }
+
         // === INDEX ===
         if ($pageName === Crud::PAGE_INDEX) {
             return [
                 AssociationField::new('user', 'Client'),
                 DateTimeField::new('date', 'Date'),
                 MoneyField::new('total', 'Total')->setCurrency('EUR')
-                    ->setStoredAsCents(false), // Ajout de cette ligne pour gérer les montants en euros.
+                    ->setStoredAsCents(false),
+                ChoiceField::new('status', 'Statut')
+                    ->setChoices($statusChoices)
+                    ->renderAsBadges([
+                        OrderStatus::Pending->value => 'warning',
+                        OrderStatus::Paid->value => 'success',
+                        OrderStatus::Failed->value => 'danger',
+                        OrderStatus::Delivered->value => 'info',
+                        OrderStatus::Canceled->value => 'secondary',
+                    ]),
+                TextField::new('deliveryMethod', 'Livraison')
+                    ->formatValue(function ($value) {
+                        return match ($value) {
+                            'relay' => 'Mondial Relay',
+                            'home' => 'Livraison à domicile',
+                            'pickup' => 'Retrait sur place',
+                            default => ucfirst((string)$value),
+                        };
+                    }),
             ];
         }
 
@@ -128,11 +161,48 @@ class OrdersCrudController extends AbstractCrudController
                 AssociationField::new('user', 'Client'),
                 AssociationField::new('address_id', 'Adresse de livraison')->onlyOnDetail(),
                 DateTimeField::new('date', 'Date'),
+                ChoiceField::new('status', 'Statut')
+                    ->setChoices($statusChoices)
+                    ->renderExpanded(false) // menu déroulant
+                    ->renderAsBadges([
+                        OrderStatus::Pending->value => 'warning',
+                        OrderStatus::Paid->value => 'success',
+                        OrderStatus::Failed->value => 'danger',
+                        OrderStatus::Delivered->value => 'info',
+                        OrderStatus::Canceled->value => 'secondary',
+                    ]),
                 CollectionField::new('articles', 'Articles commandés')
                     ->setTemplatePath('admin/order_articles.html.twig'),
                 MoneyField::new('total', 'Total')->setCurrency('EUR')
-                    ->setStoredAsCents(false), // Ajout de cette ligne pour la page de détails également.
+                    ->setStoredAsCents(false),
+                TextField::new('deliveryMethod', 'Livraison')
+                    ->formatValue(function ($value) {
+                        return match ($value) {
+                            'relay' => 'Mondial Relay',
+                            'home' => 'Livraison à domicile',
+                            'pickup' => 'Retrait sur place',
+                            default => ucfirst((string)$value), //default => ... : c'est ce que le code retournera si aucune des valeurs ne correspond (relay, home, pickup).
+                        };
+                    }),
+
+            ];
+        }
+
+        // === EDIT ===
+        if ($pageName === Crud::PAGE_EDIT) {
+            return [
+                ChoiceField::new('status', 'Statut')
+                    ->setChoices($statusChoices)
+                    ->renderExpanded(false) // menu déroulant
+                    ->renderAsBadges([
+                        OrderStatus::Pending->value => 'warning',
+                        OrderStatus::Paid->value => 'success',
+                        OrderStatus::Failed->value => 'danger',
+                        OrderStatus::Delivered->value => 'info',
+                        OrderStatus::Canceled->value => 'secondary',
+                    ]), // permet de modifier le statut
             ];
         }
     }
+
 }

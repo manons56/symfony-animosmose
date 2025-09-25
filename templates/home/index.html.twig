@@ -8,52 +8,73 @@
 
 
 {% block body %}
-<main class="home-container">
-    <div class="team-picture"></div>
-        <div class="background-beige">
-            <div class="section-h1">
+    <div class="team-picture">
+
+    </div>
+        <div class=" home-container ">
+            <div class="background-beige">
+            <div class="section-h1 ">
                 <h1>Bienvenue chez Animosmose !</h1>
                 <a href='{{ path('app_product_list') }}' class="button-shop">Notre boutique</a>
                 <h2>Nos services</h2>
-                <article class='home-article-s2 article-flex' >
-                    <p>Notre boutique <br> En ligne et en magasin <br> Pour chiens et chats</p>
-                    <img class='logo-alimosmose' src='{{ asset('build/images/logo-boutique.png')}}' alt='logo de la boutique'/>
-                    <a href='{{ path('app_product_list') }}'><button>Découvrir</button></a>
-                </article>
-                <article class='home-article-s2 article-flex'>
-                    <p>Notre élevage de cocker anglais</p>
-                    <img class='logo-alimosmose' src='{{ asset('build/images/chiot1.jpg')}}' alt="photo de chiot"/>
-                    <a href='{{ path('app_breeding') }}'><button>Découvrir</button></a>
-                </article>
-                <div class='side-activities'>
-                    <article class='home-article-s2'>
-                        <img class='logo-alimosmose' src='{{ asset('build/images/pension.png')}}' alt='image de la pension canine'/>
-                        <p>Pension et garde à domicile</p>
-                        <a href='{{ path('app_pension') }}'><button>Découvrir</button></a>
-                    </article>
-                    <article class='home-article-s2'>
-                        <img class='logo-alimosmose' src='{{ asset('build/images/chiot12.jpg')}}' alt="photo d'éducation canine"/>
-                        <p>Éducation canine</p>
-                        <a href='{{ path('app_pension') }}'><button>Découvrir</button></a>
-                    </article>
-                    <article class='home-article-s2'>
-                        <img class='logo-alimosmose' src='{{ asset('build/images/reconversion.png')}}' alt="cheval au travail"/>
-                        <p>Pension et reconversion équine</p>
-                        <a href='{{ path('app_stable') }}'><button>Découvrir</button></a>
-                    </article>
-                </div>
+                <section class="carousel-container">
+                    <button class="carousel-btn prev">‹</button>
+
+                    <div class="carousel-track">
+                        <div class="carousel-item">
+                            <article class="home-article-s2">
+                                <img src="{{ asset('build/images/logo-boutique.png') }}" alt="Boutique" />
+                                <p>Notre boutique pour chiens et chats<br>En ligne et en magasin</p>
+                                <a href="{{ path('app_product_list') }}"><button>Découvrir</button></a>
+                            </article>
+                        </div>
+
+                        <div class="carousel-item">
+                            <article class="home-article-s2">
+                                <img src="{{ asset('build/images/chiot1.jpg') }}" alt="Élevage de cockers" />
+                                <p>Notre élevage de cocker anglais</p>
+                                <a href="{{ path('app_breeding') }}"><button>Découvrir</button></a>
+                            </article>
+                        </div>
+
+                        <div class="carousel-item">
+                            <article class="home-article-s2">
+                                <img src="{{ asset('build/images/pension.png') }}" alt="Pension canine" />
+                                <p>Pension et garde à domicile</p>
+                                <a href="{{ path('app_pension') }}"><button>Découvrir</button></a>
+                            </article>
+                        </div>
+
+                        <div class="carousel-item">
+                            <article class="home-article-s2">
+                                <img src="{{ asset('build/images/chiot12.jpg') }}" alt="Éducation canine" />
+                                <p>Éducation canine</p>
+                                <a href="{{ path('app_pension') }}"><button>Découvrir</button></a>
+                            </article>
+                        </div>
+
+                        <div class="carousel-item">
+                            <article class="home-article-s2">
+                                <img src="{{ asset('build/images/reconversion.png') }}" alt="Reconversion équine" />
+                                <p>Pension et reconversion équine</p>
+                                <a href="{{ path('app_stable') }}"><button>Découvrir</button></a>
+                            </article>
+                        </div>
+                    </div>
+
+                    <button class="carousel-btn next">›</button>
+                </section>
             </div>
         </div>
             <section>
                 <h2>Qui sommes nous ? </h2>
-                <p class="p-intro">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, cum, dolor voluptatum quos doloremque nobis unde ad ea facere aliquam labore provident excepturi placeat tempore ratione voluptas recusandae debitis voluptates.</p>
                 <article>
                     <div class="personne">
                         <img src= "{{ asset('build/images/baptiste.png')}}" alt="photo de baptiste"/>
                         <p class=font-family-title>Baptiste</p>
                     </div>
                     <div class="separation-border">
-                        <p class="description"> Après des études dans les services à la personne, il s’investit dans la protection animale puis à 21 ans il crée “l’association Bêtes de Scène” qu’il préside pendant 10 ans. </br>
+                        <p class="description"> Après des études dans les services à la personne, Baptiste s’investit dans la protection animale puis à 21 ans il crée “l’association Bêtes de Scène” qu’il préside pendant 10 ans. </br>
                             En parallèle il est salarié dans une pension canine au sud de Rennes, puis il allie ses deux savoirs, canin et social, et intègre l’association Lien K nin comme intervenant dans des structures pour personnes handicapées, âgées, Instituts Médicaux Éducatifs etc …. </br>
                             Il devient salarié à la Spa pendant quelques années.</br>
                             En 2014 il ouvre Animosmose une pension canine familiale, en Ille et Vilaine, puis en 2017 il découvre les joies de faire naître des petits cockers ! 🐾 </br>
@@ -61,6 +82,7 @@
                             La pension canine devient anecdotique et l’élevage prend un nouvel envol tout en gardant sa dimension familiale.</br>
                             Une nouvelle activité voit le jour, la pension d’équidés et le sauvetage / reconversion de chevaux de courses, l’éducation canine reste au cœur de ses préoccupations. Baptiste propose la garde à domicile dans son nouveau secteur.
                         </p>
+                        <div class="toggle-arrow">→</div>
                     </div>
                 </article>
                 <article>
@@ -68,14 +90,15 @@
                         <img src="{{ asset('build/images/franck.png')}}" alt="photo de franck"/>
                         <p class=font-family-title>Franck</p>
                     </div>
-                    <p class="description">Ingénieur de production spécialisé en alimentation, il obtient une thèse professionnelle où il manage notamment une unité de fabrication d’aliments pour animaux de compagnie, puis fait ses armes pendant deux ans au sein d’une PME spécialisée dnas le domaine de l’ultra propreté (salles blanches, agro-alimentaire, cosmétiques, pharmaceutiques), puis passe 13 ans à travers différents postes en tant que fournisseur de solutions techniques et de process industriels novateurs dans le domaine de l’alimentation et la pharmaceutique. </br>
+                    <p class="description-franck">Ingénieur de production spécialisé en alimentation, Franck obtient une thèse professionnelle où il manage notamment une unité de fabrication d’aliments pour animaux de compagnie, puis fait ses armes pendant deux ans au sein d’une PME spécialisée dnas le domaine de l’ultra propreté (salles blanches, agro-alimentaire, cosmétiques, pharmaceutiques), puis passe 13 ans à travers différents postes en tant que fournisseur de solutions techniques et de process industriels novateurs dans le domaine de l’alimentation et la pharmaceutique. </br>
                         Il est directeur des ventes lorsqu’au contact de Baptiste et de sa tribu, il décide de prendre un virage à 180 degrés et de mettre ses compétences et son expérience au service de l’alimentation des chiens & des chats, en créant Alimosmose en 2021. </br>
                         Depuis 7 ans, totalement dédié au bien être de vos animaux à travers le prisme de l’alimentation, il apporte son expertise et livre les clients à leur domicile pour assurer un service toujours plus proche de nos clients.
                         </br></br>
                         La complémentarité de ces deux là est indubitablement leur plus grande force pour servir leur devise : le bien être des animaux avant tout.
                     </p>
+                    <div class="toggle-arrow">→</div>
                 </article>
-                <a href="{{ path('app_interview') }}"><button type="button">Ça parle de nous!</button></a>
+                <a href="{{ path('app_interview') }}"><button class="button-interview" type="button">Ça parle de nous!</button></a>
             </section>
         <section class="background-beige">
             <h2>Suivez nous !</h2>
@@ -87,7 +110,8 @@
             <a href=''>Vous avez été conquis ? N'hésitez pas à nous laisser un avis !</a>
 
         </section>
-</main>
+
+
 {% endblock %}
 
 

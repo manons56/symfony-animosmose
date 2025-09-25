@@ -17,7 +17,11 @@ class ContactType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [
-                'attr' => ['class' => 'input'],
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Nom'
+                ],
+                'label' => false,
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez renseigner votre nom',
@@ -29,7 +33,11 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('prenom', TextType::class, [
-                'attr' => ['class' => 'input'],
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Prénom'
+                ],
+                'label' => false,
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez renseigner votre prénom',
@@ -41,7 +49,11 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('telephone', TextType::class, [
-                'attr' => ['class' => 'input'],
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Numéro de téléphone'
+                ],
+                'label' => false,
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez renseigner votre téléphone',
@@ -53,7 +65,11 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('email', EmailType::class, [
-                'attr' => ['class' => 'input'],
+                'attr' => [
+                    'class' => 'input',
+                    'placeholder' => 'Email'
+                ],
+                'label' => false,
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez renseigner votre email',
@@ -64,7 +80,11 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('message', TextareaType::class, [
-                'attr' => ['class' => 'textarea'],
+                'attr' => [
+                    'class' => 'textarea',
+                    'placeholder' => 'Tapez votre message...',
+                ],
+                'label' => false,
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Veuillez écrire un message',
