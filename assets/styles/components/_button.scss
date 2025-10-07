@@ -1,6 +1,6 @@
 @use "../abstracts" as *;
 
-button{
+button, .button{
     color : $font-white;
     background-color : $color-orange;
     border: $color-orange solid 1px;
@@ -11,11 +11,13 @@ button{
     font-size: $font-size-button;
 }
 
-button:hover {
+button:hover, .button:hover {
     background-color: #b15116; /* change légèrement la couleur au survol */
 }
 
-
+a{
+    text-decoration:none;
+}
 
 .button-shop {
     background-color: $background-color;

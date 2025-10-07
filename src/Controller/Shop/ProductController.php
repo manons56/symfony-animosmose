@@ -9,18 +9,43 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\CategoriesRepository;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
 
 class ProductController extends AbstractController
 {
     #[Route('shop/product/{id}', name:'app_product_show')]
-    public function show(Products $product): Response
-{
-    return $this->render('shop/product/show.html.twig', [
-        'product' => $product,
-        'variants' => $product->getVariants(),
-        'current_page' => 'product'
-    ]);
-}
+    public function show(Products $product, CsrfTokenManagerInterface $csrfTokenManager): Response
+    {
+        $variants = $product->getVariants();
+
+        // Préparer un tableau formaté pour le JS
+        $variantsForJs = [];
+        foreach ($product->getVariants() as $v) {
+            $variantsForJs[] = [
+                'id' => $v->getId(),
+                'size' => $v->getSize(),
+                'color' => $v->getColor(),
+                'contenance' => $v->getContenance(),
+                'outOfStock' => $v->isOutOfStock(),
+                'price' => $v->getPriceEuros(),
+                'url' => $this->generateUrl('app_shop_cart_add', ['variantId' => $v->getId()]),
+                'token' => $csrfTokenManager->getToken('cart_add_' . $v->getId())->getValue(), // ✅ ICI !
+            ];
+        }
+
+        // Détection d'au moins une couleur
+        $hasColor = array_reduce($variantsForJs, fn($carry, $v) => $carry || !empty($v['color']), false);
+
+        return $this->render('shop/product/show.html.twig', [
+            'product' => $product,
+            'variants' => $product->getVariants(),
+            'variants_for_js' => $variantsForJs,
+            'hasColor' => $hasColor,
+            'current_page' => 'product'
+        ]);
+    }
+
 
     #[Route('/shop/products', name:'app_product_list')]
     public function list(

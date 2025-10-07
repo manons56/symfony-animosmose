@@ -31,9 +31,19 @@
 }
 
 
+.space-p p{
+    margin-bottom:1.5em;
+}
+
+.space-p p:last-of-type {
+   margin-bottom: 4em;
+}
 
 
-
+a:focus-visible {
+    outline: 2px solid #da6a47;
+    outline-offset: 4px;
+}
 
 // FORM
 .input {

@@ -250,3 +250,62 @@ h2{
 }
 
 
+
+// carroussel de commentaires
+.new-carousel-container {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.new-carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.new-carousel-item {
+    flex: 0 0 100%; /* mobile : 1 item visible */
+    box-sizing: border-box;
+    padding: 1rem;
+}
+
+.new-carousel-item img {
+    width: 70%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+@media (min-width: 768px) {
+    .new-carousel-item {
+        flex: 0 0 50%; /* desktop : 2 items visibles */
+    }
+}
+
+.new-carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #b15116;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 0.3em 0.8em;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.new-carousel-btn.prev { left: 0; }
+.new-carousel-btn.next { right: 0; }
+
+.leave-comment{
+    font-weight: 600;
+    text-decoration:underline;
+}
+
+.leave-comment:visited{
+    color:black;
+}

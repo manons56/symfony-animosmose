@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PicturesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: PicturesRepository::class)]
 class Pictures
@@ -13,8 +14,12 @@ class Pictures
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable:true)]
     private ?string $filename = null;
+
+
+    // Propriété pour stocker temporairement le fichier uploadé (non en base)
+    private ?UploadedFile $file = null;
 
     #[ORM\ManyToOne(targetEntity: Products::class, inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: false)]
@@ -33,6 +38,19 @@ class Pictures
     public function setFilename(string $filename): self
     {
         $this->filename = $filename;
+        return $this;
+    }
+
+
+    // Getter et setter pour la propriété non persistée "file"
+    public function getFile(): ?UploadedFile
+    {
+        return $this->file;
+    }
+
+    public function setFile(?UploadedFile $file): self
+    {
+        $this->file = $file;
         return $this;
     }
 

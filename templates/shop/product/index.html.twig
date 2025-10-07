@@ -63,7 +63,9 @@
                                 {% if product.isNew %}
                                     <span class="badge badge-success">Nouveau</span>
                                 {% endif %}
-                                <img src="{{ product.image ? asset('img/products/' ~ product.image) : asset('img/default-product.png') }}" alt="{{ product.name }}" class="product-image">
+                                {% set firstImage = product.images|first %}
+                                <img src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}" alt="{{ product.name }}" class="product-image">
+
                                 <h3 class="product-name">{{ product.name }}</h3>
                             </div>
                         </a>
@@ -143,7 +145,12 @@
                                 <span class="badge badge-success">Nouveau</span>
                             {% endif %}
 
-                            <img src="{{ product.image ? asset('img/products/' ~ product.image) : asset('img/default-product.png') }}" alt="{{ product.name }}" class="product-image">
+                            <div class="product-image-wrapper">
+                                {% set firstImage = product.images|first %}
+                                <img src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}" alt="{{ product.name }}" class="product-image">
+
+                            </div>
+
                             <h3 class="product-name">{{ product.name }}</h3>
 
                             {# Bloc prix #}
@@ -169,35 +176,6 @@
         <div id="pagination-controls" class="pagination"></div>
 
     </div>
-
-    <script>
-        document.querySelectorAll('.category-menu > ul > li > a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                const li = this.parentElement;
-                const submenu = li.querySelector('.subcategory-list');
-
-                // Seulement empêcher le comportement par défaut si un sous-menu existe
-                if (submenu) {
-                    e.preventDefault();
-
-                    // Toggle visible
-                    if (submenu.classList.contains('visible')) {
-                        submenu.classList.remove('visible');
-                        return;
-                    }
-
-                    // Masquer tous les autres menus ouverts
-                    document.querySelectorAll('.subcategory-list.visible').forEach(openMenu => {
-                        openMenu.classList.remove('visible');
-                    });
-
-                    submenu.classList.add('visible');
-                }
-            });
-        });
-
-
-    </script>
 
 
 {% endblock %}

@@ -3,14 +3,376 @@
 
 {% block title %}Pension et éducation canine{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }} {# conserve app.css #}
+    {{ encore_entry_link_tags('pension') }} {# ajoute pension.scss compilé #}
+{% endblock %}
+
+
 {% block body %}
 <div>
-    <h2>Pension canine</h2>
+    <section class="background-beige content-wrapper">
+        <h2>Pension canine</h2>
+        <div class="text-videopension-flex">
+            <div>
+            <p>À seulement 20 minutes à l’est de Vannes, Animosmose vous ouvre les portes d’un havre de paix, au coeur de la nature, où les chiens sont accueillis comme des membres de la famille.</p>
+            <p>Ici, tout est pensé pour leur bien-être : espace, attention, douceur et respect du rythme de chacun.</p>
+            <p>Nichée dans un environnement calme, notre pension est entourée de sentiers de promenade, de grands espaces verts et proche de la mer pour des moments uniques de détente et de découverte.</p>
+            <p>Nous vous offrons un accueil intimiste et chaleureux avec 2 chalets isolés et chauffés, chacun avec courrette privative, un grand parc arboré équipé d’un abri pour jouer et se reposer et des promenades quotidiennes sur les chemins environnants et/ou sur la propriété de 5 hectares.</p>
+            <p> La mer étant à 10 minutes, baignades et balades maritimes peuvent être proposées en option pour venir compléter le bien être de votre compagnon et immortaliser ce séjour par une séance photo.</p>
+            <p>Chez Animosmose, votre compagnon profite d’un séjour au calme, en pleine nature, avec toute la bienveillance qu’il mérite.</p>
+            <p>Parce que chaque chien mérite une attention personnalisée, nous n’accueillons que 3 pensionnaires à la fois. Cette capacité volontairement limitée nous permet d’offrir un cadre serein, sécurisant et adapté aux besoins de chacun.</p>
+            </div>
+            <div class="video-container">
+                <video class="video-pension" autoplay muted loop playsinline>
+                    <source src="{{ asset('build/videos/pension.mp4') }}" type="video/mp4">
+                    Votre navigateur ne supporte pas les vidéos HTML5.
+                </video>
+            </div>
+        </div>
+        <div class="button-section-flex">
+            <button data-modal-target="#modalPension">Nos tarifs</button>
+            <a target="_blank" class="button" href="https://sd-g1.archive-host.com/membres/up/8ffa3b44eed7ac5d18eece41b7a77957428e0c1f/Conditions_de_sejour.pdf">Nos conditions de séjour</a>
+        </div>
+    </section>
 
-    <h2>Éducation canine</h2>
 
-    <h2>Garde à domicile</h2>
+    <div class="modal" id="modalPension">
+        <div class="modal-header">
+            <div class="title">Tarifs pension canine</div>
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Pension chien</span>
+                    <span class="description-secondary">Prix par jour - Hors vacances scolaires</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">19€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément petites vacances scolaires</span>
+                    <span class="description-secondary">Prix par jour - Hors juillet/août</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">3€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément vacances estivales</span>
+                    <span class="description-secondary">Prix par jour - Juillet/août</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">6€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément nuit</span>
+                    <span class="description-secondary"></span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">50€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément chauffage</span>
+                    <span class="description-secondary">Prix par nuit</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">5€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Privatisation d'un box</span>
+                    <span class="description-secondary">Prix par jour - Pour chiens non sociables/timides ou femelles en chaleur</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">40€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Accueil dimanche ou férié</span>
+                    <span class="description-secondary">Prix par accueil</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">6,5€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément anti-puces</span>
+                    <span class="description-secondary">Prix pour une pipette d'anti-puces + son administration</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">6€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément E/S de nuit</span>
+                    <span class="description-secondary">Prix par entrée ou sortie de nuit (20h-8h30)</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">20€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément soins</span>
+                    <span class="description-secondary">Prix par jour - Soins et/ou médicaments</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">0,5€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Toilettage</span>
+                    <span class="description-secondary">Prix pour une heure</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">25€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Balade à la mer et shooting photo</span>
+                    <span class="description-secondary">1h de balade, 10 photos</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">45€</span>
+            </div>
+        </div>
+        <p class="devis">Demande de devis par Whatsapp : 06 25 81 48 45</p>
+    </div>
 
+    <div id="overlay"></div>
+
+
+
+
+
+
+
+
+    <section id="2">
+        <h2>Éducation canine</h2>
+        <p>Éducation canine autour de Vannes, Questembert, Nivillac, Muzillac, Séné Damgan et Elven</p>
+        <p>Vous souhaitez renforcer la complicité avec votre chien et instaurer une relation harmonieuse et bienveillante ? Animosmose vous accompagne pour mieux comprendre votre animal et instaurer un quotidien serein ensemble.</p>
+        <p>Avant toute prise en charge, un bilan comportemental personnalisé est réalisé. Il permet d’évaluer le caractère et les besoins de votre chien, tout en vous apportant des conseils théoriques adaptés à votre situation.</p>
+        <p>Je travaille exclusivement en méthode positive, convaincu que valoriser les bons comportements est bien plus efficace que de réprimer les mauvais. Que ce soit pour l’éducation d’un chiot ou le dressage d’un chien adulte, je vous propose un accompagnement sur mesure, respectueux et efficace.</p>
+        <p>Contactez-moi dès maintenant pour offrir à votre compagnon le meilleur de l’éducation canine.</p>
+        <div class="img-services-educ">
+        <img src="{{ asset('build/images/educ.png')}}" class="services-educ" alt='services proposés pour éducation'/>
+        </div>
+        <div class="button-section-flex">
+            <button data-modal-target="#modalEduc">Nos tarifs</button>
+        </div>
+    </section>
+
+
+    <div class="modal" id="modalEduc">
+        <div class="modal-header">
+            <div class="title">Tarifs éducation canine</div>
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Bilan comportemental</span>
+                    <span class="description-secondary">Prix pour 1 séance</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">75€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Carte 5 séances</span>
+                    <span class="description-secondary">Prix pour 5 séances</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">225€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Carte 10 séances</span>
+                    <span class="description-secondary">Prix pour 10 séances</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">450€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Cours à l'auberge</span>
+                    <span class="description-secondary">Prix pour 1 séance</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">48€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Cours à domicile</span>
+                    <span class="description-secondary">Prix pour 1 séance hors déplacement</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">48€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">École du chiot</span>
+                    <span class="description-secondary">Prix pour 1 séance</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">20€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Balade éducative</span>
+                    <span class="description-secondary">Prix pour 1 balade</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">25€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Rando éducative</span>
+                    <span class="description-secondary">Prix pour une randonnée</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">35€</span>
+            </div>
+        </div>
+        <p class="devis">Frais de déplacement : 0,85€/km </p>
+    </div>
+    <div id="overlay"></div>
+
+
+    <section class="background-beige ">
+        <h2>Garde à domicile</h2>
+        <p>Vous partez en vacances, en week-end, ou vous avez de longues journées au travail ? Vous n’avez pas la possibilité de promener votre chien ou de vous occuper de vos animaux , que vous soyez à la maison ou absent.
+        Animosmose est là pour vous : partez l’esprit tranquille: nous veillons sur vos animaux et prenons soin de votre maison comme si c’était la votre. Chiens, chats, NAC, chevaux ou animaux de la ferme : chaque compagnon bénéficie d’une attention personnalisée adaptée à ses besoins et à vos habitudes.</p>
+
+        <p class="p-underline"> Au programme : </p>
+        <div class="garde-dom">
+            <div class="garde-item">
+                <p>Pour les chiens et chats</p>
+                <ul>
+                    <li>Câlins, jeux, promenades et soins quotidiens</li>
+                    <li>Entretien (litières, gamelles etc.)</li>
+                    <li>Gestion de l'alimentation</li>
+                    <li>Brossage</li>
+                    <li>Surveillance attentive de leur bien-être</li>
+                </ul>
+            </div>
+
+            <div class="garde-item">
+                <p>Pour les équidés</p>
+                <ul>
+                    <li>Pansage</li>
+                    <li>Balade à pied, travail monté</li>
+                    <li>Nettoyage des box, des points d'eau</li>
+                    <li>Gestion de l'alimentation</li>
+                    <li>Surveillance attentive de leur bien-être</li>
+                </ul>
+            </div>
+
+            <div class="garde-item">
+                <p>Pour les autres espèces</p>
+                <ul>
+                    <li>Adaptable selon l'espèce et les besoins</li>
+                </ul>
+            </div>
+        </div>
+        <p class="p-padding">Les petits plus Animosmose :</p>
+        <ul class="ul-padding">
+           <li> Arrosage des plantes</li>
+           <li> Ouverture/fermeture des volets pour simuler une présence</li>
+            <li>Ménage avant votre retour pour une maison accueillante</li>
+        </ul>
+
+        <img src="{{ asset('build/images/ChatGPT.png')}}" class="services-garde-dom" alt='services proposés lors de la garde à domicile'/>
+
+        <p>Avec Animosmose, offrez à vos compagnons une présence rassurante et bienveillante, et profitez pleinement de vos déplacements sans souci.</p>
+        <div class="button-section-flex">
+            <button data-modal-target="#modalGardeDom">Nos tarifs</button>
+        </div>
+    </section>
+
+    <div class="modal" id="modalGardeDom">
+        <div class="modal-header">
+            <div class="title">Garde à domicile</div>
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">30 minutes</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">15€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">1 heure</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">24€</span>
+            </div>
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément petites vacances scolaires</span>
+                    <span class="description-secondary">Prix en supplément pour 1h</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">+2,50€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément vacances estivales</span>
+                    <span class="description-secondary">Prix en supplément pour 1h</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">+5€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément jours fériés et dimanche</span>
+                    <span class="description-secondary">Prix en supplément pour 1h</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">+6,5€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Supplément samedi</span>
+                    <span class="description-secondary">Prix en supplément pour 1h</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">+2€</span>
+            </div>
+
+            <div class="tarif-item">
+                <div class="description-wrapper">
+                    <span class="description">Ménage intérieur</span>
+                    <span class="description-secondary">Prix pour 1h</span>
+                </div>
+                <span class="dots"></span>
+                <span class="price">25€</span>
+            </div>
+
+        </div>
+        <p class="devis">Frais de déplacement : 0,85€/km </p>
+    </div>
+    <div id="overlay"></div>
 
 </div>
+
+
 {% endblock %}

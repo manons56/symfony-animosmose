@@ -1,0 +1,7 @@
+<form id="realCheckoutForm" method="post" action="{{ path('app_shop_cart_checkout') }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('cart_checkout') }}">
+</form>
+
+<script>
+    document.getElementById('realCheckoutForm').submit();
+</script>

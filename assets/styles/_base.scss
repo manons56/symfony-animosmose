@@ -71,5 +71,58 @@ article{
 
 
 /////////////
+//content//
+h2{
+    padding:1em;
+}
+
+h3{
+    text-align:left;
+}
+.content-padding{
+    padding:2em;
+}
 
 
+.h3-content{
+    padding:1em 0;
+}
+
+.no-bullet {
+    list-style: none;
+    padding-left: 0;
+}
+
+.list-style li::before{
+    content: "• ";
+}
+
+.toc {
+    background:$background-color;
+    padding: 2em;
+    border-radius: 8px;
+    margin-bottom: 2em;
+    margin-top:2em;
+
+}
+
+.toc ul {
+    list-style: none;
+    padding: 0;
+}
+
+.toc li {
+    margin-bottom: 0.5em;
+    font-size: smaller;
+    font-family:$font-family-nav;
+}
+
+.toc a {
+    text-decoration: none;
+    color: #da6a47;
+}
+
+.toc a:hover,
+.toc a:focus {
+    text-decoration: underline;
+}

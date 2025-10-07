@@ -49,7 +49,7 @@
                             <article class="home-article-s2">
                                 <img src="{{ asset('build/images/chiot12.jpg') }}" alt="Éducation canine" />
                                 <p>Éducation canine</p>
-                                <a href="{{ path('app_pension') }}"><button>Découvrir</button></a>
+                                <a href="{{ path('app_pension') }}#2"><button>Découvrir</button></a>
                             </article>
                         </div>
 
@@ -77,7 +77,7 @@
                         <p class="description"> Après des études dans les services à la personne, Baptiste s’investit dans la protection animale puis à 21 ans il crée “l’association Bêtes de Scène” qu’il préside pendant 10 ans. </br>
                             En parallèle il est salarié dans une pension canine au sud de Rennes, puis il allie ses deux savoirs, canin et social, et intègre l’association Lien K nin comme intervenant dans des structures pour personnes handicapées, âgées, Instituts Médicaux Éducatifs etc …. </br>
                             Il devient salarié à la Spa pendant quelques années.</br>
-                            En 2014 il ouvre Animosmose une pension canine familiale, en Ille et Vilaine, puis en 2017 il découvre les joies de faire naître des petits cockers ! 🐾 </br>
+                            En 2014 il ouvre Animosmose une pension canine familiale, en Ille et Vilaine, puis en 2017 il découvre les joies de faire naître des petits cockers ! <span aria-hidden="true">🐾</span> </br>
                             En 2020 toute la ménagerie élit domicile dans le Morbihan !</br>
                             La pension canine devient anecdotique et l’élevage prend un nouvel envol tout en gardant sa dimension familiale.</br>
                             Une nouvelle activité voit le jour, la pension d’équidés et le sauvetage / reconversion de chevaux de courses, l’éducation canine reste au cœur de ses préoccupations. Baptiste propose la garde à domicile dans son nouveau secteur.
@@ -107,7 +107,47 @@
         <section>
             <h2>Témoignages</h2>
 
-            <a href=''>Vous avez été conquis ? N'hésitez pas à nous laisser un avis !</a>
+            <section class="new-carousel-container">
+                <button class="new-carousel-btn prev">‹</button>
+
+                <div class="new-carousel-track">
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment1.png') }}" alt="commentaire google" />
+                    </div>
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment2.png') }}" alt="commentaire google" />
+                    </div>
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment3.png') }}" alt="commentaire google" />
+                    </div>
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment4.png') }}" alt="commentaire google" />
+                    </div>
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment5.png') }}" alt="commentaire google" />
+                    </div>
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment6.png') }}" alt="commentaire google" />
+                    </div>
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment7.png') }}" alt="commentaire google" />
+                    </div>
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment8.png') }}" alt="commentaire google" />
+                    </div>
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment9.png') }}" alt="commentaire google" />
+                    </div>
+                    <div class="new-carousel-item">
+                        <img src="{{ asset('build/images/comment10.png') }}" alt="commentaire google" />
+                    </div>
+                </div>
+
+                <button class="new-carousel-btn next">›</button>
+            </section>
+
+
+            <a class="leave-comment" href=''>Vous avez été conquis ? N'hésitez pas à nous laisser un avis vous aussi !</a>
 
         </section>
 

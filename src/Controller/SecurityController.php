@@ -27,6 +27,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('app_shop_order'); // page utilisateur classique
         }
 
+
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername, // le terme username est défini par symfony, c'est dans le yaml ensuite qu'on lui dit que le username, c'est pour ce projet, l'email dont on se sert pour la connexion
             'error' => $error,

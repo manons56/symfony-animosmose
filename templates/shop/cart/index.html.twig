@@ -43,7 +43,7 @@
         <thead>
         <tr>
             <th>Produit</th>
-            <th>Contenance</th>
+            <th>Détail</th>
             <th>Quantité</th>
             <th>Prix</th>
             <th>Total</th>
@@ -54,7 +54,21 @@
         {% for item in items %}
             <tr>
                 <td>{{ item.variant.product.name }}</td>
-                <td>{{ item.variant.label }}</td>
+
+                {# GESTION DE L'AFFICHAGE DES ATTRIBUTS (contenance / taille / couleur) #}
+                <td>
+                    {% if item.variant.contenance %}
+                        {{ item.variant.contenance }}
+                    {% else %}
+                        {% if item.variant.size %}
+                            Taille : {{ item.variant.size }}
+                        {% endif %}
+                        {% if item.variant.color %}
+                            <br>Couleur : {{ item.variant.color }}
+                        {% endif %}
+                    {% endif %}
+                </td>
+
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.variant.price }} €</td>
                 <td>{{ item.total }} €</td>
@@ -69,27 +83,53 @@
             <tr><td colspan="6">Votre panier est vide.</td></tr>
         {% endfor %}
         </tbody>
+
     </table>
 
     <div class="cart-mobile">
         {% for item in items %}
-            <div class="cart-item">
-                <div class="cart-item-header font-weight-bold">
-                    {{ item.variant.product.name }} ({{ item.variant.label }})
-                </div>
-                <div>Quantité : {{ item.quantity }}</div>
-                <div>Prix unitaire : {{ item.variant.price }} €</div>
-                <div>Total : {{ item.total }} €</div>
+            <div class="cart-item d-flex">
+                <div class="cart-item-content">
+                    <div class="cart-item-header font-weight-bold">
+                        {{ item.variant.product.name }}
+                    </div>
 
-                <form method="post" action="{{ path('app_shop_cart_remove', {id: item.variant.id}) }}" onsubmit="return confirm('Supprimer cet article ?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('cart_remove_' ~ item.variant.id) }}">
-                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                </form>
+                    <div>
+                        {% if item.variant.contenance %}
+                            Contenance : {{ item.variant.contenance }}
+                        {% else %}
+                            {% if item.variant.size %}
+                                Taille : {{ item.variant.size }}
+                            {% endif %}
+                            {% if item.variant.color %}
+                                <br>Couleur : {{ item.variant.color }}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <div>Quantité : {{ item.quantity }}</div>
+                    <div>Prix unitaire : {{ item.variant.price }} €</div>
+                    <div>Total : {{ item.total }} €</div>
+
+                    <form method="post" action="{{ path('app_shop_cart_remove', {id: item.variant.id}) }}" onsubmit="return confirm('Supprimer cet article ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('cart_remove_' ~ item.variant.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                </div>
+
+                <div class="cart-item-image-wrapper">
+                    {% set firstImage = item.variant.product.images|first %}
+                    <img src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}"
+                         alt="{{ item.variant.product.name }}"
+                         class="cart-item-image">
+                </div>
             </div>
         {% else %}
             <p>Votre panier est vide.</p>
         {% endfor %}
     </div>
+
+
 
 
     <h2>Total : {{ total }} €</h2>

@@ -9,6 +9,10 @@
 {% endblock %}
 
 {% block body %}
+    <a href="{{ path('app_shop_cart') }}">
+        <img src="{{ asset('build/images/back_arrow.png') }}" alt="Flèche retour" class="back_arrow">
+    </a>
+
 
     <h2>Livraison et paiement</h2>
 <div class="add-padding">
@@ -16,9 +20,9 @@
         <thead>
         <tr>
             <th>Produit</th>
-            <th>Contenance</th>
-            <th>Prix</th>
+            <th>Détail</th>
             <th>Quantité</th>
+            <th>Prix</th>
             <th>Total</th>
         </tr>
         </thead>
@@ -26,9 +30,20 @@
         {% for article in order.articles %}
             <tr>
                 <td>{{ article.variantId.product.name }}</td>
-                <td>{{ article.variantId.label }}</td>
-                <td>{{ article.price }} €</td>
+                <td>
+                    {% if article.variantId.contenance %}
+                        {{ article.variantId.contenance }}
+                    {% else %}
+                        {% if article.variantId.size %}
+                            Taille : {{ article.variantId.size }}
+                        {% endif %}
+                        {% if article.variantId.color %}
+                            <br>Couleur : {{ article.variantId.color }}
+                        {% endif %}
+                    {% endif %}
+                </td>
                 <td>{{ article.quantity }}</td>
+                <td>{{ article.price }} €</td>
                 <td>{{ (article.price * article.quantity)|number_format(2, '.', ' ') }} €</td>
             </tr>
         {% endfor %}
@@ -38,8 +53,21 @@
         {% for article in order.articles %}
             <div class="order-item">
                 <div class="order-item-header font-weight-bold">
-                    {{ article.variantId.product.name }} ({{ article.variantId.label }})
+                    {{ article.variantId.product.name }}
                 </div>
+                <div>
+                    {% if article.variantId.contenance %}
+                        Contenance : {{ article.variantId.contenance }}
+                    {% else %}
+                        {% if article.variantId.size %}
+                            Taille : {{ article.variantId.size }}
+                        {% endif %}
+                        {% if article.variantId.color %}
+                            <br>Couleur : {{ article.variantId.color }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+
                 <div>Quantité : {{ article.quantity }}</div>
                 <div>Prix unitaire : {{ article.price }} €</div>
                 <div>Total : {{ (article.price * article.quantity)|number_format(2, '.', ' ') }} €</div>

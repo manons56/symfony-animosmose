@@ -16,16 +16,29 @@ class VariantType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('label', TextType::class, [
-                'label' => 'Label du variant',
+            ->add('contenance', TextType::class, [
+                'required' => false,
+                'label' => 'Contenance',
+            ])
+            ->add('size', TextType::class, [
+                'required' => false,
+                'label' => 'Taille',
+            ])
+            ->add('color', TextType::class, [
+                'required' => false,
+                'label' => 'Couleur',
             ])
             ->add('price', MoneyType::class, [
-                'label' => 'Prix du variant',
+                'label' => 'Prix (€)',
                 'currency' => 'EUR'
             ])
             ->add('isDefault', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Par défaut ?',
+            ])
+            ->add('isOutOfStock', CheckboxType::class, [
+            'required' => false,
+            'label' => 'Indisponible',
             ]);
     }
 

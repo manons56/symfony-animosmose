@@ -6,6 +6,7 @@ use App\Repository\ProductsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: ProductsRepository::class)]
 class Products
@@ -21,11 +22,12 @@ class Products
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
+    private ?UploadedFile $imageFile = null;
 
     /**
      * @var Collection<int, Pictures>
      */
-    #[ORM\OneToMany(targetEntity: Pictures::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Pictures::class, mappedBy: 'product', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $images;
 
     #[ORM\Column(type: 'text')]
@@ -34,7 +36,7 @@ class Products
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $capacity = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $composition = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -56,7 +58,6 @@ class Products
     #[ORM\Column(nullable: true)]
     private ?bool $isOutOfStock = null;
 
-
     /**
      * @var Collection<int, Variants>
      */
@@ -66,10 +67,11 @@ class Products
     public function __construct()
     {
         $this->variants = new ArrayCollection();
-        $this->images = new ArrayCollection(); // initialisation
+        $this->images = new ArrayCollection();
     }
 
     // ---------- Getters / Setters classiques ----------
+
     public function getId(): ?int
     {
         return $this->id;
@@ -82,7 +84,8 @@ class Products
 
     public function setName(string $name): static
     {
-        $this->name = $name; return $this;
+        $this->name = $name;
+        return $this;
     }
 
     public function getImage(): ?string
@@ -96,10 +99,24 @@ class Products
         return $this;
     }
 
+    public function getImageFile(): ?UploadedFile
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?UploadedFile $imageFile): self
+    {
+        $this->imageFile = $imageFile;
+        return $this;
+    }
+
     /**
      * @return Collection<int, Pictures>
      */
-    public function getImages(): Collection { return $this->images; }
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
 
     public function addImage(Pictures $image): self
     {
@@ -120,8 +137,6 @@ class Products
         return $this;
     }
 
-
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -129,7 +144,8 @@ class Products
 
     public function setDescription(string $description): static
     {
-        $this->description = $description; return $this;
+        $this->description = $description;
+        return $this;
     }
 
     public function getCapacity(): ?string
@@ -142,6 +158,7 @@ class Products
         $this->capacity = $capacity;
         return $this;
     }
+
 
     public function getComposition(): ?string
     {
@@ -220,11 +237,13 @@ class Products
         return $this;
     }
 
-
     /**
      * @return Collection<int, Variants>
      */
-    public function getVariants(): Collection { return $this->variants; }
+    public function getVariants(): Collection
+    {
+        return $this->variants;
+    }
 
     public function addVariant(Variants $variant): static
     {
@@ -246,8 +265,10 @@ class Products
     }
 
     // ---------- Champ temporaire pour EasyAdmin ----------
+
     /**
      * Champ temporaire pour la catégorie principale (non mappé)
+     *
      * @var int|null
      */
     private ?int $categoryParent = null;

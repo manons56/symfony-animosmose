@@ -15,6 +15,12 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use App\Repository\ProductsRepository;
+use App\Repository\VariantsRepository;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+
 
 class CartController extends AbstractController
 {
@@ -33,48 +39,42 @@ class CartController extends AbstractController
         ]);
     }
 
-    #[Route('/shop/cart/add/{id}', name:'app_shop_cart_add', methods: ['POST'])]
-    // --> permet d'ajouter un produit au panier, méthode POST uniquement
-    // Route pour ajouter un produit/variant au panier
-    // {id} est un paramètre de route (ex: /cart/add/5)
+    #[Route('/shop/cart/add/{variantId}', name:'app_shop_cart_add', methods: ['POST'])]
     public function add(
-        int $id,
+        int $variantId,
         Request $request,
         CartService $cartService,
         CsrfTokenManagerInterface $csrfTokenManager,
-        ProductsRepository $productRepository // <-- injection du repository pour récupérer le produit
+        VariantsRepository $variantRepository
     ): Response
     {
-        // On récupère le token CSRF envoyé via le formulaire POST
         $submittedToken = $request->request->get('_token');
 
-        // On vérifie que le token est valide pour éviter les attaques CSRF
-        if (!$csrfTokenManager->isTokenValid(new CsrfToken('cart_add_' . $id, $submittedToken))) {
+        if (!$csrfTokenManager->isTokenValid(new CsrfToken('cart_add_' . $variantId, $submittedToken))) {
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        // On récupère le produit depuis la base de données
-        $product = $productRepository->find($id);
+        // On récupère la variante
+        $variant = $variantRepository->find($variantId);
 
-        // On vérifie que le produit existe bien
-        if (!$product) {
-            throw $this->createNotFoundException('Produit introuvable.');
+        if (!$variant) {
+            throw $this->createNotFoundException('Variant introuvable.');
         }
 
-        // On vérifie si le produit est en rupture de stock
+        // On récupère le produit associé
+        $product = $variant->getProduct();
+
         if ($product->isOutOfStock()) {
-            // Si oui, on affiche un message d'erreur et on redirige vers la boutique
-            $this->addFlash('error', 'Ce produit est en rupture de stock et ne peut pas être ajouté au panier.');
+            $this->addFlash('error', 'Ce produit est en rupture de stock.');
             return $this->redirectToRoute('app_product_list');
-
         }
 
-        // Si tout est bon, on appelle la méthode add() du CartService pour ajouter ce produit/variant
-        $cartService->add($id);
+        // On ajoute la variante au panier
+        $cartService->add($variantId);
 
-        // Après l’ajout, on redirige vers la page du panier (route "app_shop_cart")
         return $this->redirectToRoute('app_shop_cart');
     }
+
 
 
     #[Route('/shop/cart/remove/{id}', name:'app_shop_cart_remove', methods: ['POST'])] // --> permet de retirer un produit du panier, méthode POST uniquement
@@ -100,6 +100,30 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_shop_cart');
         // Après suppression, on redirige encore vers la page panier
     }
+
+
+    #[Route('/shop/cart/checkout/trigger', name: 'app_shop_cart_checkout_trigger', methods: ['GET'])]
+    public function checkoutTrigger(CartService $cartService): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // Vérifie que le panier n’est pas vide
+        if (empty($cartService->getCart())) {
+            $this->addFlash('warning', 'Votre panier est vide.');
+            return $this->redirectToRoute('app_shop_cart');
+        }
+
+        // Redirige vers un contrôleur qui va vraiment valider la commande (en POST)
+        return $this->render('shop/cart/trigger_checkout.html.twig', [
+            'csrf_token' => $this->container->get('security.csrf.token_manager')->getToken('cart_checkout')->getValue(),
+        ]);
+    }
+
+// par défaut, après le login, symfony cherche à retourner sur la page d'avant login, via un GET
+// la route ci dessus, va permettre, avec le trigger_checkout.html.twig et son js, de créer une étape intermédiaire
+// --> apres le login, le get va etre transformé en post
+// la route ci dessous est alors appelé et peut etre utilisé correctement et on est redirigé vers la page de commande
+
 
     #[Route('/shop/cart/checkout', name:'app_shop_cart_checkout', methods: ['POST'])]// permet de valider le panier et transformer en commande
     public function checkout(CartService $cartService, EntityManagerInterface $manager): Response

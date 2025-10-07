@@ -1,3 +1,4 @@
+{# templates/shop/product/show.html.twig #}
 {% extends 'base.html.twig' %}
 {% set current_page = 'product' %}
 
@@ -31,82 +32,188 @@
                 {% endif %}
             </div>
         </div>
+
         <a href="{{ path('app_product_list') }}">
             <img src="{{ asset('build/images/back_arrow.png') }}" alt="Flèche retour" class="back_arrow">
         </a>
 
+        {% if product.isNew %}
+            <span class="badge badge-success" style="margin-left:10px; font-size:0.8em; padding:5px 8px;">Nouveau</span>
+        {% endif %}
 
-        <h2>
-            {{ product.name }}
-            {% if product.isNew %}
-                <span class="badge badge-success" style="margin-left:10px; font-size:0.8em; padding:5px 8px;">Nouveau</span>
-            {% endif %}
-        </h2>
-
-        <section class="descriptif-flex background-beige">
-            <div class="product-slider">
-                {# Image principale du slider #}
-                <div class="main-image-container">
-                    {% if product.images|length > 0 %}
-                        <img id="main-product-image" src="{{ asset('img/products/' ~ product.images|first.filename) }}" alt="{{ product.name }}">
-                    {% else %}
-                        <img id="main-product-image" src="{{ asset('img/default-product.jpg') }}" alt="Produit par défaut">
-                    {% endif %}
-                </div>
-
-                {# Flèches navigation #}
-                <button id="prev-image" class="slider-arrow">&#10094;</button>
-                <button id="next-image" class="slider-arrow">&#10095;</button>
-
-                {# Miniatures #}
-                <div class="thumbnail-container">
-                    {% for image in product.images %}
-                        <img class="thumbnail" src="{{ asset('img/products/' ~ image.filename) }}" alt="{{ product.name }}" data-index="{{ loop.index0 }}">
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div>
-                <h3>Description</h3>
-                <p>{{ product.description|nl2br|raw }}</p>
-                </br>
-                <h3>Contenance </h3>
-                <div class="variants-container">
-                    {% for variant in variants %}
-                        <div class="variant-card" data-variant-id="{{ variant.id }}">
-                            {{ variant.label }} - {{ variant.price }} €
-                        </div>
-                    {% endfor %}
-                </div>
-
-                <div class="btn-container">
-                    {# Formulaire toujours présent, même si le produit est en rupture #}
-                    <form id="add-to-cart-form" method="post" action="{% if variants|length > 0 %}{{ path('app_shop_cart_add', {'id': variants[0].id}) }}{% endif %}">
-                        {# Génération du token CSRF basé sur l'ID du premier variant #}
-                        {% if variants|length > 0 %}
-                            <input type="hidden" name="_token" id="csrf-token" value="{{ csrf_token('cart_add_' ~ variants[0].id) }}">
+        <section class="background-beige">
+            <h2 class="h2-right">{{ product.name }}</h2>
+            <div class="descriptif-flex">
+                <div class="product-slider">
+                    {# IMAGES #}
+                    {% set images = product.images %}
+                    {% set firstImage = images|first %}
+                    <div class="main-image-container">
+                        {% if firstImage %}
+                            <img id="main-product-image" src="{{ asset('img/products/' ~ firstImage.filename) }}" alt="{{ product.name }}">
                         {% endif %}
+                    </div>
 
-                        {# Bouton désactivé si le produit est en rupture #}
-                        <button type="submit"
-                                class="btn-add-cart"
-                                {% if product.isOutOfStock or variants|length == 0 %}disabled style="background-color:#d6d5d5;color:black;cursor:not-allowed;"{% endif %}>
-                            {% if product.isOutOfStock %}
-                                Produit indisponible
-                            {% else %}
-                                Ajouter au panier
-                            {% endif %}
-                        </button>
-                    </form>
+                    {# MINIATURES #}
+                    {% if images|length > 1 %}
+                        <div class="thumbnail-container">
+                            {% for image in images %}
+                                <img src="{{ asset('img/products/' ~ image.filename) }}" alt="{{ product.name }}" class="thumbnail" data-index="{{ loop.index0 }}">
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
-                    {# Badge visible si rupture #}
-                    {% if product.isOutOfStock %}
-                        <span class="rupture-stock-badge" style="background-color:#c0392b;color:white;padding:5px 10px;border-radius:5px;display:inline-block;margin-top:5px;">
-                        Produit en rupture de stock
-                    </span>
+                    {% if product.images|length > 1 %}
+                        <button id="prev-image" class="slider-arrow">&#10094;</button>
+                        <button id="next-image" class="slider-arrow">&#10095;</button>
                     {% endif %}
                 </div>
-            </div>
+
+                <div class="description-contenance">
+                    {# --- DESCRIPTION (au-dessus des variantes) --- #}
+                    <div class="product-description">
+                        {{ product.description|raw }}
+                    </div>
+                    <br>
+
+                    {# --- Préparer les variants côté Twig et détecter les types présents --- #}
+                    {% set variants = product.variants %}
+                    {% set hasContenance = false %}
+                    {% set hasSize = false %}
+                    {% set hasColor = false %}
+                    {% for v in variants %}
+                        {% if v.contenance is not empty %}{% set hasContenance = true %}{% endif %}
+                        {% if v.size is not empty %}{% set hasSize = true %}{% endif %}
+                        {% if v.color is not empty %}{% set hasColor = true %}{% endif %}
+                    {% endfor %}
+
+                    {# ---------------- Contenance ---------------- #}
+                    {% if hasContenance %}
+                        <h3>Contenance</h3>
+                        <div class="variants-container contenance">
+                            {% for variant in variants %}
+                                {% if variant.contenance %}
+                                    <div class="variant-card
+                                        {% if product.isOutOfStock or variant.isOutOfStock %}variant-unavailable{% endif %}"
+                                         data-csrf="{{ csrf_token('cart_add_' ~ variant.id) }}"
+                                         data-variant-id="{{ variant.id }}"
+                                         data-outofstock="{{ variant.isOutOfStock ? '1' : '0' }}"
+                                         {% if product.isOutOfStock or variant.isOutOfStock %}title="Indisponible"{% endif %}
+                                    >
+                                        {{ variant.contenance }} - {{ variant.getPriceEuros() }} €
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {# Prix unique affiché sous le nom du produit #}
+                        {% if variants|length > 0 %}
+                            <p><strong>Prix : {{ variants[0].getPriceEuros() }} €</strong></p>
+                        {% endif %}
+                    {% endif %}
+
+                    {# ---------------- Taille ---------------- #}
+                    {% if hasSize %}
+                        <h3>Taille</h3>
+                        <div class="variants-container size" id="sizes-container">
+                            {% set seenSizes = [] %}
+                            {% for v in variants %}
+                                {% if v.size %}
+                                    {% if v.size not in seenSizes %}
+                                        {% set seenSizes = seenSizes|merge([v.size]) %}
+
+                                        {# find an example variant for this size to check outOfStock #}
+                                        {% set example = null %}
+                                        {% for ev in variants %}
+                                            {% if ev.size == v.size and example is null %}
+                                                {% set example = ev %}
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        <div class="variant-card size-card {% if example and example.isOutOfStock %}variant-unavailable{% endif %}"
+                                             data-size="{{ v.size }}"
+                                             data-outofstock="{{ (example and example.isOutOfStock) ? '1' : '0' }}"
+                                        >
+                                            {{ v.size }}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {# ---------------- Couleur ---------------- #}
+                    {% if hasColor %}
+                        <h3>Couleur</h3>
+                        <div class="variants-container color" id="colors-container">
+                            {% set seenColors = [] %}
+                            {% for v in variants %}
+                                {% if v.color %}
+                                    {% if v.color not in seenColors %}
+                                        {% set seenColors = seenColors|merge([v.color]) %}
+
+                                        {% set exampleC = null %}
+                                        {% for ev in variants %}
+                                            {% if ev.color == v.color and exampleC is null %}
+                                                {% set exampleC = ev %}
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        <div class="variant-card color-card {% if exampleC and exampleC.isOutOfStock %}variant-unavailable{% endif %}"
+                                             data-color="{{ v.color }}"
+                                             data-outofstock="{{ (exampleC and exampleC.isOutOfStock) ? '1' : '0' }}"
+                                        >
+                                            {{ v.color }}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {# ---------------- Préparer le tableau JS côté Twig (url + token garantis) ---------------- #}
+                    {% set variants_for_js = [] %}
+                    {% for v in variants %}
+                        {% set item = {
+                            'id': v.id,
+                            'size': v.size|default(''),
+                            'color': v.color|default(''),
+                            'contenance': v.contenance|default(''),
+                            'outOfStock': v.isOutOfStock ? true : false,
+                            'price': v.getPriceEuros(),
+                            'url': path('app_shop_cart_add', {'variantId': v.id}),
+                            'token': csrf_token('cart_add_' ~ v.id)
+                        } %}
+                        {% set variants_for_js = variants_for_js|merge([item]) %}
+                    {% endfor %}
+
+                    {# ---------------- Formulaire d'ajout au panier ---------------- #}
+                    <div class="btn-container">
+                        <form id="add-to-cart-form" method="post" action="#">
+                            <input type="hidden" name="_token" id="csrf-token" value="">
+                            <input type="hidden" name="variantId" id="selected-variant-id" value="">
+                            {% if not product.isOutOfStock %}
+                                <button type="submit" class="btn-add-cart">
+                                    Ajouter au panier
+                                </button>
+                            {% endif %}
+                        </form>
+
+                        <div id="variant-error" style="color:#c0392b;margin-top:8px;display:none;">
+                            ⚠️ Merci de choisir une combinaison taille/couleur avant d'ajouter au panier.
+                        </div>
+
+                        {% if product.isOutOfStock %}
+                            <span class="rupture-stock-badge" style="background-color:#c0392b;color:white;padding:5px 10px;border-radius:5px;display:inline-block;margin-top:5px;">
+                                Produit en rupture de stock
+                            </span>
+                        {% endif %}
+                    </div>
+
+                </div> {# /description-contenance #}
+            </div> {# /descriptif-flex #}
         </section>
 
         <section class="composition-flex">
@@ -126,5 +233,551 @@
             {% endif %}
         </section>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function() {
+
+            /*
+                VARIANTS : données JSON injectées par Twig côté serveur.
+                Contient la liste complète des variantes disponibles pour ce produit.
+                Chaque élément typique contient : id, size, color, contenance, outOfStock, url, token
+            */
+            const VARIANTS = {{ variants_for_js|json_encode|raw }};
+
+            /*
+                Récupération des éléments DOM essentiels :
+
+                - form : le formulaire d'ajout au panier
+                - csrfInput : champ qui contiendra le token CSRF (_token)
+                - selectedVariantHidden : champ caché pour renseigner l'id de la variante choisie (optionnel)
+                - addToCartButton : bouton submit du formulaire
+                - errorBox : conteneur d'erreur pour afficher des messages à l'utilisateur
+            */
+            const form = document.getElementById('add-to-cart-form');
+            const csrfInput = document.getElementById('csrf-token');                 // input _token
+            const selectedVariantHidden = document.getElementById('selected-variant-id'); // hidden variant id (optional)
+            const addToCartButton = form ? form.querySelector('button[type="submit"]') : null;
+            const errorBox = document.getElementById('variant-error');
+
+            /*
+                Sélection des "boutons" de variante dans le DOM.
+                Ces noeuds représentent les cartes/interrupteurs pour taille, couleur, contenance.
+                On convertit NodeList en Array pour pouvoir utiliser forEach, map, etc.
+            */
+            const sizeButtons = Array.from(document.querySelectorAll('#sizes-container .variant-card'));
+            const colorButtons = Array.from(document.querySelectorAll('#colors-container .variant-card'));
+            const contenanceButtons = Array.from(document.querySelectorAll('.variants-container.contenance .variant-card'));
+
+            /*
+                Flags pour savoir quels types d'attributs existent sur cette fiche produit.
+                Ces booléens facilitent les chemins conditionnels du script (contenance-only, size+color, etc.).
+            */
+            const hasSize = sizeButtons.length > 0;
+            const hasColor = colorButtons.length > 0;
+            const hasContenance = contenanceButtons.length > 0;
+
+            /*
+                State interne : mémorise la sélection courante et l'id de variante final sélectionnée.
+                - selectedSize : valeur string de la taille sélectionnée
+                - selectedColor : valeur string de la couleur sélectionnée
+                - selectedContenanceBtn : référence DOM du bouton contenance sélectionné (si applicable)
+                - selectedVariantId : id numérique/string de la variante choisie (utilisé pour le submit)
+            */
+            const state = {
+                selectedSize: null,
+                selectedColor: null,
+                selectedContenanceBtn: null, // DOM element if contenance selected
+                selectedVariantId: null
+            };
+
+            /*
+                Vérifications de sécurité initiales :
+                Si le formulaire, le champ CSRF ou le bouton sont absents, on logge et on stoppe l'exécution.
+                Ceci évite des erreurs JS inutiles sur des pages sans le formulaire attendu.
+            */
+            if (!form || !csrfInput || !addToCartButton) {
+                console.warn('add-to-cart form or token/button not found — script stopped.');
+                return;
+            }
+
+            /*
+                findMatchingVariant(size, color)
+                --------------------------------
+                Parcourt le tableau VARIANTS et retourne la première variante qui :
+                - correspond exactement à la taille et la couleur fournies (si les deux sont fournies)
+                - ou correspond à la taille si il n'y a pas d'attribut couleur sur le produit
+                S'assure aussi que la variante trouvée n'est pas en rupture de stock (outOfStock falsy).
+            */
+            function findMatchingVariant(size, color) {
+                for (const v of VARIANTS) {
+                    const vs = v.size || '';
+                    const vc = v.color || '';
+                    if (size && color) {
+                        if (vs === size && vc === color && !v.outOfStock) return v;
+                    } else if (size && !hasColor) {
+                        if (vs === size && !v.outOfStock) return v;
+                    }
+                }
+                return null;
+            }
+
+            /*
+                setFormForVariant(variant)
+                -------------------------
+                Configure le formulaire pour pointer vers l'URL d'ajout au panier correspondante
+                et injecte le token CSRF si fourni par la variante (token côté serveur).
+                - Définit method="post"
+                - Définit action = variant.url ou fallback '/shop/cart/add/' + variant.id
+                - Remplit le champ CSRF (csrfInput.value)
+                - Remplit le champ caché selectedVariantHidden si présent
+                - Met à jour state.selectedVariantId et active le bouton addToCartButton
+                - Cache le message d'erreur si visible
+            */
+            function setFormForVariant(variant) {
+                if (!variant) return;
+                const url = variant.url && variant.url !== '' ? variant.url : '/shop/cart/add/' + variant.id;
+                const token = variant.token && variant.token !== '' ? variant.token : '';
+
+                form.setAttribute('method', 'post');
+                form.setAttribute('action', url);
+                csrfInput.value = token;
+                if (selectedVariantHidden) selectedVariantHidden.value = variant.id;
+                state.selectedVariantId = variant.id;
+                addToCartButton.disabled = false;
+                if (errorBox) errorBox.style.display = 'none';
+            }
+
+            /*
+                resetFormToEmpty()
+                ------------------
+                Réinitialise l'action du formulaire, le token CSRF, l'id de variante caché et
+                désactive le bouton d'ajout au panier. Utilisé quand la sélection n'est pas complète.
+            */
+            function resetFormToEmpty() {
+                form.setAttribute('action', '#');
+                csrfInput.value = '';
+                if (selectedVariantHidden) selectedVariantHidden.value = '';
+                state.selectedVariantId = null;
+                addToCartButton.disabled = true;
+            }
+
+            /*
+                clearSelected(list)
+                -------------------
+                Enlève la classe CSS 'selected' de tous les éléments de la liste passée.
+                Utile pour gérer l'état visuel quand on change de sélection.
+            */
+            function clearSelected(list) {
+                list.forEach(el => el.classList.remove('selected'));
+            }
+
+            /*
+                markSelected(list, key, value)
+                ------------------------------
+                Ajoute la classe 'selected' à l'élément de la liste dont l'attribut data-{key}
+                correspond à la valeur fournie. (Ex : key='size', value='M')
+                Ne fait rien si value falsy.
+            */
+            function markSelected(list, key, value) {
+                if (!value) return;
+                list.forEach(el => {
+                    if (el.dataset[key] === value) el.classList.add('selected');
+                });
+            }
+
+            /*
+                Cas spécial : contenance ONLY (pas de taille, pas de couleur)
+                -------------------------------------------------------------
+                Si le produit n'a que des contenances (ex : 250ml, 500ml) et pas d'autres attributs,
+                alors cliquer sur une contenance sélectionne immédiatement la variante et
+                configure le formulaire en conséquence.
+            */
+            if (hasContenance && !hasSize && !hasColor) {
+                // Par défaut, on désactive le bouton tant qu'aucune contenance n'est choisie.
+                addToCartButton.disabled = true;
+
+                // Pour chaque bouton contenance on ajoute un handler click
+                contenanceButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // Si la contenance est marquée outofstock via dataset, on ignore le clic
+                        if (btn.dataset.outofstock === '1') return;
+
+                        // Visuel : on désélectionne les autres et on marque celui-ci
+                        clearSelected(contenanceButtons);
+                        btn.classList.add('selected');
+
+                        // État : on mémorise le bouton contenance sélectionné, on réinitialise size/color
+                        state.selectedContenanceBtn = btn;
+                        state.selectedSize = null;
+                        state.selectedColor = null;
+
+                        // Récupère l'id de variante et le token CSRF stockés dans les data-attributes du bouton
+                        const variantId = btn.dataset.variantId;
+                        const token = btn.dataset.csrf || '';
+
+                        // Configure le formulaire immédiatement
+                        form.setAttribute('method', 'post');
+                        form.setAttribute('action', '/shop/cart/add/' + variantId);
+                        csrfInput.value = token;
+                        if (selectedVariantHidden) selectedVariantHidden.value = variantId;
+                        state.selectedVariantId = variantId;
+
+                        // Active le bouton d'ajout au panier et masque toute erreur
+                        addToCartButton.disabled = false;
+                        if (errorBox) errorBox.style.display = 'none';
+                    });
+                });
+
+                // Si il n'y a qu'une seule option de contenance et qu'elle n'est pas OOS,
+                // on la pré-sélectionne automatiquement pour faciliter l'utilisateur.
+                if (contenanceButtons.length === 1 && contenanceButtons[0].dataset.outofstock !== '1') {
+                    contenanceButtons[0].classList.add('selected');
+                    const id = contenanceButtons[0].dataset.variantId;
+                    form.setAttribute('action', '/shop/cart/add/' + id);
+                    csrfInput.value = contenanceButtons[0].dataset.csrf || '';
+                    if (selectedVariantHidden) selectedVariantHidden.value = id;
+                    state.selectedVariantId = id;
+                    addToCartButton.disabled = false;
+                }
+
+                /*
+                    Soumission : si aucune contenance sélectionnée, on empêche la soumission
+                    et on affiche un message d'erreur.
+                */
+                form.addEventListener('submit', function(e) {
+                    if (!state.selectedVariantId) {
+                        e.preventDefault();
+                        if (errorBox) {
+                            errorBox.textContent = '⚠️ Veuillez sélectionner une contenance.';
+                            errorBox.style.display = 'block';
+                        }
+                        return false;
+                    }
+                    return true;
+                });
+
+                // On s'arrête là : la logique contenance-only est traitée.
+                return;
+            }
+
+            /*
+                CAS STANDARD / MIXTE : taille + couleur (ou d'autres combinaisons)
+                -------------------------------------------------------------------
+                initAvailability() : initialise l'état visuel et interactivité des boutons
+                en fonction des informations VARIANTS (on ignore le dataset "outofstock"
+                éventuellement généré côté Twig pour recalculer à partir des données serveurs).
+            */
+            function initAvailability() {
+                // Sets utilisés pour calculer quelles tailles/couleurs sont globalement disponibles
+                const availableSizes = new Set();
+                const availableColors = new Set();
+                VARIANTS.forEach(v => {
+                    if (v.size && !v.outOfStock) availableSizes.add(String(v.size));
+                    if (v.color && !v.outOfStock) availableColors.add(String(v.color));
+                });
+
+                /*
+                    Pour chaque bouton de taille : si son dataset indique outofstock='1'
+                    on lui applique la classe variant-unavailable et on désactive les events via pointerEvents.
+                    Sinon on s'assure qu'il est activable.
+                */
+                sizeButtons.forEach(s => {
+                    if (s.dataset.outofstock === '1') {
+                        s.classList.add('variant-unavailable');
+                        s.style.pointerEvents = 'none';
+                    } else {
+                        s.classList.remove('variant-unavailable');
+                        s.style.pointerEvents = '';
+                    }
+                });
+
+                /*
+                    Même chose pour les couleurs : on se base sur le dataset outofstock qui
+                    est présumé avoir été rendu côté Twig. Le script se permet de recalculer
+                    quand l'utilisateur fait des sélections croisées (voir plus bas).
+                */
+                colorButtons.forEach(c => {
+                    if (c.dataset.outofstock === '1') {
+                        c.classList.add('variant-unavailable');
+                        c.style.pointerEvents = 'none';
+                    } else {
+                        c.classList.remove('variant-unavailable');
+                        c.style.pointerEvents = '';
+                    }
+                });
+
+                /*
+                    Pour les contenances on laisse la logique antérieure : on désactive si dataset.outofstock === '1'
+                */
+                contenanceButtons.forEach(c => {
+                    if (c.dataset.outofstock === '1') {
+                        c.classList.add('variant-unavailable');
+                        c.style.pointerEvents = 'none';
+                    }
+                });
+
+                // On remet le formulaire dans un état "vide" par défaut
+                resetFormToEmpty();
+            }
+            // Appel initial pour configurer l'UI
+            initAvailability();
+
+            /*
+                updateColorsForSize(size)
+                ------------------------
+                Lorsqu'une taille est sélectionnée, cette fonction active uniquement les couleurs
+                compatibles avec cette taille (et disponibles). Les autres couleurs sont marquées
+                comme indisponibles et le clic est désactivé.
+            */
+            function updateColorsForSize(size) {
+                const allowed = new Set();
+                VARIANTS.forEach(v => {
+                    if ((v.size || '') === size && !v.outOfStock) allowed.add(v.color);
+                });
+                colorButtons.forEach(c => {
+                    if (allowed.has(c.dataset.color)) {
+                        c.classList.remove('variant-unavailable');
+                        c.style.pointerEvents = ''; // Reactivation du clic
+                    } else {
+                        c.classList.add('variant-unavailable');
+                        c.style.pointerEvents = 'none';
+                    }
+                });
+            }
+
+            /*
+                updateSizesForColor(color)
+                -------------------------
+                Même logique inverse : si une couleur est choisie, on active seulement
+                les tailles compatibles avec cette couleur et disponibles.
+            */
+            function updateSizesForColor(color) {
+                const allowed = new Set();
+                VARIANTS.forEach(v => {
+                    if ((v.color || '') === color && !v.outOfStock) allowed.add(v.size);
+                });
+                sizeButtons.forEach(s => {
+                    if (allowed.has(s.dataset.size)) {
+                        s.classList.remove('variant-unavailable');
+                        s.style.pointerEvents = ''; // Reactivation du clic
+                    } else {
+                        s.classList.add('variant-unavailable');
+                        s.style.pointerEvents = 'none';
+                    }
+                });
+            }
+
+            /*
+                Gestion du clic sur un bouton de taille :
+                - bascule la sélection (toggle)
+                - met à jour l'état interne
+                - réinitialise la configuration du formulaire (id, token, action) puisque la combinaison change
+                - met à jour l'UI (couleurs) si nécessaire
+                - masque le message d'erreur
+            */
+            sizeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+
+                    // Récupère la taille clickée depuis data-size
+                    const size = btn.dataset.size;
+
+                    // Toggle visuel / logique : si on reclique sur la même taille, on désélectionne
+                    if (state.selectedSize === size) {
+                        state.selectedSize = null;
+                        clearSelected(sizeButtons);
+                    } else {
+                        state.selectedSize = size;
+                        clearSelected(sizeButtons);
+                        markSelected(sizeButtons, 'size', size);
+                    }
+
+                    // Interaction size/color annule toute contenance précédemment sélectionnée
+                    state.selectedContenanceBtn = null;
+
+                    // On invalide la variante sélectionnée précédente (si existante)
+                    state.selectedVariantId = null;
+                    if (selectedVariantHidden) selectedVariantHidden.value = '';
+                    csrfInput.value = '';
+                    form.setAttribute('action', '#');
+                    addToCartButton.disabled = true;
+
+                    // Si le produit a des couleurs, on met à jour les couleurs disponibles en fonction de la taille choisie
+                    if (hasColor) {
+                        if (state.selectedSize) {
+                            updateColorsForSize(state.selectedSize);
+                        } else {
+                            // Si aucune taille sélectionnée, on réinitialise la disponibilité globale
+                            initAvailability();
+                        }
+                    } else {
+                        // Si pas de couleurs : on essaie de retrouver directement la variante correspondant à la taille
+                        if (state.selectedSize) {
+                            const variant = VARIANTS.find(v => (v.size || '') === state.selectedSize && !v.outOfStock);
+                            if (variant) setFormForVariant(variant);
+                        }
+                    }
+
+                    // Masque l'erreur si visible
+                    if (errorBox) errorBox.style.display = 'none';
+                });
+            });
+
+            /*
+                Gestion du clic sur un bouton de couleur :
+                - bascule la sélection (toggle)
+                - met à jour l'état interne
+                - réinitialise la configuration du formulaire (id, token, action)
+                - met à jour les tailles disponibles si besoin
+                - masque le message d'erreur
+            */
+            colorButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+
+                    // Récupère la couleur clickée depuis data-color
+                    const color = btn.dataset.color;
+
+                    // Toggle visuel / logique pour la couleur
+                    if (state.selectedColor === color) {
+                        state.selectedColor = null;
+                        clearSelected(colorButtons);
+                    } else {
+                        state.selectedColor = color;
+                        clearSelected(colorButtons);
+                        markSelected(colorButtons, 'color', color);
+                    }
+
+                    // Interaction color/size annule toute contenance précédemment sélectionnée
+                    state.selectedContenanceBtn = null;
+
+                    // Invalide la variante précédente
+                    state.selectedVariantId = null;
+                    if (selectedVariantHidden) selectedVariantHidden.value = '';
+                    csrfInput.value = '';
+                    form.setAttribute('action', '#');
+                    addToCartButton.disabled = true;
+
+                    // Si le produit a des tailles, on met à jour les tailles disponibles en fonction de la couleur choisie
+                    if (hasSize) {
+                        if (state.selectedColor) {
+                            updateSizesForColor(state.selectedColor);
+                        } else {
+                            initAvailability();
+                        }
+                    }
+
+                    // Masque l'erreur si visible
+                    if (errorBox) errorBox.style.display = 'none';
+                });
+            });
+
+            /*
+                refreshVariantFromSelections()
+                ------------------------------
+                Si l'utilisateur a sélectionné à la fois une taille et une couleur,
+                tente de retrouver la variante exacte et, si trouvée, configure le formulaire.
+                Retourne true si une variante a été trouvée et appliquée, false sinon.
+            */
+            function refreshVariantFromSelections() {
+                if (state.selectedSize && state.selectedColor) {
+                    const variant = findMatchingVariant(state.selectedSize, state.selectedColor);
+                    if (variant) {
+                        setFormForVariant(variant);
+                        return true;
+                    } else {
+                        // Aucune variante pour cette paire size+color : réinitialise le formulaire
+                        resetFormToEmpty();
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            /*
+                Chaque clic sur un bouton de taille ou de couleur déclenche aussi
+                un appel à refreshVariantFromSelections() pour tenter de compléter
+                automatiquement la configuration du formulaire (prise en charge des
+                sélections dans l'ordre : size->color ou color->size).
+            */
+            sizeButtons.concat(colorButtons).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Tentative synchrone immédiate de résolution de variante
+                    refreshVariantFromSelections();
+                });
+            });
+
+            /*
+                Submit handler (dernière vérification avant envoi) :
+                - Si state.selectedVariantId est déjà présent et le formulaire correctement configuré, on laisse passer.
+                - Sinon on tente plusieurs stratégies pour déduire la variante :
+                    1) Si il y a seulement la taille (pas de couleur) -> trouver par taille.
+                    2) Si taille + couleur -> findMatchingVariant.
+                    3) Si il n'y a qu'une seule variante globale et qu'elle est en stock -> l'utiliser.
+                - Si aucune stratégie ne trouve une variante valide -> empêcher la soumission et afficher un message d'erreur.
+            */
+            form.addEventListener('submit', function(e) {
+                // Si la variante est déjà sélectionnée et l'action du form configurée, laisser soumettre
+                if (state.selectedVariantId && form.getAttribute('action') && form.getAttribute('action') !== '#') {
+                    return true;
+                }
+
+                // 1) Si seulement size choisi et pas de couleur, essayer trouver par size
+                if (state.selectedSize && !hasColor) {
+                    const v = VARIANTS.find(x => (x.size || '') === state.selectedSize && !x.outOfStock);
+                    if (v) {
+                        setFormForVariant(v);
+                        return true;
+                    }
+                }
+
+                // 2) size + color -> trouver variante exacte
+                if (state.selectedSize && state.selectedColor) {
+                    const v = findMatchingVariant(state.selectedSize, state.selectedColor);
+                    if (v) {
+                        setFormForVariant(v);
+                        return true;
+                    }
+                }
+
+                // 3) fallback : si le produit n'a qu'une seule variante et qu'elle est en stock, on l'utilise
+                if (VARIANTS.length === 1 && !VARIANTS[0].outOfStock) {
+                    setFormForVariant(VARIANTS[0]);
+                    return true;
+                }
+
+                // Sinon : bloquer et informer l'utilisateur
+                e.preventDefault();
+                if (errorBox) {
+                    errorBox.textContent = '⚠️ Merci de choisir une combinaison taille/couleur avant d\'ajouter au panier.';
+                    errorBox.style.display = 'block';
+                    errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return false;
+            });
+
+            /*
+                Pré-sélection automatique si il n'y a qu'une seule variante (ex : produit sans options)
+                et que cette variante est en stock : configure immédiatement le formulaire pour améliorer l'UX.
+                On essaye aussi d'appliquer visuellement la sélection si des boutons size/color existent.
+            */
+            if (VARIANTS.length === 1 && !VARIANTS[0].outOfStock) {
+                setFormForVariant(VARIANTS[0]);
+                if (hasSize) { clearSelected(sizeButtons); markSelected(sizeButtons, 'size', VARIANTS[0].size || ''); }
+                if (hasColor) { clearSelected(colorButtons); markSelected(colorButtons, 'color', VARIANTS[0].color || ''); }
+                if (hasContenance && !hasSize && !hasColor) {
+                    contenanceButtons.forEach(b => {
+                        if (b.dataset.variantId == VARIANTS[0].id) {
+                            b.classList.add('selected');
+                        }
+                    });
+                }
+            }
+
+        })();
+    </script>
+
 
 {% endblock %}
+

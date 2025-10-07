@@ -16,8 +16,12 @@ require('./styles/app.scss');
 require('./js/carroussel-product.js');
 require('./js/menuburger.js');
 require('./js/carroussel-home.js');
+require('./js/carroussel-comment.js');
 require('./js/toggle-description-home.js');
 require('./js/final-price.js');
+require('./js/categories-mobile.js');
+require('./js/toggle-ul-garde-dom.js');
+
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 

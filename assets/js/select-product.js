@@ -1,36 +1,89 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const variantCards = document.querySelectorAll('.variant-card');
+
+/*document.addEventListener('DOMContentLoaded', function () {
+
+    // Récupération des données Twig via data-*
+    const productDataEl = document.getElementById('product-data');
+    const VARIANTS = JSON.parse(productDataEl.dataset.variants);
+    const hasSize = productDataEl.dataset.hasSize === '1';
+    const hasColor = productDataEl.dataset.hasColor === '1';
+    const hasContenance = productDataEl.dataset.hasContenance === '1';
+
+    // Sélecteurs basés sur ta structure HTML actuelle
+    const sizeButtons = document.querySelectorAll('.variant-card.size-card');
+    const colorButtons = document.querySelectorAll('.variant-card.color-card');
+    const contenanceButtons = document.querySelectorAll('.variant-card:not(.size-card):not(.color-card)');
+
+    const mainImage = document.getElementById('main-product-image');
     const addToCartForm = document.getElementById('add-to-cart-form');
+    const addToCartBtn = document.querySelector('.btn-add-cart');
+    const variantIdInput = document.getElementById('selected-variant-id');
 
-    if (variantCards.length === 0 || !addToCartForm) return; // sécurité si pas de variants
+    let selectedSize = null;
+    let selectedColor = null;
+    let selectedContenance = null;
 
-    const csrfTokenInput = document.getElementById('csrf-token');
-    const addToCartButton = addToCartForm.querySelector('button');
+    function getCurrentVariant() {
+        return VARIANTS.find(variant => {
+            return (!hasSize || variant.size === selectedSize) &&
+                (!hasColor || variant.color === selectedColor) &&
+                (!hasContenance || variant.contenance === selectedContenance);
+        });
+    }
 
-    // URL template avec placeholder 'IDPLACEHOLDER' pour l'id du variant
-    const urlTemplate = "{{ path('app_shop_cart_add', {'id': 'IDPLACEHOLDER'}) }}";
+    function updateAddToCartButton() {
+        const variant = getCurrentVariant();
+        const allSelected = (!hasSize || selectedSize) &&
+            (!hasColor || selectedColor) &&
+            (!hasContenance || selectedContenance);
 
-    let selectedVariantId = variantCards[0].dataset.variantId; // premier variant par défaut
-    variantCards[0].classList.add('selected');
+        if (variant && allSelected) {
+            addToCartBtn.disabled = false;
+            addToCartBtn.textContent = 'Ajouter au panier';
+            variantIdInput.value = variant.id;
+            document.getElementById('variant-error').style.display = 'none';
+        } else {
+            addToCartBtn.disabled = true;
+            addToCartBtn.textContent = 'Choisissez une option';
+        }
+    }
 
-    // Empêche l'envoi du formulaire si le bouton est désactivé
-    addToCartForm.addEventListener('submit', (e) => {
-        if (addToCartButton.disabled) {
+    function toggleSelected(button, group) {
+        group.forEach(btn => btn.classList.remove('selected'));
+        button.classList.add('selected');
+    }
+
+    contenanceButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            selectedContenance = button.dataset.contenance;
+            toggleSelected(button, contenanceButtons);
+            updateAddToCartButton();
+        });
+    });
+
+    sizeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            selectedSize = button.dataset.size;
+            toggleSelected(button, sizeButtons);
+            updateAddToCartButton();
+        });
+    });
+
+    colorButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            selectedColor = button.dataset.color;
+            toggleSelected(button, colorButtons);
+            updateAddToCartButton();
+        });
+    });
+
+    addToCartForm?.addEventListener('submit', function (e) {
+        const variant = getCurrentVariant();
+        if (!variant) {
             e.preventDefault();
-            alert("Ce produit est actuellement en rupture de stock.");
+            document.getElementById('variant-error').style.display = 'block';
         }
     });
 
-    // Mise à jour du formulaire lors du clic sur un variant
-    variantCards.forEach(card => {
-        card.addEventListener('click', () => {
-            variantCards.forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            selectedVariantId = card.dataset.variantId;
-
-            // Mise à jour de l'action du formulaire et du token CSRF
-            addToCartForm.action = urlTemplate.replace('IDPLACEHOLDER', selectedVariantId);
-            csrfTokenInput.value = "{{ csrf_token('cart_add_') }}" + selectedVariantId;
-        });
-    });
+    updateAddToCartButton();
 });
+*/

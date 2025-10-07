@@ -15,9 +15,9 @@ class PicturesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('filename', FileType::class, [
+        ->add('file', FileType::class, [
             'label' => 'Image',
-            'mapped' => false,
+            'mapped' => true,
             'required' => false,
             'constraints' =>
                 [
@@ -27,11 +27,11 @@ class PicturesType extends AbstractType
                     'mimeTypesMessage' => 'Merci de télécharger une image valide',
                     ])
                 ],
-        ])
-        ->add('isCover', CheckboxType::class, [
-            'label' => 'Image principale',
-            'required' => false,
         ]);
+      //  ->add('isCover', CheckboxType::class, [
+            //'label' => 'Image principale',
+           // 'required' => false,
+      //  ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

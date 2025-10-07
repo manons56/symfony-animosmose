@@ -19,6 +19,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+
 
 
 
@@ -47,12 +53,6 @@ class ProductsCrudController extends AbstractCrudController
     }
     public function configureFields(string $pageName): iterable
     {
-        // Champ image unique (pour la photo principale)
-        $imageField = ImageField::new('image', 'Image')
-            ->setBasePath('img/products')            // chemin pour afficher l'image
-            ->setUploadDir('public/img/products')    // dossier où uploader
-            ->setRequired(false)                      // non obligatoire
-            ->setLabel('Image du produit');
 
         // Champ galerie d'images (plusieurs images)
         $imagesCollectionField = CollectionField::new('images', 'Galerie d\'images')
@@ -81,18 +81,14 @@ class ProductsCrudController extends AbstractCrudController
         // Champs communs pour formulaire new/edit/detail
         $commonFields = [
             TextField::new('name', 'Nom du produit'),
-            TextField::new('capacity', 'Contenance')
-                ->setRequired(false)           // le champ n'est plus obligatoire
-                ->setFormTypeOption('empty_data', null), // si vide, Symfony met null
-            TextField::new('description', 'Description du produit'),
-            TextField::new('composition', 'Composition'),
-            TextField::new('analytics_components', 'Composants analytiques'),
-            TextField::new('nutritionnal_additive', 'Additifs'),
+            //TextField::new('capacity', 'Contenance')
+               // ->setRequired(false)           // le champ n'est plus obligatoire
+              //  ->setFormTypeOption('empty_data', null), // si vide, Symfony met null
             BooleanField::new('isNew', 'Nouveau')// Nouveau / formulaire
-                ->setLabel('Nouveau')      // facultatif, juste pour être clair
-                ->onlyOnForms(),            // visible uniquement dans new/edit
+            ->setLabel('Nouveau')      // facultatif, juste pour être clair
+            ->onlyOnForms(),            // visible uniquement dans new/edit
 
-            // Liste (index)
+
             BooleanField::new('isNew', 'Nouveau')
                 ->renderAsSwitch(false)
                 ->formatValue(function ($value, $entity) {
@@ -101,10 +97,14 @@ class ProductsCrudController extends AbstractCrudController
                 ->onlyOnIndex(),
             BooleanField::new('isBestSeller', 'Best Seller'),
             BooleanField::new('isOutOfStock', 'Rupture de stock'),
-            $imageField,            // Image unique (optionnelle)
             $imagesCollectionField, // Galerie multiple
-            $variantsFields,
             $categoryField,
+            $variantsFields,
+            TextEditorField::new('description', 'Description du produit'),
+            TextField::new('composition', 'Composition'),
+            TextField::new('analytics_components', 'Composants analytiques'),
+            TextField::new('nutritionnal_additive', 'Additifs'),
+
         ];
 
         // Page index : on n'affiche que le nom du produit
@@ -131,8 +131,14 @@ class ProductsCrudController extends AbstractCrudController
     {
         if (!$entityInstance instanceof Products) return;
 
+        // Vérification obligatoire : au moins une image
+        if (count($entityInstance->getImages()) === 0) {
+            throw new \InvalidArgumentException('Le produit doit contenir au moins une image.');
+        }
+
+        // Traitement des fichiers uploadés pour la galerie
         foreach ($entityInstance->getImages() as $image) {
-            $file = $image->getFilename(); // Le FileType retourne un UploadedFile
+            $file = $image->getFile();
             if ($file instanceof UploadedFile) {
                 $newFilename = uniqid() . '.' . $file->guessExtension();
                 $file->move($this->getParameter('products_images_directory'), $newFilename);
@@ -142,6 +148,7 @@ class ProductsCrudController extends AbstractCrudController
 
         parent::persistEntity($entityManager, $entityInstance);
     }
+
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {

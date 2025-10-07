@@ -1,6 +1,16 @@
 @use "../abstracts" as *;
 
 
+h2{
+    padding-bottom:1em;
+}
+
+.h2-right{
+    margin-left:9em;
+    padding-top:1em;
+
+}
+
 /* Styles simples pour les cartes et la barre de recherche */
 .search-container {
     margin-bottom: 20px;
@@ -21,34 +31,50 @@
 }
 
 .product-card {
-    height:12em;
+    height:25em;
     border: 1px solid #eee;
     border-radius: 10px;
     padding: 10px;
     text-align: center;
     transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
 }
 
 .product-image {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
 }
 
+.product-image-wrapper {
+    flex: 2; /* prend tout l’espace disponible */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5em;
+}
+
+
 .product-name {
-    margin: 10px 0 5px;
-    font-size: 16px;
+    margin: 5px 0 5px;
+    font-size: 2rem;
+    letter-spacing: 0.05em;
 }
 
 .product-price {
     color: #333;
     font-weight: bold;
 }
+
+
 
 a {
     display: block;
@@ -76,6 +102,7 @@ a {
     padding:1em;
     margin:2em;
 }
+
 
 
 .icones-user-shop{
@@ -272,7 +299,7 @@ a {
 
 .composition-flex{
     padding:1em;
-    margin:1em;
+    margin:1em 3em;
 }
 .composition-flex h3{
     text-align: left;
@@ -283,8 +310,15 @@ a {
     padding-bottom:2em;
 }
 
+h3{
+    padding-top:1em;
+}
 
 
+.description-contenance{
+     margin:1.5em 1em;
+
+}
 
 .category-toggle {
     display: inline-flex;
@@ -312,19 +346,21 @@ a {
 .product-slider {
     position: relative;
     max-width: 500px;
-    margin: 20px auto;
+    margin: 20px;
+    width:100%;
 }
 
 .main-image-container {
     width: 100%;
     height: 400px;
     overflow: hidden;
+
 }
 
 .main-image-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 10px;
 }
 
@@ -332,7 +368,7 @@ a {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgb(154, 165, 132);
     color: white;
     border: none;
     font-size: 2rem;
@@ -516,6 +552,16 @@ a {
 .back_arrow{
     width:2em;
     margin-left:1em;
+    margin-bottom: 2em;
+}
+
+
+
+
+.variant-unavailable {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 
@@ -525,18 +571,64 @@ a {
 }
 
 .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 1em;
     margin: 1em;
     background: #f9f9f9;
     font-size: 1.1rem;
+    gap: 1em;
 }
 
-.cart-item-header {
-    font-size: 1.3rem;
-    margin-bottom: 0.5em;
+.cart-item-content {
+    flex: 1;
 }
+
+.cart-item-image-wrapper {
+    flex-shrink: 0;
+}
+
+.cart-item-image {
+    max-width: 80px;
+    height: auto;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+
+//Tag isNew
+.badge {
+   // display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    background-color: #a0ab81; // couleur personnalisée de ta boutique
+    border-radius: 0.5em;
+    animation: pulseBadge 1.5s ease-in-out infinite;
+    box-shadow: 0 0 0 rgba(160, 171, 129, 0.4);
+}
+
+@keyframes pulseBadge {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(160, 171, 129, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 6px rgba(160, 171, 129, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(160, 171, 129, 0.4);
+    }
+}
+
+
+
 
 @media (max-width: 768px) {
     .content-wrapper {
@@ -686,6 +778,14 @@ a {
         gap: 2em;            /* espace entre l’image et le texte */
     }
 
+    .description-contenance{
+        margin:0 1em;
+        text-align:justify
+    }
+
+    .h2-right{
+        margin-left:0;
+    }
 
 }
 
