@@ -126,3 +126,123 @@ h3{
 .toc a:focus {
     text-decoration: underline;
 }
+
+
+// acceptation des cookies
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    z-index: 9999; /* Très au-dessus */
+}
+
+.cookie-banner p {
+    margin: 0;
+}
+
+.cookie-banner a {
+    color: #9aa584;
+    text-decoration: underline;
+}
+
+
+
+#accept {
+    background-color: rgb(154, 165, 132);
+    color: white;
+    border: 1px solid #9AA584FF ;
+    border-radius: 1em;
+    margin-bottom: 0;
+}
+
+#reject {
+    background-color: #fcfcfc;
+    color: black;
+    border-radius: 1em;
+    border: 1px solid black ;
+    margin-bottom: 0;
+}
+
+.posts-insta.blurred .accept-now-btn {
+    border-radius: 1em;
+    background-color: transparent;
+    color:black;
+    text-decoration: underline;
+    pointer-events: auto; /* le bouton reste cliquable malgré l'overlay */
+    position: relative;   /* pour être au-dessus de l'overlay */
+    z-index: 3;
+}
+
+.flex-button{
+    display:flex;
+    align-items: flex-end;
+    gap:1em;
+}
+
+.posts-insta {
+    position: relative;
+}
+
+.posts-insta.blurred {
+    position: relative;
+}
+
+
+
+.posts-insta.blurred .post-insta {
+    filter: blur(6px);
+    pointer-events: none; /* interdit les clics */
+    user-select: none;    /* interdit la sélection du texte */
+}
+
+/* Overlay pour le message */
+.posts-insta .insta-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: rgba(255,255,255,0.6);
+    text-align:center;
+    font-weight:bold;
+    z-index: 2;
+    pointer-events: none;
+}
+
+
+/* Overlay Instagram */
+.posts-insta.blurred .insta-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: rgba(255,255,255,0.6);
+    text-align:center;
+    font-weight:bold;
+    z-index: 10; /* < 9999 pour bannière */
+    pointer-events: auto;
+}
+
+
+
+/* Flou sur les posts */
+.posts-insta.blurred .post-insta {
+    filter: blur(6px);
+    pointer-events: none;
+    user-select: none;
+}

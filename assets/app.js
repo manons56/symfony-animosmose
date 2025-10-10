@@ -11,7 +11,7 @@ require ('./js/button-logout.js')
 require('./js/slider-img-products.js');
 require('./js/findproduct.js');
 require('./js/select-product.js');
-//require('./js/cookie.js');
+require('./js/cookie.js');
 require('./styles/app.scss');
 require('./js/carroussel-product.js');
 require('./js/menuburger.js');

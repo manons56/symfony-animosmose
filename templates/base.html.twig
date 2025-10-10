@@ -21,6 +21,19 @@
 </head>
 <body>
 
+{# --- Banniere cookie --- #}
+{% if not cookieService.isConsentAccepted() and not cookieService.isConsentRejected() %}
+    <div id="cookie-banner" class="cookie-banner">
+        <p>Ce site utilise des cookies pour améliorer votre expérience.
+            <a href="{{ path('app_content_confidentialite') }}" target="_blank" rel="noopener noreferrer">En savoir plus</a>
+        </p>
+        <div class='flex-button'>
+            <button id="accept">Accepter</button>
+            <button id="reject">Refuser</button>
+        </div>
+    </div>
+{% endif %}
+
 <header class="header">
     <img src="{{ asset('build/images/logo-animosmose.png')}}" alt='logo animosmose'/>
     <nav>
@@ -44,24 +57,23 @@
 {# --- CONTENU DES PAGES --- #}
 {% block body %}{% endblock %}
 
-{# --- BANNIÈRE COOKIE --- #}
-{# % if app.request.cookies.get('cookie') is not defined %}
-    <div id="cookie-banner">
-        Ce site utilise des cookies.
-        <button id="accept">Accepter</button>
-        <button id="reject">Refuser</button>
-    </div>
-{% endif %}#}
-
-
 <footer class="footer">
     <div class="footer-flex">
         <!-- Colonne gauche : Logo + réseaux -->
         <div class="footer-col-left">
             <img src="{{ asset('build/images/logo-animosmose.png')}}" alt='logo animosmose'/>
             <div class="footer-flex-reseaux">
-                <a href='https://www.instagram.com/animosmose/'><i class="fa-brands fa-square-instagram fa-xl" style="color: #000000;"></i></a>
-                <a href='https://www.facebook.com/animosmose56'><i class="fa-brands fa-square-facebook fa-xl" style="color: #000000;"></i></a>
+                {# noopener--> Empêche le site ouvert de manipuler ton onglet d’origine-->Sécurité
+                   noreferrer-->Masque ton URL d’origine au site externe-->Confidentialité #}
+               {# aria-hidden="true" pour dire au lecteur d’écran :
+               L’icône est juste visuelle, elle décore, elle n’ajoute rien au sens.
+                Ignore cette icône, elle n’a pas d’intérêt pour toi. » #}
+                <a href='https://www.instagram.com/animosmose/' target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <i class="fa-brands fa-square-instagram fa-xl" aria-hidden="true" style="color: #000000;"></i>
+                </a>
+                <a href='https://www.facebook.com/animosmose56' target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                    <i class="fa-brands fa-square-facebook fa-xl" aria-hidden="true" style="color: #000000;"></i>
+                </a>
             </div>
             <span class="copyright">Copyright 2025 © Animosmose</span>
         </div>
@@ -92,8 +104,6 @@
         </div>
     </div>
 </footer>
-
-
 
 {# --- SCRIPTS PRINCIPAUX (APP.JS) --- #}
 {% block javascripts %}

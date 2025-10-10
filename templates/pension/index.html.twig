@@ -24,7 +24,7 @@
             <p>Parce que chaque chien mérite une attention personnalisée, nous n’accueillons que 3 pensionnaires à la fois. Cette capacité volontairement limitée nous permet d’offrir un cadre serein, sécurisant et adapté aux besoins de chacun.</p>
             </div>
             <div class="video-container">
-                <video class="video-pension" autoplay muted loop playsinline>
+                <video class="video-pension" autoplay muted loop playsinline preload="metadata" aria-label="Chiens en pension en balade">
                     <source src="{{ asset('build/videos/pension.mp4') }}" type="video/mp4">
                     Votre navigateur ne supporte pas les vidéos HTML5.
                 </video>
@@ -32,15 +32,15 @@
         </div>
         <div class="button-section-flex">
             <button data-modal-target="#modalPension">Nos tarifs</button>
-            <a target="_blank" class="button" href="https://sd-g1.archive-host.com/membres/up/8ffa3b44eed7ac5d18eece41b7a77957428e0c1f/Conditions_de_sejour.pdf">Nos conditions de séjour</a>
+            <a target="_blank" rel="noopener noreferrer" class="button" href="https://sd-g1.archive-host.com/membres/up/8ffa3b44eed7ac5d18eece41b7a77957428e0c1f/Conditions_de_sejour.pdf">Nos conditions de séjour</a>
         </div>
     </section>
 
 
-    <div class="modal" id="modalPension">
+    <div class="modal" id="modalPension" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalPensionTitle">
         <div class="modal-header">
-            <div class="title">Tarifs pension canine</div>
-            <button data-close-button class="close-button">&times;</button>
+            <div class="title" id="modalPensionTitle">Tarifs pension canine</div>
+            <button data-close-button class="close-button"  aria-label="Fermer la fenêtre">&times;</button>
         </div>
         <div class="modal-body">
             <div class="tarif-item">
@@ -143,14 +143,6 @@
         <p class="devis">Demande de devis par Whatsapp : 06 25 81 48 45</p>
     </div>
 
-    <div id="overlay"></div>
-
-
-
-
-
-
-
 
     <section id="2">
         <h2>Éducation canine</h2>
@@ -160,7 +152,7 @@
         <p>Je travaille exclusivement en méthode positive, convaincu que valoriser les bons comportements est bien plus efficace que de réprimer les mauvais. Que ce soit pour l’éducation d’un chiot ou le dressage d’un chien adulte, je vous propose un accompagnement sur mesure, respectueux et efficace.</p>
         <p>Contactez-moi dès maintenant pour offrir à votre compagnon le meilleur de l’éducation canine.</p>
         <div class="img-services-educ">
-        <img src="{{ asset('build/images/educ.png')}}" class="services-educ" alt='services proposés pour éducation'/>
+        <img src="{{ asset('build/images/educ.png')}}" class="services-educ" alt='services proposés pour éducation'  loading="lazy"/>
         </div>
         <div class="button-section-flex">
             <button data-modal-target="#modalEduc">Nos tarifs</button>
@@ -168,10 +160,10 @@
     </section>
 
 
-    <div class="modal" id="modalEduc">
+    <div class="modal" id="modalEduc" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalEducTitle">
         <div class="modal-header">
-            <div class="title">Tarifs éducation canine</div>
-            <button data-close-button class="close-button">&times;</button>
+            <div class="title" id="modalEducTitle">Tarifs éducation canine</div>
+            <button data-close-button class="close-button" aria-label="Fermer la fenêtre">&times;</button>
         </div>
         <div class="modal-body">
             <div class="tarif-item">
@@ -247,8 +239,6 @@
         </div>
         <p class="devis">Frais de déplacement : 0,85€/km </p>
     </div>
-    <div id="overlay"></div>
-
 
     <section class="background-beige ">
         <h2>Garde à domicile</h2>
@@ -293,7 +283,7 @@
             <li>Ménage avant votre retour pour une maison accueillante</li>
         </ul>
 
-        <img src="{{ asset('build/images/ChatGPT.png')}}" class="services-garde-dom" alt='services proposés lors de la garde à domicile'/>
+        <img src="{{ asset('build/images/ChatGPT.png')}}" class="services-garde-dom" alt='services proposés lors de la garde à domicile'  loading="lazy"/>
 
         <p>Avec Animosmose, offrez à vos compagnons une présence rassurante et bienveillante, et profitez pleinement de vos déplacements sans souci.</p>
         <div class="button-section-flex">
@@ -301,10 +291,10 @@
         </div>
     </section>
 
-    <div class="modal" id="modalGardeDom">
+    <div class="modal" id="modalGardeDom" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalGardeTitle">
         <div class="modal-header">
-            <div class="title">Garde à domicile</div>
-            <button data-close-button class="close-button">&times;</button>
+            <div class="title" id="modalGardeTitle">Garde à domicile</div>
+            <button data-close-button class="close-button" aria-label="Fermer la fenêtre">&times;</button>
         </div>
         <div class="modal-body">
             <div class="tarif-item">

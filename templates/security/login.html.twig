@@ -14,19 +14,23 @@
 
         <h2>Connexion</h2>
 
-        <form method="post" action="{{ path('app_login') }}">
+        <form method="post" action="{{ path('app_login') }}" aria-label="Formulaire de connexion">
 
             <div class="form-row">
                 <label for="username">Email</label>
                 <input type="email" value="{{ last_username }}"
                        name="email" id="username"
-                       autocomplete="email" required autofocus>
+                       autocomplete="email" required autofocus
+                       aria-required="true"
+                       placeholder="Votre email">
             </div>
 
             <div class="form-row">
                 <label for="password">Mot de passe</label>
                 <input type="password" name="password" id="password"
-                       autocomplete="current-password" required>
+                       autocomplete="current-password" required
+                       aria-required="true"
+                       placeholder="Votre mot de passe">
                 <p>
                     Mot de passe oublié ?
                     <a href="{{ path('app_forgot_password_request') }}">Cliquez ici</a> pour le réinitialiser.
@@ -37,9 +41,10 @@
 
 
             {% if error %}
-                <div class="form-errors">
+                <div class="form-errors" role="alert" aria-live="assertive">
                     {{ error.messageKey|trans(error.messageData, 'security') }}
                 </div>
+                {# role="alert" et aria-live : notification immédiate aux lecteurs d’écran #}
             {% endif %}
 
             <div class="form-row">
@@ -119,14 +124,15 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus,
-        select:focus {
-            border-color: #9aa584;
-            outline: none;
 
+        /* Focus visible pour clavier */
+        input:focus-visible,
+        select:focus-visible,
+        button:focus-visible {
+            outline: 2px solid #9aa584;
+            outline-offset: 2px;
         }
+
 
         button[type="submit"] {
             font-weight: 600;

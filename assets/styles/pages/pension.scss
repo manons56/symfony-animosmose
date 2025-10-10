@@ -228,21 +228,32 @@ button, .button{
 }
 
 .video-pension{
-    width:25%;
-    padding-right:2em;
+    width:80%;
     border-radius:20em;
+    margin-top:1em;
+}
+
+.video-container{
+   text-align: center;
 }
 
 .text-videopension-flex{
     display:flex;
     flex-direction: row;
     margin-bottom: 2em;
+    gap:2em;
 }
 
 @media (max-width: 768px) {
     .tarif-item {
         flex-direction: column;
-        //align-items: flex-start;
+        align-items: center; /* centre tous les éléments horizontalement */
+        text-align: center; /* centre le texte dans les spans */
+    }
+
+    .tarif-item .description-wrapper {
+        width:100%;
+        text-align: center; /* pour les lignes secondaires */
     }
 
     .tarif-item .description,

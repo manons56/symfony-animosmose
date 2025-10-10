@@ -36,7 +36,6 @@
 
 .home-container article {
     display: flex;
-    align-items: flex-start;
     gap: 2em;
 }
 
@@ -48,10 +47,17 @@
 }
 
 .home-container .description {
-    padding: 1em;
+    padding-left: 1em;
+    padding-top: 0;
+    padding-right: 1em;
+    padding-bottom: 0;
     flex: 1;
     line-height: 2;
     text-align:justify;
+}
+
+.both-description{
+    padding:1em;
 }
 
 .home-container .description-franck {
@@ -63,11 +69,28 @@
 
 .separation-border {
     border-bottom: $color-green 1px solid;
+    padding-bottom: 1em;
 }
 
+
+
 .button-interview {
-    margin: 2em;
+    padding: 2em;
+    margin:2em;
+    color:black;
+    font-weight:bold;
+    text-align:center;
+    border:1px dashed black;
+
 }
+
+
+.button-interview a {
+    color:black;
+}
+
+
+
 
 .background-beige {
     padding-bottom: 4em;
@@ -77,30 +100,34 @@
 
 .carousel-container {
     position: relative;
+    overflow: hidden;
     width: 100%;
-    overflow-x: hidden;
-    overflow-y: visible;
-    margin: 0 auto;
-    max-width: 1200px;
-    padding:4em 0;
+    padding: 0 8px;
 }
 
 .carousel-track {
     display: flex;
-    gap: 2rem; // garde un bel espace entre les articles
-    transition: transform 0.5s ease-in-out;
-    will-change: transform;
+    transition: transform 0.4s ease-in-out;
+    width: 100%;
 }
 
 .carousel-item {
-    height: 410px;
-    min-width: 300px;
-    max-width: 300px;
-    flex-shrink: 0;
-    padding: 1rem; // ajoute de l’air autour de chaque carte
-    box-sizing: border-box;
-    transition: transform 0.3s ease;
+    flex: 0 0 calc(100% - 8px); /* mobile : un petit espace entre les bords */
+    margin-right: 8px;
+
 }
+
+
+@media (min-width: 768px) {
+    .carousel-item {
+        flex: 0 0 calc(33.333% - 16px); /* 3 éléments visibles avec gap fluide */
+        margin-right: 16px;
+    }
+    .carousel-item:last-child {
+        margin-right: 0; /* évite un espace vide à la fin */
+    }
+}
+
 
 .carousel-item.active {
     transform: scale(1.2);
@@ -123,6 +150,7 @@
 
     img {
         width: 80%;
+        max-width: 200px;
         max-height: 200px;
         object-fit: cover;
         margin: 0 auto;
@@ -143,20 +171,23 @@
 .home-article-s2 a {
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 50%;
+
+
     text-decoration:none;
 }
+
 
 
 .carousel-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: $color-orange;
-    border: none;
+    background: rgba(0, 0, 0, 0.3);
     color: white;
+    border: none;
     font-size: 2rem;
-    padding: 0.5em 1em;
+    padding: 0.3em 0.6em;
     cursor: pointer;
     z-index: 2;
 }
@@ -181,11 +212,20 @@ h2{
 
 
 @media (max-width: 768px) {
-    .carousel-item {
-        min-width: 60%;  // prend toute la largeur visible
-        max-width: 60%;  // idem
-        padding: 1rem;
+    .home-article-s2 p{
+        padding-bottom:1em;
+        padding-top:1em;
     }
+
+    .carousel-item {
+        flex: 0 0 calc(100% - 8px); /* cohérent avec le JS */
+        margin-right: 8px;
+        padding: 1rem;
+        height: auto;
+        display: flex;
+        justify-content: center;
+    }
+
 
     .carousel-btn {
         font-size: 1.5rem;
@@ -201,6 +241,13 @@ h2{
         display: block;  /* plus de flex, empilement vertical */
     }
 
+    .home-article-s2 a {
+        display: inline-flex;        /* inline-flex prend seulement la largeur de son contenu */
+        justify-content: center;     /* centre le texte à l’intérieur du bouton */
+        margin: 0 auto;              /* centre le bouton dans l’article */
+        padding: 0.5em 1.5em;        /* ajuste la taille si besoin */
+    }
+
     .home-container .personne {
         margin-bottom: 1em;
         min-width: auto;
@@ -210,9 +257,9 @@ h2{
     }
 
     .home-container .description,
-    .home-container .description-franck {
+    .home-container .description-franck{
         width: 100%;
-        max-height: 9em; /* plus de lignes visibles (~6 lignes) */
+        max-height: 10em; /* plus de lignes visibles (~6 lignes) */
         overflow: hidden;
         position: relative;
         transition: max-height 0.3s ease;
@@ -254,7 +301,7 @@ h2{
 // carroussel de commentaires
 .new-carousel-container {
     position: relative;
-    width: 90%;
+    width: 80%;
     max-width: 1200px;
     margin: auto;
     overflow: hidden;
@@ -304,8 +351,48 @@ h2{
 .leave-comment{
     font-weight: 600;
     text-decoration:underline;
+    color:black;
+
 }
 
 .leave-comment:visited{
     color:black;
+}
+
+.link-wrapper{
+    text-align:center;
+}
+
+
+.post-insta{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colonnes égales */
+    gap: 1em;
+   // padding-left: 2em;
+    max-width: 100%; /* par exemple */
+
+}
+
+.instagram-media{
+    max-height: 35em;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: unset !important;
+    margin: 0 auto !important;
+}
+
+
+@media (max-width: 768px) {
+    .post-insta{
+        grid-template-columns: repeat(1, 1fr);
+       max-width: 600px; /* par exemple */
+    }
+
+    .instagram-media {
+        max-height: 20em;
+    }
+
+    .insta-overlay {
+      margin-top:2em;
+    }
 }

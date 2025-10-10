@@ -1,15 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mail de réinitilisation envoyé{% endblock %}
+{% block title %}Mail de réinitialisation envoyé{% endblock %}
 
 {% block body %}
-    <p>
-        Si vous êtes déjà inscrit, un mail va vous être envoyé avec un lien que vous pouvez utilisez pour choisir un nouveau mot de passe.
-        Attention, ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-    </p>
-    <p> Si vous ne recevez pas de mail, vérifiez dans vos spam. Sinon <a href="{{ path('app_forgot_password_request') }}">vous pouvez réessayer.</a>.</p>
+    <main>
+        <section aria-labelledby="reset-password-title">
+            <h1 id="reset-password-title">Réinitialisation du mot de passe</h1>
 
+            <p>
+                Si vous êtes déjà inscrit, un email vous sera envoyé avec un lien pour choisir un nouveau mot de passe.
+                Attention, ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+            </p>
 
+            <p>
+                Si vous ne recevez pas de mail, vérifiez vos spams. Sinon
+                <a href="{{ path('app_forgot_password_request') }}">réessayez ici</a>.
+            </p>
+        </section>
+    </main>
 
 
 {% endblock %}

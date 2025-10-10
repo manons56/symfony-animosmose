@@ -17,7 +17,7 @@
         <div class=info-contact>
             <div class="space-p">
                 <p> <i class="fa-solid fa-location-dot fa-2xl" style="color: #da6a47;"></i> 5 Le Petit Bodo, 56230 Berric</p>
-                <p> <i class="fa-solid fa-phone fa-2xl" style="color: #da6a47;"></i> 06.25.81.48.45</p>
+                <p> <i class="fa-brands fa-square-whatsapp whatsapp fa-2xl" style="color: #ca6342;"></i>06.25.81.48.45</p>
                 <p> <i class="fa-solid fa-square-envelope fa-2xl" style="color: #da6a47;"></i> animosmose@gmail.com</p>
             </div>
             <p>Retrouvez toutes nos actualités sur Facebook et Instagram !</p>
@@ -77,11 +77,19 @@
                         {{ form_errors(contactForm.message) }}
                     </div>
                 </div>
+
             </div>
+
+            <div class="texte-RGPD">
+            {{ form_row(contactForm.consent) }}
+            <p> Pour en savoir plus, consultez notre <a href="{{ path('app_content_confidentialite') }}"  target="_blank">Politique de confidentialité</a>.</p>
+            </div>
+
             {# Champ honeypot invisible pour bots #}
             <div style="display: none;">
                 {{ form_widget(contactForm.website) }}
             </div>
+
 
             <div class="toolbar">
                 <button type="submit">Envoyer</button>

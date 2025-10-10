@@ -21,7 +21,12 @@
     margin-left: 3em;
 }
 
-.info-contact .fa-brands {
+.whatsapp {
+   padding-right:0.5em;
+    padding-bottom: 1em;
+
+}
+.info-contact .fa-brands  {
     padding-top:1em;
 
 }
@@ -129,7 +134,7 @@ h4{
 
 
 button[type="submit"] {
-    background-color: #da6a47;
+    background-color: #b95735;;
     border: none;
     color: white;
     padding: 0.75em 2em;
@@ -139,8 +144,19 @@ button[type="submit"] {
     transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover {
-    background-color: #b95735;
+.texte-RGPD{
+    font-size:smaller;
+    margin-bottom:4em;
+}
+
+.texte-RGPD a{
+    color: black ;
+    text-decoration: underline;
+}
+
+input[type="checkbox"] {
+    margin-left: 0.5em;
+    vertical-align: middle; /* aligne mieux avec le texte */
 }
 
 

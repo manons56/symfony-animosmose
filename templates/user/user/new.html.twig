@@ -6,40 +6,56 @@
     <div class="example-wrapper">
         <h2>Inscription</h2>
 
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'aria-label': 'Formulaire d’inscription'}}) }}
+
 
         <div class="form-row">
-            {{ form_row(form.email, {label: 'Email'}) }}
+            {{ form_row(form.email, {
+                label: 'Email',
+                attr: {
+                    'aria-required': 'true',
+                    'placeholder': 'Votre email'
+                }
+            }) }}
         </div>
+
+
         <div class="form-row">
             {{ form_label(form.plainPassword, 'Mot de passe') }}
-            {{ form_widget(form.plainPassword) }}
+            {{ form_widget(form.plainPassword, {
+                attr: {
+                    'aria-required': 'true',
+                    'placeholder': 'Votre mot de passe'
+                }
+            }) }}
             {{ form_errors(form.plainPassword) }}
         </div>
         </br>
 
         <div class="form-row">
-        <div class="form-row">
-            {{ form_row(form.name, {label: 'Nom'}) }}
-        </div>
-        <div class="form-row">
-            {{ form_row(form.surname, {label: 'Prénom'}) }}
-        </div>
-        <div class="form-row">
-            {{ form_row(form.phone, {label: 'Numéro de téléphone'}) }}
-        </div>
+            <div class="form-row">
+                {{ form_row(form.name, {label: 'Nom', attr: {'aria-required': 'true', 'placeholder': 'Votre nom'}}) }}
+            </div>
+            <div class="form-row">
+                {{ form_row(form.surname, {label: 'Prénom', attr: {'aria-required': 'true', 'placeholder': 'Votre prénom'}}) }}
+            </div>
+            <div class="form-row">
+                {{ form_row(form.phone, {label: 'Numéro de téléphone', attr: {'placeholder': 'Ex: 06 12 34 56 78'}}) }}
+            </div>
 
-            {{ form_row(form.address.street, {label: 'Adresse'}) }}
+            <div class="form-row">
+                {{ form_row(form.address.street, {label: 'Adresse', attr: {'placeholder': 'Rue / numéro'}}) }}
+            </div>
         </div>
-        <div class="form-row">
-            {{ form_row(form.address.zipcode, {label: 'Code postal'}) }}
-        </div>
-        <div class="form-row">
-            {{ form_row(form.address.city, {label: 'Ville'}) }}
-        </div>
-        <div class="form-row">
-            {{ form_row(form.address.countryLabel, {label: 'Pays'}) }}
-        </div>
+            <div class="form-row">
+                {{ form_row(form.address.zipcode, {label: 'Code postal', attr: {'placeholder': 'Ex: 56000'}}) }}
+            </div>
+            <div class="form-row">
+                {{ form_row(form.address.city, {label: 'Ville', attr: {'placeholder': 'Ex: Vannes'}}) }}
+            </div>
+            <div class="form-row">
+                {{ form_row(form.address.countryLabel, {label: 'Pays'}) }}
+            </div>
         <div class="form-row">
             {{ form_row(form.address.country) }} {# champ caché #}
         </div>
@@ -97,14 +113,16 @@
         transition: border-color 0.3s ease;
     }
 
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="password"]:focus,
-    select:focus {
-        border-color: #9aa584;
-        outline: none;
 
+    /* Focus visible pour clavier */
+    input:focus-visible,
+    select:focus-visible,
+    button:focus-visible {
+        outline: 2px solid #9aa584;
+        outline-offset: 2px;
     }
+
+
 
     button[type="submit"] {
         font-weight: 600;

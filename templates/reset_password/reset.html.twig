@@ -7,12 +7,26 @@
 
         <h2>Nouveau mot de passe</h2>
 
-        {{ form_start(resetForm) }}
+        {{ form_start(resetForm, {
+            'attr': {
+                'aria-label': 'Formulaire de réinitialisation du mot de passe'
+            }
+        }) }}
 
         <div class="form-row">
             {{ form_row(resetForm.plainPassword, {
-                label: 'Nouveau mot de passe'
+                label: 'Nouveau mot de passe',
+                'attr': {
+                    'placeholder': 'Entrez votre nouveau mot de passe',
+                    'aria-required': 'true',
+                    'autocomplete': 'new-password'
+                }
             }) }}
+            {#
+            placeholder : aide visuelle
+            aria-required : indique que le champ est obligatoire
+            autocomplete="new-password" : améliore la sécurité et empêche le navigateur de remplir un ancien mot de passe
+            #}
         </div>
 
         <button type="submit">Réinitialiser le mot de passe</button>
@@ -72,13 +86,13 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus,
-        select:focus {
-            border-color: #9aa584;
-            outline: none;
 
+        /* Focus visible pour utilisateurs clavier */
+        input:focus-visible,
+        select:focus-visible,
+        button:focus-visible {
+            outline: 2px solid #9aa584;
+            outline-offset: 2px;
         }
 
         button[type="submit"] {

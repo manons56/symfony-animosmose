@@ -6,17 +6,26 @@
     <div class="example-wrapper">
 
         {% for flash_error in app.flashes('reset_password_error') %}
-            <div class="form-errors">
+            <div class="form-errors" role="alert">
                 {{ flash_error }}
             </div>
         {% endfor %}
 
+
         <h2>Réinitialisation du mot de passe</h2>
 
-        {{ form_start(requestForm) }}
+        {{ form_start(requestForm, {
+            'attr': {'aria-label': 'Formulaire de demande de réinitialisation du mot de passe'}
+        })
+        }}
 
         <div class="form-row">
-            {{ form_row(requestForm.email) }}
+            {{ form_row(requestForm.email, {
+                'attr': {
+                    'placeholder': 'Votre adresse email',
+                    'aria-required': 'true'
+                }
+            }) }}
         </div>
 
         <div class="form-row">
@@ -80,13 +89,13 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus,
-        select:focus {
-            border-color: #9aa584;
-            outline: none;
 
+        {# focus-visible pour accessibilité#}
+        input:focus-visible,
+        select:focus-visible,
+        button:focus-visible {
+            outline: 2px solid #9aa584;
+            outline-offset: 2px;
         }
 
         button[type="submit"] {

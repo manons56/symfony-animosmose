@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Validator\Constraints\IsTrue;
 
 class ContactType extends AbstractType
 {
@@ -99,6 +101,15 @@ class ContactType extends AbstractType
                 'attr' => ['style' => 'display:none;'],
                 'mapped' => false,
                 'required' => false,
+            ])
+            ->add('consent', CheckboxType::class, [
+                'label' => 'J’accepte que mes données soient utilisées pour être recontacté(e).',
+                'mapped' => false, // n’est pas lié à une propriété de l’entité
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accepter le traitement de vos données pour envoyer le formulaire.',
+                    ]),
+                ],
             ]);
     }
 
