@@ -89,7 +89,7 @@
 
                     {# ---------------- Contenance ---------------- #}
                     {% if hasContenance %}
-                        <h3>Contenance</h3>
+                        <h3 class="contenance">Contenance</h3>
                         <div class="variants-container contenance">
                             {% for variant in variants %}
                                 {% if variant.contenance %}
@@ -100,7 +100,7 @@
                                          data-outofstock="{{ variant.isOutOfStock ? '1' : '0' }}"
                                          {% if product.isOutOfStock or variant.isOutOfStock %}title="Indisponible"{% endif %}
                                     >
-                                        {{ variant.contenance }} - {{ variant.getPriceEuros() }} €
+                                        {{ variant.contenance }} - {{ variant.getPriceEuros()|number_format(2, ',', ' ') }} €
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -108,7 +108,8 @@
                     {% else %}
                         {# Prix unique affiché sous le nom du produit #}
                         {% if variants|length > 0 %}
-                            <p><strong>Prix : {{ variants[0].getPriceEuros() }} €</strong></p>
+                            <p><strong>Prix : {{ variants[0].getPriceEuros()|number_format(2, ',', ' ') }} €</strong></p>
+
                         {% endif %}
                     {% endif %}
 

@@ -1,4 +1,4 @@
-// Récupère l'élément avec l'ID 'hamburger' (généralement l'icône de menu, souvent trois barres)
+// Récupère l'élément avec l'ID 'hamburger' (l'icône de menu, trois barres)
 const hamburger = document.getElementById('hamburger');
 
 // Récupère l'élément avec l'ID 'menu-list' (le menu déroulant ou la liste des liens de navigation)

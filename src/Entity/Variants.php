@@ -27,8 +27,8 @@ class Variants
     private ?string $color = null;
 
 
-    #[ORM\Column(nullable: true)]
-    private ?int $price = null;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
+    private ?string $price = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isDefault = null;
@@ -101,17 +101,18 @@ class Variants
    */
 
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
-        return $this->price;
+        return $this->price !== null ? (float) $this->price : null;
     }
 
-    public function setPrice(?int $price): static
+    public function setPrice(?float $price): static
     {
-        $this->price = $price;
-
+        $this->price = $price !== null ? number_format($price, 2, '.', '') : null;
         return $this;
     }
+
+
 
     public function getPriceEuros(): float
     {

@@ -25,7 +25,7 @@ class VariantsCrudController extends AbstractCrudController
             TextField::new('contenance', 'Contenance')->hideOnIndex(),
             TextField::new('size', 'Taille')->hideOnIndex(),
             TextField::new('color', 'Couleur')->hideOnIndex(),
-            NumberField::new('priceEuros', 'Prix (€)')
+            NumberField::new('price', 'Prix (€)')
                 ->setCurrency('EUR')
                 ->setStoredAsCents(false)
                 ->setNumDecimals(2),
