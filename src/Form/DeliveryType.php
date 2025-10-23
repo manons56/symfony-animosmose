@@ -13,30 +13,28 @@ class DeliveryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $deliveryOptions = [
-        'relay' => ['label' => 'Point relais', 'price' => 8.00],
-        'home' => ['label' => 'Livraison à domicile', 'price' => 5.00],
-        'pickup' => ['label' => 'Retrait sur place', 'price' => 0.00],
+            'relay' => ['label' => 'Point relais', 'price' => 8.00],
+            'home' => ['label' => 'Livraison à domicile', 'price' => 5.00],
+            'pickup' => ['label' => 'Retrait sur place, sur RDV', 'price' => 0.00],
         ];
-
-        $choices = [];
-        foreach ($deliveryOptions as $key => $option) {
-        $choices[$option['label'] . ' (+ ' . number_format($option['price'], 2) . ' €)'] = $key;
-        }
 
         $builder
             ->add('delivery_method', ChoiceType::class, [
-                'choices' => $choices,
+                'choices' => [
+                    'Point relais (+ 8 €)' => 'relay',
+                    'Livraison à domicile (+ 5 €)' => 'home',
+                    'Retrait sur place, sur RDV (+ 0 €)' => 'pickup',
+                ],
                 'expanded' => true,
                 'multiple' => false,
                 'label' => 'Choisissez votre mode de livraison',
-                'choice_attr' => function($choice, $key, $value) use ($deliveryOptions)
-                    {
+                'choice_attr' => function($choice, $key, $value) use ($deliveryOptions) {
                     return ['data-price' => $deliveryOptions[$value]['price']];
-                    },
-                ])
+                },
+            ])
             ->add('cgv', CheckboxType::class, [
                 'label' => 'J’ai lu et j’accepte les Conditions Générales de Vente',
-                'mapped' => false, // on ne stocke pas en BDD
+                'mapped' => false,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepter les conditions générales de vente pour continuer.',

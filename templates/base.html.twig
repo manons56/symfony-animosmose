@@ -33,9 +33,16 @@
         </div>
     </div>
 {% endif %}
+<div id="cookie-consent-status"
+     data-accepted="{{ cookieService.isConsentAccepted() ? 'true' : 'false' }}"
+     data-rejected="{{ cookieService.isConsentRejected() ? 'true' : 'false' }}"
+     style="display: none;"></div>
+
 
 <header class="header">
-    <img src="{{ asset('build/images/logo-animosmose.png')}}" alt='logo animosmose'/>
+    {% block header_logo %}
+        <img src="{{ asset('build/images/logo-animosmose.png') }}" alt="logo animosmose"/>
+    {% endblock %}
     <nav>
         <button id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="menu-list">
             <span></span>
@@ -55,7 +62,9 @@
 </header>
 
 {# --- CONTENU DES PAGES --- #}
-{% block body %}{% endblock %}
+<main>
+    {% block body %}{% endblock %}
+</main>
 
 <footer class="footer">
     <div class="footer-flex">
@@ -99,8 +108,9 @@
         <!-- Colonne CGV, FAQ, Mentions légales -->
         <div class="footer-nav">
             <p><a href='{{ path('app_content_cgv') }}'>CGV</a></p>
-            <p><a href=''>FAQ</a></p>
+            {# <p><a href=''>FAQ</a></p>#}
             <p><a href='{{ path('app_content_legalnotices') }}'>Mentions légales</a></p>
+            <p><a href="{{ path("app_content_confidentialite") }}">Politique de confidentialité</a></p>
         </div>
     </div>
 </footer>

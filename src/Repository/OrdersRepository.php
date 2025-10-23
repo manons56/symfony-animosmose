@@ -30,28 +30,21 @@ class OrdersRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    //    /**
-    //     * @return Orders[] Returns an array of Orders objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Orders
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+//EXPLICATION createQUERYBuilder : traduction en SQL simple
+/*SELECT *
+FROM orders o
+WHERE o.user_id = :user
+AND o.status IN ('paid', 'delivered')
+ORDER BY o.date DESC;
+Explications :
+o.user = :user → en SQL, c’est souvent la colonne user_id.
+
+o.status IN (:statuses) → en SQL, on remplace par la liste des statuts qu'on veut ('paid', 'delivered').
+ORDER BY o.date DESC → même logique en SQL.
+    */
+
+
+
+
 }

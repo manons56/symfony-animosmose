@@ -30,7 +30,7 @@ class ProductController extends AbstractController
                 'outOfStock' => $v->isOutOfStock(),
                 'price' => $v->getPriceEuros(),
                 'url' => $this->generateUrl('app_shop_cart_add', ['variantId' => $v->getId()]),
-                'token' => $csrfTokenManager->getToken('cart_add_' . $v->getId())->getValue(), // ✅ ICI !
+                'token' => $csrfTokenManager->getToken('cart_add_' . $v->getId())->getValue(),
             ];
         }
 

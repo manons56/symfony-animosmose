@@ -1,5 +1,11 @@
 @use "../abstracts" as *;
+@import 'normalize.css';
 
+.logo-alimosmose{
+    width:15em !important;
+    padding-top:2em;
+    padding-bottom:2em;
+}
 
 h2{
     padding-bottom:1em;
@@ -31,7 +37,7 @@ h2{
 }
 
 .product-card {
-    height:25em;
+    height:27em;
     border: 1px solid #eee;
     border-radius: 10px;
     padding: 10px;
@@ -485,7 +491,7 @@ h3{
     background-color: #a0ab81;
     border: none;
     border-radius: 5px;
-    color: white;
+    color: #000000;
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.3s ease;
@@ -607,9 +613,9 @@ h3{
 .badge {
    // display: inline-block;
     padding: 0.35em 0.65em;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
-    color: white;
+    color: #000000;
     background-color: #a0ab81; // couleur personnalisée de ta boutique
     border-radius: 0.5em;
     animation: pulseBadge 1.5s ease-in-out infinite;
@@ -768,7 +774,7 @@ h3{
 
     .cart-mobile form button {
         background-color: inherit;
-        color: $color-orange;
+        color: #a41e1e;
         border: none;
         font-weight: bold;
         text-decoration: underline;

@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
-#[Route('/user/user')]
+#[Route('/user')]
 class UserController extends AbstractController
 {
     #[Route('', name: 'app_user_user')]
@@ -71,4 +71,35 @@ class UserController extends AbstractController
 
 
     }
+
+    #[Route('/edit', name: 'app_user_user_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, EntityManagerInterface $manager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $form = $this->createForm(UserType::class, $user, [
+            'is_edit' => true, // on passe en mode édition
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->flush();
+
+            $this->addFlash('success', 'Vos informations ont bien été mises à jour.');
+            return $this->redirectToRoute('app_user_user_edit');
+        }
+
+        return $this->render('user/user/edit.html.twig', [
+            'form' => $form,
+            'current_page' => 'edit',
+        ]);
+    }
+
+
+
+
 }

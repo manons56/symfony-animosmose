@@ -1,5 +1,5 @@
 @use "../abstracts" as *;
-
+@import 'normalize.css';
 
 
 .list-style li::before{
@@ -206,12 +206,12 @@
 
 
 .flex img {
-    width:30%;
+    width:40%;
     height: auto;
     object-fit: cover;
 
     @media (max-width: 768px) {
-        width: 70%;       // prend toute la largeur
+        width: 90%;       // prend toute la largeur
         text-align: justify;
     }
 }

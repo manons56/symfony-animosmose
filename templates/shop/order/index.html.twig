@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 {% set current_page = 'order' %}
 
+{% block header_logo %}
+    <img class="logo-alimosmose" src="{{ asset('build/images/logo-boutique.png') }}" alt="logo boutique"/>
+{% endblock %}
+
 {% block title %}Mes commandes{% endblock %}
 
 {% block body %}

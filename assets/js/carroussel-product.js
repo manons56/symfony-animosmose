@@ -12,7 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Cela permet d'avoir deux séries de produits à la suite,
         // créant un effet de "boucle infinie" sans coupure visible
         items.forEach(item => {
-            track.appendChild(item.cloneNode(true)); // cloneNode(true) => clone toute la carte avec son contenu
+            const clone = item.cloneNode(true); // clone la carte
+            clone.setAttribute('aria-hidden', 'true'); // masque aux lecteurs d'écran
+
+            // Empêche le focus clavier sur les éléments dupliqués
+            clone.querySelectorAll('a, button, input').forEach(el => {
+                el.setAttribute('tabindex', '-1');
+            });
+
+            track.appendChild(clone);
         });
     }
 });

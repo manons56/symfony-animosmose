@@ -158,7 +158,7 @@ class CartController extends AbstractController
         $manager->flush();
         // Doctrine exécute toutes les requêtes SQL en base : Création des Articles, Création de la commande, Liaison ManyToMany entre Order et Articles
 
-        $cartService->clear();
+        //$cartService->clear();
         // on vide le panier dans la session
         $this->addFlash('success', 'Commande créée avec succès !');
 

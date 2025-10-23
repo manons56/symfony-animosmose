@@ -1,12 +1,20 @@
 {% extends 'base.html.twig' %}
 {% set current_page = 'order' %}
 
+{% block header_logo %}
+    <img class="logo-alimosmose" src="{{ asset('build/images/logo-boutique.png') }}" alt="logo boutique"/>
+{% endblock %}
+
 {% block title %}Commande #{{ order.id }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('order') }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 {% endblock %}
+
+
+
 
 {% block body %}
     <a href="{{ path('app_shop_cart') }}">
@@ -14,16 +22,16 @@
     </a>
 
 
-    <h2>Livraison et paiement</h2>
+    <h1>Livraison et paiement</h1>
 <div class="add-padding">
     <table class="order-table">
         <thead>
         <tr>
-            <th>Produit</th>
-            <th>Détail</th>
-            <th>Quantité</th>
-            <th>Prix</th>
-            <th>Total</th>
+            <th scope="col">Produit</th>
+            <th scope="col">Détail</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Prix</th>
+            <th scope="col">Total</th>
         </tr>
         </thead>
         <tbody>
@@ -51,7 +59,7 @@
     </table>
     <div class="order-mobile">
         {% for article in order.articles %}
-            <div class="order-item">
+            <div class="order-item" role="region" aria-label="Article {{ article.variantId.product.name }}">
                 <div class="order-item-header font-weight-bold">
                     {{ article.variantId.product.name }}
                 </div>
@@ -81,12 +89,21 @@
     {{ form_start(form) }}
 
 
+    <div id="mondial-relay-container" style="display:none; margin-top:20px;">
+        <div id="Zone_Widget" class="widget-container"></div>
+        <button id="confirm-relay" class="btn btn-primary mt-3" disabled>
+            Confirmer le point relais
+        </button>
+
+        <div id="relay-info" class="mt-3"></div>
+    </div>
+
     {# Ce bloc sert à afficher la liste de méthodes de livraison sous forme de boutons radio ou de cases à cocher,
      avec des données supplémentaires (prix et description) associées à chaque option. #}
     <div class="delivery-methods">
         {% for child in form.delivery_method %}
             {% set key = child.vars.value %}
-            <label>
+            <label for="{{ child.vars.id }}">
                 {{ form_widget(child, { attr: {'data-price': deliveryOptions[key].price} }) }}
                 {{ child.vars.label }}
             </label>
@@ -102,28 +119,150 @@
     </div>
     </br>
     <div class="cgv-container">
-        <label>
-            <span>
-                En cochant, vous acceptez nos
-                <a href="{{ path('app_content_cgv') }}" target="_blank">conditions générales de vente</a> et notre <a href="{{ path('app_content_confidentialite') }}"  target="_blank">politique de confidentialité </a>.
-            </span>
-            {{ form_widget(form.cgv) }}
-        </label>
+        {{ form_row(form.cgv, {
+            label: '
+            En cochant, vous acceptez nos
+            <a href="' ~ path('app_content_cgv') ~ '" target="_blank" rel="noopener noreferrer">conditions générales de vente</a>
+            et notre
+            <a href="' ~ path('app_content_confidentialite') ~ '" target="_blank" rel="noopener noreferrer">politique de confidentialité</a>.
+        ',
+            label_html: true
+        }) }}
     </div>
+
+
 
 
 
     {# Bouton Payline – Mondial Relay seulement #}
     {# Bouton Payline – toujours présent mais masqué par défaut #}
-    <a id="payline-button" href="{{ path('checkout_pay', {'orderId': order.id}) }}" class="btn" style="display:none;">
-        Payer avec Payline
-    </a>
+    <button type="button" name="payline" class="btn" id="payline-button" data-order-id="{{ order.id }}" style="display:none;">
+       Payer avec Payline
+    </button>
 
-    <button type="submit" class="btn" id="submit-button">Valider ma commande</button>
+    <!-- Champs cachés pour stocker les infos du relais -->
+    <input type="hidden" name="relay_name" id="relay_name">
+    <input type="hidden" name="relay_address" id="relay_address">
+    <input type="hidden" name="relay_cp" id="relay_cp">
+    <input type="hidden" name="relay_city" id="relay_city">
+
+    <button type="submit" class="btn">Valider ma commande</button>
 
 
     {{ form_end(form) }}
+
 </div>
 {% endblock %}
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="https://widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+
+                // Sélecteurs
+                const radios = $('input[type="radio"][name$="[delivery_method]"], input[type="radio"][name$=".delivery_method"]');
+                const relayRadio = $('input[value="relay"]');
+                const relayContainer = $('#mondial-relay-container');
+                const confirmRelayBtn = $('#confirm-relay');
+                const paylineBtn = $('#payline-button');
+
+                const baseTotalEl = $('#base-total');
+                const deliveryPriceEl = $('#delivery-price');
+                const finalTotalEl = $('#final-total');
+
+                // Fonction pour mettre à jour le total final
+                function updateTotals(deliveryMethod) {
+                    let baseTotal = parseFloat(baseTotalEl.text().replace(' ', '')) || 0;
+                    let deliveryPrice = 0;
+
+                    // Récupération du prix de livraison depuis l'attribut data-price
+                    if (deliveryMethod) {
+                        const selectedRadio = radios.filter(':checked');
+                        if (selectedRadio.length) {
+                            deliveryPrice = parseFloat(selectedRadio.data('price')) || 0;
+                        }
+                    }
+
+                    deliveryPriceEl.text(deliveryPrice.toFixed(2) + ' €');
+                    finalTotalEl.text((baseTotal + deliveryPrice).toFixed(2) + ' €');
+                }
+
+                // Initialisation : si une méthode est déjà cochée
+                const initiallyChecked = radios.filter(':checked').val();
+                if (initiallyChecked) {
+                    updateTotals(initiallyChecked);
+                    if (initiallyChecked === 'relay') {
+                        relayContainer.show();
+                    }
+                }
+
+                // Quand l'utilisateur change de méthode de livraison
+                radios.on('change', function () {
+                    const selected = $(this).val();
+
+                    updateTotals(selected);
+
+                    if (selected === 'relay') {
+                        relayContainer.show();
+
+                        // Initialisation du widget Mondial Relay
+                        if (!$("#Zone_Widget").data('MRWidgetInitialized')) {
+                            $("#Zone_Widget").MR_ParcelShopPicker({
+                                Target: "Zone_Widget",
+                                Brand: "CC20SXK2",
+                                Country: "FR",
+                                PostCode: "56000",
+                                NbResults: 10,
+                                ShowResultsOnMap: true,
+                                ColLivMod: "24R",
+                                OnParcelShopSelected: function(data) {
+                                    $('#relay-info').html(`
+                            <strong>${data.Nom}</strong><br>
+                            ${data.Adresse1}<br>
+                            ${data.CP} ${data.Ville}
+                        `);
+                                    $('#relay_name').val(data.Nom);
+                                    $('#relay_address').val(data.Adresse1);
+                                    $('#relay_cp').val(data.CP);
+                                    $('#relay_city').val(data.Ville);
+
+                                    confirmRelayBtn.prop('disabled', false);
+                                }
+                            });
+                            $("#Zone_Widget").data('MRWidgetInitialized', true);
+                        }
+
+                    } else {
+                        relayContainer.hide();
+                        confirmRelayBtn.prop('disabled', true);
+                    }
+                });
+
+                // Confirmer le point relais → montrer le bouton Payline
+                confirmRelayBtn.on('click', function() {
+                    paylineBtn.show();
+                    confirmRelayBtn.prop('disabled', true);
+                    $('html, body').animate({scrollTop: paylineBtn.offset().top}, 500);
+                });
+
+                // Rafraîchissement du widget lors du redimensionnement
+                $(window).on('resize', function() {
+                    if ($("#Zone_Widget").data('MRWidgetInitialized')) {
+                        $("#Zone_Widget").MR_ParcelShopPicker('refresh');
+                    }
+                });
+
+            });
+
+        </script>
+
+
+
+
+    {% endblock %}
 
 

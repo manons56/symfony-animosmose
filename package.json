@@ -37,5 +37,8 @@
     "bugs": {
         "url": "https://github.com/manons56/symfony-animosmose/issues"
     },
-    "homepage": "https://github.com/manons56/symfony-animosmose#readme"
+    "homepage": "https://github.com/manons56/symfony-animosmose#readme",
+    "dependencies": {
+        "normalize.css": "^8.0.1"
+    }
 }

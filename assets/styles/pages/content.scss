@@ -1,0 +1,89 @@
+@use "../abstracts" as *;
+@import 'normalize.css';
+
+
+/////////////
+//content//
+h2{
+    padding:1em;
+}
+
+h3{
+    text-align:left;
+}
+.content-padding{
+    padding:2em;
+}
+
+
+.h3-content{
+    padding:1em 0;
+}
+
+.no-bullet {
+    list-style: none;
+    padding-left: 0;
+}
+
+.list-style li::before{
+    content: "• ";
+}
+
+.toc {
+    background:$background-color;
+    padding: 2em;
+    border-radius: 8px;
+    margin-bottom: 2em;
+    margin-top:2em;
+
+}
+
+.toc ul {
+    list-style: none;
+    padding: 0;
+}
+
+.toc li {
+    margin-bottom: 0.5em;
+    font-size: smaller;
+    font-family:$font-family-nav;
+}
+
+.toc a {
+    text-decoration: none;
+    color: #da6a47;
+}
+
+.toc a:hover,
+.toc a:focus {
+    text-decoration: underline;
+}
+
+
+.form-rgpd {
+    max-width: 600px;
+    margin-top: 1rem;
+}
+.form-rgpd div {
+    margin-bottom: 1rem;
+}
+.form-rgpd input,
+.form-rgpd select,
+.form-rgpd textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+.form-rgpd button {
+    background-color: #b15116;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.form-rgpd{
+    padding:2em;
+}

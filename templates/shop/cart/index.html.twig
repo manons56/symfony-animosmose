@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 {% set current_page = 'cart' %}
 
+{% block header_logo %}
+    <img class="logo-alimosmose" src="{{ asset('build/images/logo-boutique.png') }}" alt="logo boutique"/>
+{% endblock %}
+
 {% block title %}Mon panier{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
@@ -11,22 +15,29 @@
 
 <div>
     <div class="icones-user-shop">
-        <a href="{{ path('app_shop_cart') }}">
+        <a href="{{ path('app_shop_cart') }}" aria-label="Voir le panier">
             <i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i>
         </a>
 
         <div class="user-menu-wrapper">
             {% if app.user %}
-                <button id="user-menu-toggle" class="user-icon-button">
+                <button id="user-menu-toggle" class="user-icon-button"
+                        aria-label="Menu utilisateur"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-controls="user-menu"
+                >
                     <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
                 </button>
                 <div id="user-menu" class="user-dropdown">
+                    <a href="{{ path('app_user_user_edit') }}" class="user-menu-link">Modifier mes infos</a>
+
                     <form method="post" action="{{ path('app_logout') }}">
                         <button type="submit" class="user-menu-link">Se déconnecter</button>
                     </form>
                 </div>
             {% else %}
-                <a href="{{ path('app_login') }}">
+                <a href="{{ path('app_login') }}" aria-label="Se connecter">
                     <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
                 </a>
             {% endif %}
@@ -42,12 +53,12 @@
     <table class="table-cart">
         <thead>
         <tr>
-            <th>Produit</th>
-            <th>Détail</th>
-            <th>Quantité</th>
-            <th>Prix</th>
-            <th>Total</th>
-            <th></th>
+            <th scope="col">Produit</th>
+            <th scope="col">Détail</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Prix</th>
+            <th scope="col">Total</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -119,7 +130,7 @@
 
                 <div class="cart-item-image-wrapper">
                     {% set firstImage = item.variant.product.images|first %}
-                    <img src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}"
+                    <img loading="lazy" src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}"
                          alt="{{ item.variant.product.name }}"
                          class="cart-item-image">
                 </div>

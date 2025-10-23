@@ -118,7 +118,7 @@ class PaymentController extends AbstractController
 
         // Création d’une session de paiement auprès de Payline
         $response = $payline->createPaymentSession(
-            (float)$order->getTotal(),                               // Montant de la commande
+            (float)$order->getTotalWithDelivery(),                               // Montant de la commande
             $this->generateUrl('payment_success', [], true),        // URL de retour si succès
             $this->generateUrl('payment_cancel', [], true),         // URL de retour si annulation
             $order->getReference()                                  // Référence unique de la commande

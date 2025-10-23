@@ -2,6 +2,11 @@
 {% set current_page = 'cgv' %}
 {% block title %}Conditions générales de vente{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('content') }}
+{% endblock %}
+
 {% block body %}
 
 <div>

@@ -1,6 +1,15 @@
 {% extends 'base.html.twig' %}
 
+{% block header_logo %}
+    <img class="logo-alimosmose" src="{{ asset('build/images/logo-boutique.png') }}" alt="logo boutique"/>
+{% endblock %}
+
 {% block title %}Connexion{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('authentification') }}
+{% endblock %}
 
 {% block body %}
     <div class="example-wrapper">
@@ -12,7 +21,7 @@
             </div>
         {% endif %}
 
-        <h2>Connexion</h2>
+        <h1>Connexion</h1>
 
         <form method="post" action="{{ path('app_login') }}" aria-label="Formulaire de connexion">
 
@@ -64,122 +73,6 @@
 
         </form>
     </div>
-
-    <style>
-
-        h2{
-            margin: 1em 0;
-        }
-
-
-        body {
-
-            color: #333;
-            margin: 0;
-        }
-
-        .footer{
-            margin-top: 8em;
-        }
-        .example-wrapper {
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-
-        .form-row {
-            margin: 2.5em 0;
-        }
-
-        .form-row p{
-            font-size: smaller;
-            font-style: italic;
-        }
-
-        .form-row p a{
-              color:black;
-          }
-
-        p{
-            font-size: smaller;
-        }
-
-
-        .form-row label {
-            display: block;
-            margin-bottom: 0.3em;
-            font-weight: 500;
-            color: #555;
-
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        select {
-            width: 100%;
-            padding: 0.7em 1em;
-            border: 1.2px solid #ccc;
-            background: transparent;
-            transition: border-color 0.3s ease;
-        }
-
-
-        /* Focus visible pour clavier */
-        input:focus-visible,
-        select:focus-visible,
-        button:focus-visible {
-            outline: 2px solid #9aa584;
-            outline-offset: 2px;
-        }
-
-
-        button[type="submit"] {
-            font-weight: 600;
-            padding: 1em;
-            margin-bottom: 3em;
-            width: 100%;
-            border: none;
-            border-radius: 8px;
-        }
-
-
-
-        .form-errors {
-            color: #d93025;
-            font-size: 0.85rem;
-            margin-top: 0.3em;
-        }
-
-        /* Champ caché */
-        input[type="hidden"] {
-            display: none;
-        }
-
-
-
-        @media (max-width: 600px) {
-
-
-            .example-wrapper {
-                padding: 0 1.5em;
-            }
-
-            .form-row {
-                margin: 2em 0;
-            }
-
-            input,
-            select {
-
-                padding: 0.8em;
-            }
-
-            button[type="submit"] {
-                padding: 0.9em;
-            }
-        }
-    </style>
 
 
 {% endblock %}

@@ -132,7 +132,7 @@ class OrdersCrudController extends AbstractCrudController
             return [
                 AssociationField::new('user', 'Client'),
                 DateTimeField::new('date', 'Date'),
-                MoneyField::new('total', 'Total')->setCurrency('EUR')
+                MoneyField::new('totalWithDelivery', 'Total')->setCurrency('EUR')
                     ->setStoredAsCents(false),
                 ChoiceField::new('status', 'Statut')
                     ->setChoices($statusChoices)
@@ -173,8 +173,6 @@ class OrdersCrudController extends AbstractCrudController
                     ]),
                 CollectionField::new('articles', 'Articles commandés')
                     ->setTemplatePath('admin/order_articles.html.twig'),
-                MoneyField::new('total', 'Total')->setCurrency('EUR')
-                    ->setStoredAsCents(false),
                 TextField::new('deliveryMethod', 'Livraison')
                     ->formatValue(function ($value) {
                         return match ($value) {
@@ -184,6 +182,8 @@ class OrdersCrudController extends AbstractCrudController
                             default => ucfirst((string)$value), //default => ... : c'est ce que le code retournera si aucune des valeurs ne correspond (relay, home, pickup).
                         };
                     }),
+                MoneyField::new('totalWithDelivery', 'Total')->setCurrency('EUR')
+                    ->setStoredAsCents(false),
 
             ];
         }

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Service\CartService; // importe le CartService
 
 final class OrderController extends AbstractController
 {
@@ -51,28 +52,40 @@ final class OrderController extends AbstractController
             $data = $form->getData();
             $selectedDelivery = $data['delivery_method'];
 
-            $order->setDeliveryMethod($selectedDelivery);
 
-            // --- Définir le status en fonction du mode de livraison ---
+                $order->setDeliveryMethod($selectedDelivery);
+                $order->setStatus(OrderStatus::Pending);
+                $em->flush();
+
+
+                // Redirection  pour home et pickup
+                if ($selectedDelivery === 'home') {
+                    return $this->redirectToRoute('app_shop_homedelivery');
+                }
+
+                if ($selectedDelivery === 'pickup') {
+                    return $this->redirectToRoute('app_shop_pickup');
+                }
+
+
+            // Si mode 'relay', on redirige vers Payline pour paiement en ligne
             if ($selectedDelivery === 'relay') {
-                // Mondial Relay → paiement via Payline
-                $order->setStatus(OrderStatus::Pending);
-            } else {
-                // Livraison à domicile ou retrait sur place → attente paiement liquide/chèque
-                $order->setStatus(OrderStatus::Pending);
+                // On stocke temporairement la sélection de livraison en session
+                $request->getSession()->set('relay_pending_order', [
+                    'order_id' => $order->getId(),
+                ]);
+
+
+                return $this->redirectToRoute('checkout_pay', ['orderId' => $order->getId()]);
             }
-
-            $em->flush();
-
-            $this->addFlash('success', "Mode de livraison choisi : $selectedDelivery");
-            return $this->redirectToRoute('app_shop_order_show', ['id' => $order->getId()]);
         }
+
 
         return $this->render('shop/order/show.html.twig', [
             'order' => $order,
             'form' => $form->createView(),
             'current_page' => 'order',
-            'deliveryOptions' => $deliveryOptions,  // <-- Ajout ici
+            'deliveryOptions' => $deliveryOptions,
         ]);
     }
 
@@ -96,4 +109,55 @@ final class OrderController extends AbstractController
 
         return $this->redirectToRoute('app_shop_order');
     }
+
+    #[Route('/api/mondial-relay/save', name: 'api_mondial_relay_save', methods: ['POST'])] // Déclare une route Symfony accessible via POST à l'URL '/api/mondial-relay/save' avec le nom 'api_mondial_relay_save'
+    public function savePointRelay(Request $request, EntityManagerInterface $em): JsonResponse // Méthode qui sera exécutée pour cette route, reçoit la requête HTTP et l'Entity Manager pour interagir avec la DB, retourne un JSON
+    {
+        $data = json_decode($request->getContent(), true); // Récupère le contenu JSON de la requête et le transforme en tableau PHP associatif
+
+        $order = $em->getRepository(Orders::class)->findOneBy([ // Cherche une commande dans la base
+            'user' => $this->getUser(),                          // qui appartient à l'utilisateur connecté
+            'status' => OrderStatus::Pending                     // et dont le statut est "Pending" (en attente)
+        ]);
+
+        if ($order) {                                           // Si une commande correspondante existe
+            $order->setDeliveryMethod('relay');                // On définit le mode de livraison sur "relay" (point relais)
+            // Tu peux ajouter un champ dans ton entité Orders pour stocker les infos du relais :
+            // ex : $order->setRelayInfo(json_encode($data));  // Exemple : stocker les infos du relais en JSON dans la commande
+            $em->flush();                                      // Sauvegarde les modifications en base de données
+        }
+
+        return $this->json(['success' => true]);               // Renvoie une réponse JSON indiquant que l'opération a réussi
+    }
+
+
+    #[Route('/shop/homedelivery', name: 'app_shop_homedelivery')]
+    public function homeDelivery(CartService $cartService): Response
+    {
+        // On vide le panier seulement maintenant
+        $cartService->clear();
+        return $this->render('shop/order/homedelivery.html.twig', [
+            'current_page' => 'homedelivery',
+        ]);
+    }
+
+    #[Route('/shop/pickupdelivery', name: 'app_shop_pickup')]
+    public function pickupDelivery(CartService $cartService): Response
+    {
+        // On vide le panier seulement maintenant
+        $cartService->clear();
+        return $this->render('shop/order/pickup.html.twig', [
+            'current_page' => 'pickupdelivery',
+        ]);
+    }
+
+    #[Route('/shop/paylinedelivery', name: 'app_shop_paylinedelivery')]
+    public function paylineDelivery(): Response
+    {
+        return $this->render('shop/order/payline.html.twig', [
+            'current_page' => 'paylinedelivery',
+        ]);
+    }
+
+
 }

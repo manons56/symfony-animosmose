@@ -158,6 +158,21 @@ class Orders
         return $this;
     }
 
+    public function getDeliveryPrice(): float
+    {
+        return match ($this->deliveryMethod) {
+            'relay' => 8.00,
+            'home' => 5.00,
+            'pickup' => 0.00,
+            default => 0.00,
+        };
+    }
+
+    public function getTotalWithDelivery(): float
+    {
+        return $this->getTotal() + $this->getDeliveryPrice();
+    }
+
     public function getReference(): ?string
     {
         return $this->reference;

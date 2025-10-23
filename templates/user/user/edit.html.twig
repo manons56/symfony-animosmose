@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block header_logo %}
+    <img class="logo-alimosmose" src="{{ asset('build/images/logo-boutique.png') }}" alt="logo boutique"/>
+{% endblock %}
+
+
+{% block title %}Modifier mes informations{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('authentification') }}
+{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h1>Modifier mes informations</h1>
+
+        {{ form_start(form, {'attr': {'aria-label': 'Formulaire pour modifier ses informations personnelles'}}) }}
+
+        <div class="form-row">
+        {{ form_row(form.email, {label: 'Email', attr: {'aria-required': 'true',}}) }}
+        </div>
+
+        <div class="form-row">
+        {{ form_row(form.name, {label: 'Nom', attr: {'aria-required': 'true'}}) }}
+        </div>
+
+        <div class="form-row">
+        {{ form_row(form.surname, {label: 'Prénom', attr: {'aria-required': 'true'}}) }}
+        </div>
+
+        <div class="form-row">
+        {{ form_row(form.phone, {label: 'Numéro de téléphone'}) }}
+        </div>
+
+        <div class="form-row">
+        {{ form_row(form.address.street, {label: 'Adresse'}) }}
+        </div>
+
+        <div class="form-row">
+        {{ form_row(form.address.zipcode, {label: 'Code postal'}) }}
+        </div>
+
+        <div class="form-row">
+        {{ form_row(form.address.city, {label: 'Ville'}) }}
+        </div>
+
+        <div class="form-row">
+        {{ form_row(form.address.countryLabel, {label: 'Pays'}) }}
+        </div>
+
+
+        <button type="submit">Enregistrer les modifications</button>
+        {{ form_end(form) }}
+    </div>
+
+
+
+
+{% endblock %}
+
+

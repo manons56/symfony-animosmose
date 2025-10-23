@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 {% set current_page = 'product' %}
 
+{% block header_logo %}
+    <img class="logo-alimosmose" src="{{ asset('build/images/logo-boutique.png') }}" alt="logo boutique"/>
+{% endblock %}
+
 {% block title %}La boutique{% endblock %}
 
 {% block stylesheets %}
@@ -9,15 +13,15 @@
 {% endblock %}
 
 {% block body %}
-    <div>
+    <div role="main">
         <div class="icones-user-shop">
-            <a href="{{ path('app_shop_cart') }}">
+            <a href="{{ path('app_shop_cart') }}" aria-label="Voir mon panier">
                 <i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i>
             </a>
 
             <div class="user-menu-wrapper">
                 {% if app.user %}
-                    <button id="user-menu-toggle" class="user-icon-button">
+                    <button id="user-menu-toggle" class="user-icon-button" aria-haspopup="true" aria-expanded="false" aria-label="Mon compte">
                         <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
                     </button>
                     <div id="user-menu" class="user-dropdown">
@@ -26,7 +30,7 @@
                         </form>
                     </div>
                 {% else %}
-                    <a href="{{ path('app_login') }}">
+                    <a href="{{ path('app_login') }}" aria-label="Connexion">
                         <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
                     </a>
                 {% endif %}
@@ -55,39 +59,49 @@
         {% set bestSellers = bestSellers %}
 
         {% if bestSellers is not empty %}
-            <div class="carousel-container">
+            <section class="carousel-container" aria-label="Best-sellers">
                 <div class="carousel-track">
                     {% for product in bestSellers %}
                         <a href="{{ path('app_product_show', {'id': product.id}) }}" class="carousel-card">
                             <div class="product-card">
                                 {% if product.isNew %}
-                                    <span class="badge badge-success">Nouveau</span>
+                                    <span class="badge badge-success" aria-hidden="true">Nouveau</span>
                                 {% endif %}
                                 {% set firstImage = product.images|first %}
                                 <img src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}" alt="{{ product.name }}" class="product-image">
 
                                 <h3 class="product-name">{{ product.name }}</h3>
+                                <span class="sr-only">
+                                Prix :
+                                {% if product.variants|length == 1 %}
+                                    {{ product.variants[0].price|number_format(2, '.', ' ') }} €
+                                {% elseif product.variants|length > 1 %}
+                                    À partir de {{ product.variants[0].price|number_format(2, '.', ' ') }} €
+                                {% else %}
+                                    Prix non disponible
+                                {% endif %}
+                            </span>
                             </div>
                         </a>
                     {% endfor %}
                 </div>
-            </div>
+            </section>
         {% endif %}
 
 
         <div class="search-filter-container">
             {# Barre de recherche #}
             <div class="search-container">
-                <input type="text" id="search" class="search-input" placeholder="Rechercher un produit...">
+                <input type="text" id="search" class="search-input" placeholder="Rechercher un produit..." aria-label="Rechercher un produit">
             </div>
 
             {# Filtre de prix #}
-            <form method="GET" id="price-filter-form">
+            <form method="GET" id="price-filter-form" aria-label="Filtrer par prix">
                 <label for="min-price">Prix min :</label>
                 <input type="number" name="min" id="min-price" value="{{ app.request.get('min') ?? 0 }}" min="0">
                 <label for="max-price">max :</label>
                 <input type="number" name="max" id="max-price" value="{{ app.request.get('max') ?? 150 }}" min="0">
-                <button type="submit">Filtrer</button>
+                <button type="submit" aria-label="Filtrer les produits par prix">Filtrer</button>
             </form>
         </div>
 
@@ -98,7 +112,7 @@
 
         <div class="content-wrapper">
             {# Menu latéral  #}
-            <nav class="category-menu">
+            <nav class="category-menu" aria-label="Menu des catégories">
                 <ul>
                     <li>
                         <a href="{{ path('app_product_new') }}" class="category-link no-toggle">Nouveau</a>
@@ -108,9 +122,8 @@
                         <li>
                             {# Lien principal de la catégorie #}
                             {% if cat.subcategories|length > 0 %}
-                                <a href="#" class="category-toggle" data-cat-id="cat-{{ cat.id }}">
-                                    {{ cat.name }}
-                                    <span class="arrow">▼</span>
+                                <a href="#" class="category-toggle" data-cat-id="cat-{{ cat.id }}" aria-expanded="false" aria-controls="cat-{{ cat.id }}">
+                                    {{ cat.name }} <span class="arrow">▼</span>
                                 </a>
                             {% else %}
                                 <a href="{{ path('app_product_category', {'id': cat.id}) }}" class="category-link no-toggle">
@@ -120,7 +133,7 @@
 
                             {# Sous-catégories #}
                             {% if cat.subcategories|length > 0 %}
-                                <ul class="subcategory-list" id="cat-{{ cat.id }}">
+                                <ul class="subcategory-list" id="cat-{{ cat.id }}" aria-hidden="true">
                                     {% for sub in cat.subcategories %}
                                         <li>
                                             <a href="{{ path('app_product_category', {id: sub.id}) }}">
@@ -142,12 +155,12 @@
                     <a href="{{ path('app_product_show', {'id': product.id}) }}" class="product-item" data-index="{{ loop.index0 }}">
                         <div class="product-card">
                             {% if product.isNew %}
-                                <span class="badge badge-success">Nouveau</span>
+                                <span class="badge badge-success" aria-hidden="true">Nouveau</span>
                             {% endif %}
 
                             <div class="product-image-wrapper">
                                 {% set firstImage = product.images|first %}
-                                <img src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}" alt="{{ product.name }}" class="product-image">
+                                <img loading="lazy" src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}" alt="{{ product.name }}" class="product-image">
 
                             </div>
 
@@ -169,11 +182,10 @@
                 {% endfor %}
             </div>
 
-
-
-
         </div>
-        <div id="pagination-controls" class="pagination"></div>
+
+
+        <div id="pagination-controls" class="pagination" aria-label="Pagination des produits"></div>
 
     </div>
 

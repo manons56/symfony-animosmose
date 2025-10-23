@@ -2,6 +2,10 @@
 {% extends 'base.html.twig' %}
 {% set current_page = 'product' %}
 
+{% block header_logo %}
+    <img class="logo-alimosmose"  src="{{ asset('build/images/logo-boutique.png') }}" alt="logo boutique"/>
+{% endblock %}
+
 {% block title %} Détail produit{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
@@ -9,15 +13,15 @@
 {% endblock %}
 
 {% block body %}
-    <div>
+    <div role="main">
         <div class="icones-user-shop">
-            <a href="{{ path('app_shop_cart') }}">
+            <a href="{{ path('app_shop_cart') }}" aria-label="Voir mon panier">
                 <i class="fa-solid fa-bag-shopping fa-2xl" style="color: #a0ab81;"></i>
             </a>
 
             <div class="user-menu-wrapper">
                 {% if app.user %}
-                    <button id="user-menu-toggle" class="user-icon-button">
+                    <button id="user-menu-toggle" class="user-icon-button"  aria-haspopup="true" aria-expanded="false" aria-label="Mon compte">
                         <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
                     </button>
                     <div id="user-menu" class="user-dropdown">
@@ -26,7 +30,7 @@
                         </form>
                     </div>
                 {% else %}
-                    <a href="{{ path('app_login') }}">
+                    <a href="{{ path('app_login') }}" aria-label="Connexion">
                         <i class="fa-solid fa-user fa-2xl" style="color: #a0ab81;"></i>
                     </a>
                 {% endif %}
@@ -38,11 +42,11 @@
         </a>
 
         {% if product.isNew %}
-            <span class="badge badge-success" style="margin-left:10px; font-size:0.8em; padding:5px 8px;">Nouveau</span>
+            <span class="badge badge-success" aria-hidden="true" style="margin-left:10px; font-size:0.8em; padding:5px 8px;">Nouveau</span>
         {% endif %}
 
         <section class="background-beige">
-            <h2 class="h2-right">{{ product.name }}</h2>
+            <h1 class="h2-right">{{ product.name }}</h1>
             <div class="descriptif-flex">
                 <div class="product-slider">
                     {# IMAGES #}
@@ -50,22 +54,22 @@
                     {% set firstImage = images|first %}
                     <div class="main-image-container">
                         {% if firstImage %}
-                            <img id="main-product-image" src="{{ asset('img/products/' ~ firstImage.filename) }}" alt="{{ product.name }}">
+                            <img id="main-product-image"  loading="lazy" src="{{ asset('img/products/' ~ firstImage.filename) }}" alt="{{ product.name }}">
                         {% endif %}
                     </div>
 
                     {# MINIATURES #}
                     {% if images|length > 1 %}
-                        <div class="thumbnail-container">
+                        <div class="thumbnail-container" role="list">
                             {% for image in images %}
-                                <img src="{{ asset('img/products/' ~ image.filename) }}" alt="{{ product.name }}" class="thumbnail" data-index="{{ loop.index0 }}">
+                                <img src="{{ asset('img/products/' ~ image.filename) }}" alt="{{ product.name }}" class="thumbnail" data-index="{{ loop.index0 }}" aria-label="Voir l'image {{ loop.index }}">
                             {% endfor %}
                         </div>
                     {% endif %}
 
                     {% if product.images|length > 1 %}
-                        <button id="prev-image" class="slider-arrow">&#10094;</button>
-                        <button id="next-image" class="slider-arrow">&#10095;</button>
+                        <button id="prev-image" class="slider-arrow" aria-label="Image précédente">&#10094;</button>
+                        <button id="next-image" class="slider-arrow" aria-label="Image suivante">&#10095;</button>
                     {% endif %}
                 </div>
 
@@ -89,11 +93,11 @@
 
                     {# ---------------- Contenance ---------------- #}
                     {% if hasContenance %}
-                        <h3 class="contenance">Contenance</h3>
+                        <h2 class="contenance">Contenance</h2>
                         <div class="variants-container contenance">
                             {% for variant in variants %}
                                 {% if variant.contenance %}
-                                    <div class="variant-card
+                                    <div class="variant-card" role="button" tabindex="0" aria-pressed="false" aria-disabled="{{ variant.isOutOfStock ? 'true' : 'false' }}" data-variant-id="{{ variant.id }}" data-outofstock="{{ variant.isOutOfStock ? '1' : '0' }}"
                                         {% if product.isOutOfStock or variant.isOutOfStock %}variant-unavailable{% endif %}"
                                          data-csrf="{{ csrf_token('cart_add_' ~ variant.id) }}"
                                          data-variant-id="{{ variant.id }}"
@@ -131,10 +135,13 @@
                                             {% endif %}
                                         {% endfor %}
 
-                                        <div class="variant-card size-card {% if example and example.isOutOfStock %}variant-unavailable{% endif %}"
+                                        <div class="variant-card size-card {% if example.isOutOfStock %}variant-unavailable{% endif %}"
+                                             role="button"
+                                             tabindex="0"
+                                             aria-pressed="false"
+                                             aria-disabled="{{ example.isOutOfStock ? 'true' : 'false' }}"
                                              data-size="{{ v.size }}"
-                                             data-outofstock="{{ (example and example.isOutOfStock) ? '1' : '0' }}"
-                                        >
+                                             data-outofstock="{{ example.isOutOfStock ? '1' : '0' }}">
                                             {{ v.size }}
                                         </div>
                                     {% endif %}
@@ -161,10 +168,13 @@
                                             {% endif %}
                                         {% endfor %}
 
-                                        <div class="variant-card color-card {% if exampleC and exampleC.isOutOfStock %}variant-unavailable{% endif %}"
+                                        <div class="variant-card color-card {% if exampleC.isOutOfStock %}variant-unavailable{% endif %}"
+                                             role="button"
+                                             tabindex="0"
+                                             aria-pressed="false"
+                                             aria-disabled="{{ exampleC.isOutOfStock ? 'true' : 'false' }}"
                                              data-color="{{ v.color }}"
-                                             data-outofstock="{{ (exampleC and exampleC.isOutOfStock) ? '1' : '0' }}"
-                                        >
+                                             data-outofstock="{{ exampleC.isOutOfStock ? '1' : '0' }}">
                                             {{ v.color }}
                                         </div>
                                     {% endif %}
@@ -202,12 +212,12 @@
                             {% endif %}
                         </form>
 
-                        <div id="variant-error" style="color:#c0392b;margin-top:8px;display:none;">
-                            ⚠️ Merci de choisir une combinaison taille/couleur avant d'ajouter au panier.
+                        <div id="variant-error" style="color:#c0392b;margin-top:8px;display:none;" aria-live="polite">
+                             Merci de choisir une combinaison taille/couleur avant d'ajouter au panier.
                         </div>
 
                         {% if product.isOutOfStock %}
-                            <span class="rupture-stock-badge" style="background-color:#c0392b;color:white;padding:5px 10px;border-radius:5px;display:inline-block;margin-top:5px;">
+                            <span class="rupture-stock-badge" style="background-color:#c0392b;color:white;padding:5px 10px;border-radius:5px;display:inline-block;margin-top:5px;" aria-live="polite">
                                 Produit en rupture de stock
                             </span>
                         {% endif %}
@@ -751,7 +761,7 @@
                 // Sinon : bloquer et informer l'utilisateur
                 e.preventDefault();
                 if (errorBox) {
-                    errorBox.textContent = '⚠️ Merci de choisir une combinaison taille/couleur avant d\'ajouter au panier.';
+                    errorBox.textContent = 'Merci de choisir une combinaison taille/couleur avant d\'ajouter au panier.';
                     errorBox.style.display = 'block';
                     errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }

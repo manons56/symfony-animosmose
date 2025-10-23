@@ -23,5 +23,6 @@ require('./js/categories-mobile.js');
 require('./js/toggle-ul-garde-dom.js');
 
 
+
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 

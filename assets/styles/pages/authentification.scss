@@ -1,0 +1,120 @@
+@use "../abstracts" as *;
+@import 'normalize.css';
+
+
+
+.logo-alimosmose {
+    width: 15em !important;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+h1 {
+    margin: 1em 0;
+}
+
+h2 {
+    margin: 1em 0;
+    padding-bottom: 1em;
+}
+
+body {
+    color: #333;
+    margin: 0;
+}
+
+.footer {
+    margin-top: 8em;
+}
+
+.example-wrapper {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.form-row {
+    margin: 2.5em 0; /* garde l'espacement initial entre les champs */
+}
+
+.form-row div {
+    padding-bottom: 0.3em; /* ajusté pour ne pas augmenter l'espace global */
+}
+
+.form-row p {
+    font-size: smaller;
+    font-style: italic;
+}
+
+.form-row p a {
+    color: black;
+}
+
+p {
+    font-size: smaller;
+}
+
+.form-row label {
+    display: block;
+    margin-bottom: 0.3em;
+    font-weight: 500;
+    color: #555;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 0.7em 1em; /* padding inchangé pour garder la hauteur du champ */
+    border: 1.2px solid #ccc;
+    background: transparent;
+    transition: border-color 0.3s ease;
+}
+
+/* Focus visible pour utilisateurs clavier */
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+    outline: 2px solid #9aa584;
+    outline-offset: 2px;
+}
+
+button[type="submit"] {
+    font-weight: 600;
+    padding: 0.85em; /* padding réduit pour éviter trop d'espace */
+    margin-top: 0.5em; /* petit espace au-dessus du bouton */
+    margin-bottom: 0.5em; /* petit espace en dessous */
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+}
+
+.form-errors {
+    color: #d93025;
+    font-size: 0.85rem;
+    margin-top: 0.3em;
+}
+
+/* Champ caché */
+input[type="hidden"] {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .example-wrapper {
+        padding: 0 1.5em;
+    }
+
+    .form-row {
+        margin: 2em 0;
+    }
+
+    input,
+    select {
+        padding: 0.8em;
+    }
+
+    button[type="submit"] {
+        padding: 0.9em;
+    }
+}

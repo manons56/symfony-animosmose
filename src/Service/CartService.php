@@ -95,9 +95,11 @@ class CartService
         return $total;                                // <- Total final (type float)
     }
 
+
     public function clear(): void
     {
         $session = $this->getSession();               // <- Récupère la session
         $session->remove('cart');                      // permet de vider le panier après la création d’une Order.
     }
+
 }

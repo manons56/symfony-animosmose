@@ -25,8 +25,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Récupère le bouton de paiement (type Payline)
     const paylineButton = document.getElementById('payline-button');
 
+
     // Récupère le bouton "Valider ma commande" (formulaire classique)
     const submitButton = document.getElementById('submit-button');
+
+
+
 
     // Si le bouton de paiement est introuvable, afficher une erreur dans la console et arrêter le script
     if (!paylineButton) {
@@ -52,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // + price : on ajoute le prix de livraison.
         // .toFixed(2) : même logique, on garde deux décimales pour un affichage correct.
         const finalTotal = (baseTotal + price).toFixed(2);
-        finalTotalEl.textContent = finalTotal + ' €';
+        finalTotalEl.textContent = finalTotal ;
 
         // Si le mode de livraison est "relay", afficher le bouton de paiement, sinon le masquer
         if (selectedRadio.value === 'relay') {
@@ -76,4 +80,8 @@ document.addEventListener('DOMContentLoaded', function () {
             updateTotals(radio);
         }
     });
+
+
+
+
 });

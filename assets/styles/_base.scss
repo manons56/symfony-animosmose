@@ -1,6 +1,6 @@
 @use "abstracts" as *;
+@import 'normalize.css';
 
-// Styles de base (body, titres, paragraphes)
 
 *{
     margin: 0;
@@ -70,65 +70,9 @@ article{
 }
 
 
-/////////////
-//content//
-h2{
-    padding:1em;
-}
 
-h3{
-    text-align:left;
-}
-.content-padding{
-    padding:2em;
-}
-
-
-.h3-content{
-    padding:1em 0;
-}
-
-.no-bullet {
-    list-style: none;
-    padding-left: 0;
-}
-
-.list-style li::before{
-    content: "• ";
-}
-
-.toc {
-    background:$background-color;
-    padding: 2em;
-    border-radius: 8px;
-    margin-bottom: 2em;
-    margin-top:2em;
-
-}
-
-.toc ul {
-    list-style: none;
-    padding: 0;
-}
-
-.toc li {
-    margin-bottom: 0.5em;
-    font-size: smaller;
-    font-family:$font-family-nav;
-}
-
-.toc a {
-    text-decoration: none;
-    color: #da6a47;
-}
-
-.toc a:hover,
-.toc a:focus {
-    text-decoration: underline;
-}
-
-
-// acceptation des cookies
+////////////////////////////
+// acceptation des cookies//
 .cookie-banner {
     position: fixed;
     bottom: 0;
@@ -149,7 +93,7 @@ h3{
 }
 
 .cookie-banner a {
-    color: #9aa584;
+    color: #000000;
     text-decoration: underline;
 }
 
@@ -157,7 +101,7 @@ h3{
 
 #accept {
     background-color: rgb(154, 165, 132);
-    color: white;
+    color: #000000;
     border: 1px solid #9AA584FF ;
     border-radius: 1em;
     margin-bottom: 0;
@@ -237,7 +181,6 @@ h3{
     z-index: 10; /* < 9999 pour bannière */
     pointer-events: auto;
 }
-
 
 
 /* Flou sur les posts */

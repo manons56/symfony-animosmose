@@ -19,6 +19,8 @@ Encore
     .addEntry('stable', './assets/styles/pages/stable.scss')
     .addEntry('breeding', './assets/styles/pages/breeding.scss')
     .addEntry('product', './assets/styles/pages/product.scss')
+    .addEntry('content', './assets/styles/pages/content.scss')
+    .addEntry('authentification', './assets/styles/pages/authentification.scss')
 
 
     // Sépare les fichiers pour optimiser

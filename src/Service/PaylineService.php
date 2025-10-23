@@ -22,7 +22,7 @@ class PaylineService
             $merchantId,                              // Identifiant marchand
             $accessKey,                               // Clé secrète
             $contractNumber,                          // Numéro de contrat
-            $environment === 'sandbox' ? 'TEST' : 'PRODUCTION', // Choix entre l'environnement TEST ou PRODUCTION
+            $environment, // Choix entre l'environnement TEST ou PRODUCTION
             'https://webpayment.payline.com/webpayment/getToken', // URL de l'endpoint de génération de token
             '1.0',                                    // Version de l’API
             'Payline SDK PHP v4.77'                   // Description du SDK utilisé
