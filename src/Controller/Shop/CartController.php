@@ -54,27 +54,40 @@ class CartController extends AbstractController
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        // On récupère la variante
+        // Récupère la variante
         $variant = $variantRepository->find($variantId);
-
         if (!$variant) {
             throw $this->createNotFoundException('Variant introuvable.');
         }
 
-        // On récupère le produit associé
         $product = $variant->getProduct();
 
+        // Vérifie si le produit est en rupture de stock
         if ($product->isOutOfStock()) {
             $this->addFlash('error', 'Ce produit est en rupture de stock.');
             return $this->redirectToRoute('app_product_list');
         }
 
-        // On ajoute la variante au panier
-        $cartService->add($variantId);
+        // Récupère le texte personnalisé uniquement si le produit le permet
+        $customText = null;
+        if ($product->isCustomizable()) { // <- ton boolean "Personnalisé" dans Product
+            $customText = $request->request->get('customText'); // peut être null si non rempli
+            $customText = trim((string)$customText); // assure que c'est bien une string
+
+            // Validation : si champ présent, il doit être rempli (max 10 caractères)
+            if ($customText === '' || strlen($customText) > 10) {
+                $this->addFlash('error', 'Merci de remplir correctement le champ personnalisé (10 caractères max).');
+                return $this->redirectToRoute('app_product_show', ['id' => $product->getId()]);
+            }
+        }
+
+        // Ajoute la variante au panier avec le texte personnalisé si nécessaire
+        $cartService->add($variantId, $customText);
+
+        $this->addFlash('success', 'Produit ajouté au panier avec succès !');
 
         return $this->redirectToRoute('app_shop_cart');
     }
-
 
 
     #[Route('/shop/cart/remove/{id}', name:'app_shop_cart_remove', methods: ['POST'])] // --> permet de retirer un produit du panier, méthode POST uniquement
@@ -125,11 +138,12 @@ class CartController extends AbstractController
 // la route ci dessous est alors appelé et peut etre utilisé correctement et on est redirigé vers la page de commande
 
 
-    #[Route('/shop/cart/checkout', name:'app_shop_cart_checkout', methods: ['POST'])]// permet de valider le panier et transformer en commande
+    #[Route('/shop/cart/checkout', name:'app_shop_cart_checkout', methods: ['POST'])]
     public function checkout(CartService $cartService, EntityManagerInterface $manager): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); // Bloque les non-connectés
-        $cartItems = $cartService->getCart(); //On récupère le contenu du panier depuis la session via le CartService.
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $cartItems = $cartService->getCart();
 
         if (empty($cartItems)) {
             $this->addFlash('warning', 'Votre panier est vide.');
@@ -137,33 +151,37 @@ class CartController extends AbstractController
         }
 
         $order = new Orders();
-        $order->setUser($this->getUser()); // ← ajoute l’utilisateur connecté
-        $address = $this->getUser()->getAddress(); // récupère l'adresse de l'utilisateur
+        $order->setUser($this->getUser());
+        $address = $this->getUser()->getAddress();
         $order->setAddressId($address);
 
-        foreach ($cartItems as $item) { // on parcourt chaque item du panier
-            $article = new Articles(); // on crée un article pour chaque item
-            $article->setVariantId($item['variant'])
-                ->setPrice($item['variant']->getPrice())
-                ->setQuantity($item['quantity'])
-                ->setOrder($order); // Important pour relier l’article à la commande
-            //Sans setOrder() sur l’article, Doctrine ne sait pas quel order_id mettre → les articles ne sont pas liés → $order->getArticles() reste vide.
+        foreach ($cartItems as $item) {
+            /** @var \App\Entity\Variants $variant */
+            $variant = $item['variant'];
 
-            $order->addArticle($article); // on ajoute l'article à la commande via addArticle() créé dans Orders.php
+            $article = new Articles();
+            $article->setVariantId($variant)
+                ->setPrice($variant->getPrice())
+                ->setQuantity($item['quantity'])
+                ->setOrder($order);
+
+            // Champ personnalisé si présent
+            if ($variant->getProduct()->isCustomizable() && !empty($item['customText'])) {
+                $article->setCustomText($item['customText']);
+            }
+
+            $order->addArticle($article);
         }
 
         $manager->persist($order);
-        // Avec cascade: persist, $manager->persist($order) suffit à Doctrine pour insérer à la fois la commande et tous les articles liés.
-
         $manager->flush();
-        // Doctrine exécute toutes les requêtes SQL en base : Création des Articles, Création de la commande, Liaison ManyToMany entre Order et Articles
 
-        //$cartService->clear();
-        // on vide le panier dans la session
+        $cartService->clear();
+
         $this->addFlash('success', 'Commande créée avec succès !');
 
         return $this->redirectToRoute('app_shop_order_show', ['id' => $order->getId()]);
-        //Redirection vers la page de la commande.
-        //L’utilisateur voit donc un récapitulatif avec tous les articles et le total.
     }
+
+
 }

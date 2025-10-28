@@ -51,6 +51,11 @@ class Products
     #[ORM\Column(nullable: true)]
     private ?bool $isBestseller = null;
 
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isCustomizable = null;
+
+
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categories $category = null;
@@ -207,6 +212,17 @@ class Products
     public function isBestseller(): ?bool
     {
         return $this->isBestseller;
+    }
+
+    public function isCustomizable(): ?bool
+    {
+        return $this->isCustomizable;
+    }
+
+    public function setIsCustomizable(?bool $isCustomizable): static
+    {
+        $this->isCustomizable = $isCustomizable;
+        return $this;
     }
 
     public function setIsBestseller(?bool $isBestseller): static

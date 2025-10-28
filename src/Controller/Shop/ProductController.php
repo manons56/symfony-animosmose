@@ -3,6 +3,7 @@
 namespace App\Controller\Shop;
 
 use App\Entity\Products;
+use App\Form\ShopType;
 use App\Repository\ProductsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,11 +64,16 @@ class ProductController extends AbstractController
         $categories = $categoriesRepository->findBy(['parent' => null]);
         $bestSellers = $productRepository->findBy(['isBestseller' => true]);
 
+        //creation du formulaire pour la popup
+        $form = $this->createForm(ShopType::class);
+
+
         return $this->render('shop/product/index.html.twig', [
             'products' => $products,
             'categories' => $categories,
             'current_page' => 'product',
             'bestSellers' => $bestSellers,
+            'form' => $form->createView(), //  passe la vue du formulaire au template
         ]);
     }
 

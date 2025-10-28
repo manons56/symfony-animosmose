@@ -44,7 +44,7 @@ final class ConfidentialiteController extends AbstractController
 
        $mailer->send($mail);
 
-       $this->addFlash('success', 'Votre demande RGPD a bien été envoyée. Nous vous répondrons dans un délai de 30 jours.');
+       $this->addFlash('rgpd_success', 'Votre demande RGPD a bien été envoyée. Nous vous répondrons dans un délai de 30 jours.');
        return $this->redirectToRoute('app_content_confidentialite');
    }
 }

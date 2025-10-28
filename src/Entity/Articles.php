@@ -31,6 +31,10 @@ class Articles
     #[ORM\JoinColumn(nullable: false)]
     private ?Orders $order = null;
 
+    #[ORM\Column(type: 'string', length: 10, nullable: true)]
+    private ?string $customText = null;
+
+
 
     public function getId(): ?int
     {
@@ -84,4 +88,14 @@ class Articles
         return $this;
     }
 
+    public function getCustomText(): ?string
+    {
+        return $this->customText;
+    }
+
+    public function setCustomText(?string $customText): self
+    {
+        $this->customText = $customText;
+        return $this;
+    }
 }

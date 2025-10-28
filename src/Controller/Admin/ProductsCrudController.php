@@ -26,9 +26,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 
 
-
-
-
 class ProductsCrudController extends AbstractCrudController
 {
     private CategoriesRepository $categoriesRepo;
@@ -97,6 +94,18 @@ class ProductsCrudController extends AbstractCrudController
                 ->onlyOnIndex(),
             BooleanField::new('isBestSeller', 'Best Seller'),
             BooleanField::new('isOutOfStock', 'Rupture de stock'),
+
+            BooleanField::new('isCustomizable', 'Personnalisable')
+                ->setLabel('Personnalisable')
+                ->onlyOnForms(),
+
+            BooleanField::new('isCustomizable', 'Personnalisable')
+                ->renderAsSwitch(false)
+                ->formatValue(function ($value, $entity) {
+                    return $value ? '<span class="badge bg-info">Personnalisable</span>' : '';
+                })
+                ->onlyOnIndex(),
+
             $imagesCollectionField, // Galerie multiple
             $categoryField,
             $variantsFields,

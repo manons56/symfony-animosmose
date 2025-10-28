@@ -1,5 +1,5 @@
 @use "../abstracts" as *;
-@import 'normalize.css';
+//@import 'normalize.css';
 
 /* ..............MAIN...............*/
 
@@ -67,6 +67,10 @@
     text-align:justify;
 }
 
+.article-franck{
+    padding-left:0.7em;
+    padding-top:1em;
+}
 
 .separation-border {
     border-bottom: $color-green 1px solid;
@@ -77,7 +81,7 @@
 
 .button-interview {
     padding: 2em;
-    margin:2em;
+    margin:3em;
     color:black;
     font-weight:bold;
     text-align:center;
@@ -184,7 +188,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.3);
+    background: rgb(177, 81, 22);
     color: white;
     border: none;
     font-size: 2rem;

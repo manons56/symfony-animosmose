@@ -28,6 +28,7 @@ class VariantType extends AbstractType
                 'required' => false,
                 'label' => 'Couleur',
             ])
+
             ->add('price', MoneyType::class, [
                 'label' => 'Prix (€)',
                 'currency' => 'EUR'

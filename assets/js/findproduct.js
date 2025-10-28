@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const productList = document.getElementById('product-list');
     // Récupérer le conteneur qui contient tous les produits
 
-    const allProducts = Array.from(productList.querySelectorAll('.product-card'));
+    const allProducts = Array.from(productList.querySelectorAll('.product-item'));
     // Récupérer tous les éléments produits avec la classe "product-card"
     // Convertir la NodeList en tableau pour pouvoir utiliser les méthodes tableau (filter, slice...)
 

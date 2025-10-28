@@ -1,4 +1,4 @@
-@import 'normalize.css';
+//@import 'normalize.css';
 
 .logo-alimosmose{
     width:15em !important;
@@ -197,14 +197,94 @@ button {
 
 #mondial-relay-container {
     width: 100%;
-    max-width: 800px;
-
+    max-width: 100%;
 }
 
 .widget-container {
-    width: 100%;
-    height: 600px; /* desktop */
+    width: 100% !important;
+    max-width: 100%;
+    min-height: 400px; /* desktop */
+    overflow: hidden;
+    position: relative;
 }
+
+
+
+//"merci pour votre commnade"
+.logo-alimosmose{
+    width:15em !important;
+    padding-top:2em;
+    padding-bottom:2em;
+}
+
+
+h1{
+    margin: 1em 0;
+}
+
+
+body {
+    color: #333;
+    margin: 0;
+}
+
+.example-wrapper {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+
+.form-row {
+    margin: 2.5em 0;
+}
+
+.form-row label {
+    display: block;
+    margin-bottom: 0.3em;
+    font-weight: 500;
+    color: #555;
+
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 0.7em 1em;
+    border: 1.2px solid #ccc;
+    background: transparent;
+    transition: border-color 0.3s ease;
+}
+
+
+/* Focus visible pour clavier */
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+    outline: 2px solid #9aa584;
+    outline-offset: 2px;
+}
+
+button[type="submit"] {
+    font-weight: 600;
+    padding: 0.85em;
+    border: none;
+}
+
+.form-errors {
+    color: #d93025;
+    font-size: 0.85rem;
+    margin-top: 0.3em;
+}
+
+/* Champ caché */
+input[type="hidden"] {
+    display: none;
+}
+
+
+
 
 /* Version mobile */
 @media (max-width: 768px) {
@@ -216,16 +296,29 @@ button {
         display: block;
     }
 
-    #mondial-relay-container {
-        width: 95%;   /* presque toute la largeur */
-        max-width: 95%;
-
-    }
-
     .widget-container {
-        width: 100%;
-        height: 400px; /* réduit pour mobile */
+        min-height: 50vh; /* mobile : moitié de la hauteur de l'écran */
     }
+
+    //"merci pour votre commande"
+    .example-wrapper {
+        padding: 0 1.5em;
+    }
+
+    .form-row {
+        margin: 2em 0;
+    }
+
+    input,
+    select {
+
+        padding: 0.8em;
+    }
+
+    button[type="submit"] {
+        padding: 0.9em;
+    }
+
 
 }
 

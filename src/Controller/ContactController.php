@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\ContactType;
+use App\Form\ShopType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -61,6 +62,53 @@ final class ContactController extends AbstractController
         return $this->render('contact/index.html.twig', [
             'current_page' => 'contact',
             'contactForm' => $form->createView(),
+        ]);
+    }
+
+
+
+
+    #[Route('/shop/question', name: 'shop_question', methods: ['POST'])]
+    public function send(Request $request, MailerInterface $mailer): Response
+    {
+        $form = $this->createForm(ShopType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $email = (new Email())
+                ->from($data['email'])
+                ->to('manon.sara96@gmail.com') // email de l'admin
+                ->replyTo($data['email'])
+                ->subject('Nouveau message depuis la boutique')
+                ->text(sprintf(
+                    "Nom: %s\nTéléphone: %s\nEmail: %s\nMessage:\n%s",
+                    $data['name'],
+                    $data['phone'],
+                    $data['email'],
+                    $data['message']
+                ));
+
+            $mailer->send($email);
+
+            return $this->json(['success' => true]);
+        }
+
+        return $this->json(['success' => false], 400);
+    }
+
+    //shop_question → POST → reçoit les données du formulaire et envoie l’email.
+    //shop_question_form → GET → sert juste à rendre le formulaire HTML, pour que la popup puisse le charger via AJAX après 5 secondes.
+
+
+    #[Route('/shop/question/form', name: 'shop_question_form', methods: ['GET'])]
+    public function questionForm(): Response
+    {
+        $form = $this->createForm(ShopType::class);
+
+        return $this->render('shop/order/_question_form.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

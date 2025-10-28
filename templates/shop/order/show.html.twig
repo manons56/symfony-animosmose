@@ -154,115 +154,13 @@
 </div>
 {% endblock %}
 
-    {% block javascripts %}
-        {{ parent() }}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        <script src="https://widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
+ {% block javascripts %}
+     {{ parent() }}
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+     <script src="https://widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
+     <script src="{{ asset('build/js/order.js') }}"></script>
+ {% endblock %}
 
-        <script>
-            $(document).ready(function () {
-
-                // Sélecteurs
-                const radios = $('input[type="radio"][name$="[delivery_method]"], input[type="radio"][name$=".delivery_method"]');
-                const relayRadio = $('input[value="relay"]');
-                const relayContainer = $('#mondial-relay-container');
-                const confirmRelayBtn = $('#confirm-relay');
-                const paylineBtn = $('#payline-button');
-
-                const baseTotalEl = $('#base-total');
-                const deliveryPriceEl = $('#delivery-price');
-                const finalTotalEl = $('#final-total');
-
-                // Fonction pour mettre à jour le total final
-                function updateTotals(deliveryMethod) {
-                    let baseTotal = parseFloat(baseTotalEl.text().replace(' ', '')) || 0;
-                    let deliveryPrice = 0;
-
-                    // Récupération du prix de livraison depuis l'attribut data-price
-                    if (deliveryMethod) {
-                        const selectedRadio = radios.filter(':checked');
-                        if (selectedRadio.length) {
-                            deliveryPrice = parseFloat(selectedRadio.data('price')) || 0;
-                        }
-                    }
-
-                    deliveryPriceEl.text(deliveryPrice.toFixed(2) + ' €');
-                    finalTotalEl.text((baseTotal + deliveryPrice).toFixed(2) + ' €');
-                }
-
-                // Initialisation : si une méthode est déjà cochée
-                const initiallyChecked = radios.filter(':checked').val();
-                if (initiallyChecked) {
-                    updateTotals(initiallyChecked);
-                    if (initiallyChecked === 'relay') {
-                        relayContainer.show();
-                    }
-                }
-
-                // Quand l'utilisateur change de méthode de livraison
-                radios.on('change', function () {
-                    const selected = $(this).val();
-
-                    updateTotals(selected);
-
-                    if (selected === 'relay') {
-                        relayContainer.show();
-
-                        // Initialisation du widget Mondial Relay
-                        if (!$("#Zone_Widget").data('MRWidgetInitialized')) {
-                            $("#Zone_Widget").MR_ParcelShopPicker({
-                                Target: "Zone_Widget",
-                                Brand: "CC20SXK2",
-                                Country: "FR",
-                                PostCode: "56000",
-                                NbResults: 10,
-                                ShowResultsOnMap: true,
-                                ColLivMod: "24R",
-                                OnParcelShopSelected: function(data) {
-                                    $('#relay-info').html(`
-                            <strong>${data.Nom}</strong><br>
-                            ${data.Adresse1}<br>
-                            ${data.CP} ${data.Ville}
-                        `);
-                                    $('#relay_name').val(data.Nom);
-                                    $('#relay_address').val(data.Adresse1);
-                                    $('#relay_cp').val(data.CP);
-                                    $('#relay_city').val(data.Ville);
-
-                                    confirmRelayBtn.prop('disabled', false);
-                                }
-                            });
-                            $("#Zone_Widget").data('MRWidgetInitialized', true);
-                        }
-
-                    } else {
-                        relayContainer.hide();
-                        confirmRelayBtn.prop('disabled', true);
-                    }
-                });
-
-                // Confirmer le point relais → montrer le bouton Payline
-                confirmRelayBtn.on('click', function() {
-                    paylineBtn.show();
-                    confirmRelayBtn.prop('disabled', true);
-                    $('html, body').animate({scrollTop: paylineBtn.offset().top}, 500);
-                });
-
-                // Rafraîchissement du widget lors du redimensionnement
-                $(window).on('resize', function() {
-                    if ($("#Zone_Widget").data('MRWidgetInitialized')) {
-                        $("#Zone_Widget").MR_ParcelShopPicker('refresh');
-                    }
-                });
-
-            });
-
-        </script>
-
-
-
-
-    {% endblock %}
 
 

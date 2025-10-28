@@ -187,7 +187,24 @@
 
         <div id="pagination-controls" class="pagination" aria-label="Pagination des produits"></div>
 
+
+
+    </div>
+
+    <div id="contact-modal" class="fixed inset-0 hidden bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-xl p-6 w-96 relative">
+            <div class="modal-body">
+                {# Formulaire chargé via AJAX ici #}
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-config"
+         data-popup-url="{{ path('shop_question_form') }}"
+         data-form-action-url="{{ path('shop_question') }}">
     </div>
 
 
 {% endblock %}
+
+

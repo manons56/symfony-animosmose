@@ -1,105 +1,116 @@
 <?php
 namespace App\Service;
 
-use App\Repository\VariantsRepository;         // <- Pour récupérer les variantes depuis la BDD
-use Symfony\Component\HttpFoundation\RequestStack; // <- Pour lire/écrire dans la session
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException; // Pour lever une erreur si variante non trouvée
+use App\Repository\VariantsRepository;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CartService
 {
-    private RequestStack $requestStack;               // <- On garde le RequestStack ici
-    private VariantsRepository $variantRepo;          // <- Et le repo des variantes ici
-
-    //
+    private RequestStack $requestStack;
+    private VariantsRepository $variantRepo;
 
     public function __construct(RequestStack $requestStack, VariantsRepository $variantRepo)
-        // Injection de dépendances par le conteneur Symfony
-        //  Symfony injecte la session active et le repository des variantes
     {
-        $this->requestStack = $requestStack;           // <- On stocke le RequestStack dans la propriété
-        $this->variantRepo = $variantRepo;             // <- Idem pour le repo
+        $this->requestStack = $requestStack;
+        $this->variantRepo = $variantRepo;
     }
 
-    // Méthode privée pour récupérer la session à la volée
     private function getSession()
     {
-        return $this->requestStack->getSession(); // <- On lit la session ici, uniquement quand on en a besoin
+        return $this->requestStack->getSession();
     }
 
-    public function add(int $variantId): void        // <- Méthode publique pour AJOUTER 1 unité d'une variante
+    // Ajoute un article avec option customText
+    public function add(int $variantId, ?string $customText = null): void
     {
-        $variant = $this->variantRepo->find($variantId); // <- Vérifie si la variante existe en base
+        $variant = $this->variantRepo->find($variantId);
         if (!$variant) {
-            // Variante inconnue : on ne fait rien ou on peut lever une exception
             throw new NotFoundHttpException("La variante $variantId n'existe pas.");
         }
 
-        $session = $this->getSession();               // <- Récupère la session au moment de l'appel
-        $cart = $session->get('cart', []);            // <- On lit le panier depuis la session, [] si vide
+        $session = $this->getSession();
+        $cart = $session->get('cart', []);
 
-        if (!isset($cart[$variantId])) {              // <- Si cette variante n'est pas encore dans le panier
-            $cart[$variantId] = 0;                     // <- On initialise sa quantité à 0
+        // Toujours stocker comme tableau
+        if (!isset($cart[$variantId]) || !is_array($cart[$variantId])) {
+            $cart[$variantId] = [
+                'quantity' => 0,
+                'customText' => null,
+            ];
         }
 
-        // Limite max (par exemple 100 unités par variante)
-        if ($cart[$variantId] < 100) {
-            $cart[$variantId]++;                       // <- On incrémente de 1 la quantité de cette variante
+        // Incrémente la quantité
+        if ($cart[$variantId]['quantity'] < 100) {
+            $cart[$variantId]['quantity']++;
         }
 
-        $session->set('cart', $cart);                  // <- On réécrit le panier en session
+        // Met à jour le texte personnalisé si fourni
+        if ($customText !== null) {
+            $cart[$variantId]['customText'] = $customText;
+        }
+
+        $session->set('cart', $cart);
     }
 
-    public function remove(int $variantId): void     // <- Méthode publique pour SUPPRIMER complètement la variante
+    public function remove(int $variantId): void
     {
-        $session = $this->getSession();               // <- Récupère la session
-        $cart = $session->get('cart', []);            // <- Récupère le panier actuel
+        $session = $this->getSession();
+        $cart = $session->get('cart', []);
 
-        if (isset($cart[$variantId])) {                // <- Si la variante est présente
-            unset($cart[$variantId]);                  // <- On la retire du tableau
-            $session->set('cart', $cart);              // <- On sauvegarde le panier modifié
+        if (isset($cart[$variantId])) {
+            unset($cart[$variantId]);
+            $session->set('cart', $cart);
         }
-        // Sinon on ne fait rien (pas d'erreur levée)
     }
 
-    public function getCart(): array                 // <- Renvoie une liste exploitable pour l'affichage
+    public function getCart(): array
     {
-        $session = $this->getSession();               // <- Récupère la session
-        $cart = $session->get('cart', []);            // <- { variantId => quantity, ... }
-        $items = [];                                  // <- On va construire un tableau riche
+        $session = $this->getSession();
+        $cart = $session->get('cart', []);
+        $items = [];
 
-        foreach ($cart as $variantId => $quantity) {  // <- Pour chaque ligne du panier
-            $variant = $this->variantRepo->find($variantId); // <- On charge l'entité ProductVariant
-            if ($variant) {                            // <- Si elle existe
-                $items[] = [                           // <- On pousse un "item" prêt pour Twig
-                    'variant' => $variant,             //    l'entité variante (pour nom, prix, SKU, etc.)
-                    'quantity' => $quantity,           //    la quantité demandée
-                    'total' => $variant->getPrice() * $quantity //    le total ligne (= prix * qty)
+        foreach ($cart as $variantId => $data) {
+            if (!is_array($data)) {
+                // Convertir les anciens int en tableau pour compatibilité
+                $data = [
+                    'quantity' => $data,
+                    'customText' => null,
                 ];
+                $cart[$variantId] = $data;
+                $session->set('cart', $cart);
             }
-            else {
-                // Variante non trouvée (peut-être supprimée en base), on peut aussi la retirer du panier ici
+
+            $variant = $this->variantRepo->find($variantId);
+            if ($variant) {
+                $items[] = [
+                    'variant' => $variant,
+                    'quantity' => $data['quantity'],
+                    'customText' => $data['customText'] ?? null,
+                    'total' => $variant->getPrice() * $data['quantity'],
+                ];
+            } else {
+                // Supprime les variantes supprimées de la session
                 unset($cart[$variantId]);
                 $session->set('cart', $cart);
             }
         }
 
-        return $items;                                // <- Tableau d'items pour le template
+        return $items;
     }
 
-    public function getTotal(): float                 // <- Total du panier (somme des totaux ligne)
+    public function getTotal(): float
     {
-        $total = 0;                                   // <- Accumulateur
-        foreach ($this->getCart() as $item) {         // <- On parcourt les items "riches"
-            $total += $item['total'];                 // <- On additionne
+        $total = 0;
+        foreach ($this->getCart() as $item) {
+            $total += $item['total'];
         }
-        return $total;                                // <- Total final (type float)
+        return $total;
     }
-
 
     public function clear(): void
     {
-        $session = $this->getSession();               // <- Récupère la session
-        $session->remove('cart');                      // permet de vider le panier après la création d’une Order.
+        $this->getSession()->remove('cart');
     }
 
 }

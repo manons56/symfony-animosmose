@@ -52,7 +52,7 @@ ul{
 
 .white-underline:hover{
     text-decoration: underline;
-    text-decoration-color: white;
+    text-decoration-color: #0e0000;
 }
 
 .header li a[aria-current="page"]{
@@ -66,8 +66,10 @@ ul{
 }
 
 .li-text-white{
-    color : $font-white;
+    color : #150c01;
     text-decoration:none;
+    font-family: Arial;
+    font-weight: bold;
 }
 
 

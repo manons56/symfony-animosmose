@@ -1,9 +1,11 @@
 @use "../abstracts" as *;
-@import 'normalize.css';
+//@import 'normalize.css';
 
 
 /////////////
 //content//
+
+
 h2{
     padding:1em;
 }
@@ -18,6 +20,7 @@ h3{
 
 .h3-content{
     padding:1em 0;
+    text-align:left;
 }
 
 .no-bullet {

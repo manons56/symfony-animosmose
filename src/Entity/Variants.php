@@ -27,6 +27,7 @@ class Variants
     private ?string $color = null;
 
 
+
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private ?string $price = null;
 
@@ -89,9 +90,6 @@ class Variants
         $this->color = $color;
         return $this;
     }
-
-
-
 
 
    /* public function __toString(): string

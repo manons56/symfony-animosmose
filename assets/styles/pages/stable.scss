@@ -1,5 +1,5 @@
 @use "../abstracts" as *;
-@import 'normalize.css';
+//@import 'normalize.css';
 
 
 .list-style li::before{
@@ -204,6 +204,10 @@
 
 
 
+.flex .text p{
+    padding-top:1em;
+
+}
 
 .flex img {
     width:40%;
@@ -243,7 +247,7 @@ button{
     display: flex;
     flex-wrap: wrap;
     gap: 2em;
-    margin: 2em 1em;
+    margin: 2em 1em 4em 1em;
     justify-content: center;
 }
 
@@ -379,7 +383,7 @@ h2{
 @media (max-width: 768px) {
     .equipement-flex {
         flex-direction: column;
-        margin:1em 0;
+        margin:1em 0 3em 0;
     }
 
     .equipement-item {

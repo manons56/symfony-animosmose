@@ -64,8 +64,11 @@
         <tbody>
         {% for item in items %}
             <tr>
-                <td>{{ item.variant.product.name }}</td>
-
+                <td>
+                    <a href="{{ path('app_product_show', {id: item.variant.product.id}) }}">
+                        {{ item.variant.product.name }}
+                    </a>
+                </td>
                 {# GESTION DE L'AFFICHAGE DES ATTRIBUTS (contenance / taille / couleur) #}
                 <td>
                     {% if item.variant.contenance %}
@@ -102,7 +105,9 @@
             <div class="cart-item d-flex">
                 <div class="cart-item-content">
                     <div class="cart-item-header font-weight-bold">
-                        {{ item.variant.product.name }}
+                        <a href="{{ path('app_product_show', {id: item.variant.product.id}) }}">
+                            {{ item.variant.product.name }}
+                        </a>
                     </div>
 
                     <div>
@@ -130,9 +135,12 @@
 
                 <div class="cart-item-image-wrapper">
                     {% set firstImage = item.variant.product.images|first %}
-                    <img loading="lazy" src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}"
-                         alt="{{ item.variant.product.name }}"
-                         class="cart-item-image">
+                    <a href="{{ path('app_product_show', {id: item.variant.product.id}) }}">
+                        <img loading="lazy"
+                             src="{{ firstImage ? asset('img/products/' ~ firstImage.filename) : asset('img/default-product.png') }}"
+                             alt="{{ item.variant.product.name }}"
+                             class="cart-item-image">
+                    </a>
                 </div>
             </div>
         {% else %}
@@ -154,6 +162,5 @@
 </div>
 
 
-
-
 {% endblock %}
+

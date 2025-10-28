@@ -21,7 +21,8 @@ require('./js/toggle-description-home.js');
 require('./js/final-price.js');
 require('./js/categories-mobile.js');
 require('./js/toggle-ul-garde-dom.js');
-
+require('./js/order.js');
+require('./js/popup-boutique.js');
 
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

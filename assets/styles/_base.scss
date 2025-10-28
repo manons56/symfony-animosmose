@@ -1,5 +1,5 @@
 @use "abstracts" as *;
-@import 'normalize.css';
+//@import 'normalize.css';
 
 
 *{
@@ -42,6 +42,7 @@ h1{
     font-size:$font-size-h1;
     text-align:center;
     padding:1em;
+    margin:0;
 }
 
 
@@ -49,6 +50,7 @@ h2{
     font-family:$font-family-title;
     font-size:$font-size-h2;
     text-align:center;
+    padding:1em;
 
 }
 

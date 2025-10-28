@@ -8,15 +8,14 @@
 {% endblock %}
 
 {% block body %}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">
-                {{ message }}
-            </div>
-        {% endfor %}
+    {% for message in app.flashes('rgpd_success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
     {% endfor %}
+
     <div>
-        <h2>Politique de confidentialité</h2>
+        <h1>Politique de confidentialité</h1>
 
         <nav class="toc" aria-label="Sommaire de la politique de confidentialité">
             <ul>
@@ -41,13 +40,13 @@
 
             <p>Nous nous engageons à assurer la protection de vos données personnelles, dans le respect du Règlement Général sur la Protection des Données (RGPD) et de la loi Informatique et Libertés.</p>
 
-            <h3 id="responsable" class="h3-content">1. Responsable du traitement</h3>
+            <h2 id="responsable" class="h3-content">1. Responsable du traitement</h2>
             <p>Animosmose</p>
             <p>Adresse : 5 Le Petit Bodo, 56230 Berric</p>
             <p> E-mail : animosmose@gmail.com</p>
             <p>SIRET : 80237932100010</p>
 
-            <h3 id="donnees-collectees" class="h3-content">2. Données personnelles collectées</h3>
+            <h2 id="donnees-collectees" class="h3-content">2. Données personnelles collectées</h2>
             <p>Nous collectons uniquement les données nécessaires au bon fonctionnement de notre site et à la gestion de vos commandes ou demandes :</p>
             <ul>
                 <li>Nom et prénom</li>
@@ -63,7 +62,7 @@
                 <li>Nous contactez par tout autre moyen</li>
             </ul>
 
-            <h3 id="finalites" class="h3-content">3. Finalités du traitement</h3>
+            <h2 id="finalites" class="h3-content">3. Finalités du traitement</h2>
             <p>Les données collectées sont utilisées pour :</p>
             <ul>
                 <li>Gérer vos commandes et livraisons</li>
@@ -73,7 +72,7 @@
                 <li>Respecter nos obligations légales (facturation, comptabilité, etc.)</li>
             </ul>
 
-            <h3 id="base-legale" class="h3-content">4. Base légale du traitement</h3>
+            <h2 id="base-legale" class="h3-content">4. Base légale du traitement</h2>
             <p>Le traitement de vos données repose sur les fondements suivants :</p>
             <ul>
                 <li>L’exécution d’un contrat (commande, création de compte)</li>
@@ -81,7 +80,7 @@
                 <li>Le respect d’obligations légales</li>
             </ul>
 
-            <h3 id="conservation" class="h3-content">5. Durée de conservation des données</h3>
+            <h2 id="conservation" class="h3-content">5. Durée de conservation des données</h2>
             <p>Vos données personnelles sont conservées :</p>
             <ul>
                 <li>Pendant toute la durée de la relation commerciale</li>
@@ -89,7 +88,7 @@
                 <li>10 ans pour les documents comptables (obligation légale)</li>
             </ul>
 
-            <h3 id="cookies" class="h3-content">6. Cookies</h3>
+            <h2 id="cookies" class="h3-content">6. Cookies</h2>
             <p>Notre site utilise des cookies nécessaires au bon fonctionnement du site (ex. : cookies de session, panier, sécurité), ainsi que des contenus intégrés de services tiers, susceptibles de déposer leurs propres cookies.</p>
 
             <p>En particulier, nous intégrons des publications (ou vidéos) et redirections vers les réseaux sociaux suivants :</p>
@@ -112,7 +111,7 @@
 
 
 
-            <h3 id="destinataires" class="h3-content">7. Destinataires des données</h3>
+            <h2 id="destinataires" class="h3-content">7. Destinataires des données</h2>
             <p>Vos données sont traitées uniquement par notre équipe et, le cas échéant, par :</p>
             <ul>
                 <li>Nos prestataires techniques (hébergement, paiement sécurisé, livraison)</li>
@@ -120,10 +119,10 @@
             </ul>
             <p>Nous ne vendons ni ne louons vos données personnelles à des tiers.</p>
 
-            <h3 id="securite" class="h3-content">8. Sécurité</h3>
+            <h2 id="securite" class="h3-content">8. Sécurité</h2>
             <p>Nous mettons en œuvre toutes les mesures de sécurité techniques et organisationnelles appropriées pour protéger vos données personnelles contre tout accès non autorisé, perte, divulgation ou destruction.</p>
 
-            <h3 id="droits" class="h3-content">9. Vos droits</h3>
+            <h2 id="droits" class="h3-content">9. Vos droits</h2>
             <p>Conformément à la législation en vigueur, vous disposez des droits suivants :</p>
             <ul>
                 <li>Droit d’accès à vos données</li>
@@ -136,13 +135,13 @@
             <p>Pour exercer vos droits, contactez-nous à : <strong>animosmose@gmail.com</strong></p>
             <p>Vous avez également le droit d’introduire une réclamation auprès de la CNIL : <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a></p>
 
-            <h3 id="modification" class="h3-content">10. Modifications</h3>
+            <h2 id="modification" class="h3-content">10. Modifications</h2>
             <p>Nous nous réservons le droit de modifier la présente politique de confidentialité à tout moment. Toute modification sera publiée sur cette page.</p>
 
         </div>
 
         <div class="form-rgpd">
-            <h3 id="formulaire-rgpd" class="h3-content">Formulaire de demande RGPD</h3>
+            <h2 id="formulaire-rgpd" class="h3-content">Formulaire de demande RGPD</h2>
             <p>Vous pouvez exercer vos droits (accès, rectification, suppression, portabilité) en remplissant le formulaire ci-dessous. Nous vous répondrons dans un délai maximum d’un mois.</p>
 
             <form method="post" action="{{ path('rgpd_request') }}" class="form-rgpd">
