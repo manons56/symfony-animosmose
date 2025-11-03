@@ -99,13 +99,13 @@ class Address
         return $this;
     }
 
-    //  Méthode pour afficher l’adresse complète
+    //  function for displaying the full address
     public function getFullAddress(): string
     {
         return $this->street . ', ' . $this->zipcode . ' ' . $this->city . ', ' . $this->country;
     }
 
-    //  méthode __toString() pour EasyAdmin
+    // function __toString() for EasyAdmin
     public function __toString(): string
     {
         return $this->getFullAddress();

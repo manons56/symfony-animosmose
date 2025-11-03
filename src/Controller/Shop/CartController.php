@@ -20,25 +20,27 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-
-
+/**
+ * Controller to manage the shopping cart: display, add, remove items, and checkout
+ */
 class CartController extends AbstractController
 {
-    #[Route('/shop/cart', name: 'app_shop_cart')] // --> permet d'afficher le panier
-        // Cette méthode sera accessible via /cart
-        // Le nom de la route est "cart_index" (on s’en sert pour redirect ou path())
+    /**
+     * Display the shopping cart page
+     */
+    #[Route('/shop/cart', name: 'app_shop_cart')]
     public function index(CartService $cartService): Response
     {
         return $this->render('shop/cart/index.html.twig', [
-            // render() est un helper qui génère une réponse HTML à partir d’un template Twig
-            'items' => $cartService->getCart(),
-            // On passe la liste des articles du panier au template sous le nom "items"
-            'total' => $cartService->getTotal(),
-            // On passe aussi le total du panier
+            'items' => $cartService->getCart(),   // pass all cart items to Twig
+            'total' => $cartService->getTotal(),  // pass the total cart amount
             'current_page' => 'cart',
         ]);
     }
 
+    /**
+     * Add a variant/product to the cart (POST only)
+     */
     #[Route('/shop/cart/add/{variantId}', name:'app_shop_cart_add', methods: ['POST'])]
     public function add(
         int $variantId,
@@ -50,11 +52,12 @@ class CartController extends AbstractController
     {
         $submittedToken = $request->request->get('_token');
 
+        // CSRF token validation
         if (!$csrfTokenManager->isTokenValid(new CsrfToken('cart_add_' . $variantId, $submittedToken))) {
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        // Récupère la variante
+        // Retrieve the variant
         $variant = $variantRepository->find($variantId);
         if (!$variant) {
             throw $this->createNotFoundException('Variant introuvable.');
@@ -62,82 +65,81 @@ class CartController extends AbstractController
 
         $product = $variant->getProduct();
 
-        // Vérifie si le produit est en rupture de stock
+        // Check stock availability
         if ($product->isOutOfStock()) {
             $this->addFlash('error', 'Ce produit est en rupture de stock.');
             return $this->redirectToRoute('app_product_list');
         }
 
-        // Récupère le texte personnalisé uniquement si le produit le permet
+        // Handle optional custom text for customizable products
         $customText = null;
-        if ($product->isCustomizable()) { // <- ton boolean "Personnalisé" dans Product
-            $customText = $request->request->get('customText'); // peut être null si non rempli
-            $customText = trim((string)$customText); // assure que c'est bien une string
+        if ($product->isCustomizable()) {
+            $customText = trim((string)$request->request->get('customText'));
 
-            // Validation : si champ présent, il doit être rempli (max 10 caractères)
+            // Validate custom text length
             if ($customText === '' || strlen($customText) > 10) {
                 $this->addFlash('error', 'Merci de remplir correctement le champ personnalisé (10 caractères max).');
                 return $this->redirectToRoute('app_product_show', ['id' => $product->getId()]);
             }
         }
 
-        // Ajoute la variante au panier avec le texte personnalisé si nécessaire
+        // Add item to cart
         $cartService->add($variantId, $customText);
-
         $this->addFlash('success', 'Produit ajouté au panier avec succès !');
 
         return $this->redirectToRoute('app_shop_cart');
     }
 
-
-    #[Route('/shop/cart/remove/{id}', name:'app_shop_cart_remove', methods: ['POST'])] // --> permet de retirer un produit du panier, méthode POST uniquement
-        // Route pour supprimer un produit/variant du panier
-        // {id} correspond à l’identifiant du produit à retirer
+    /**
+     * Remove an item/variant from the cart (POST only)
+     */
+    #[Route('/shop/cart/remove/{id}', name:'app_shop_cart_remove', methods: ['POST'])]
     public function remove(
         int $id,
         Request $request,
         CartService $cartService,
-        CsrfTokenManagerInterface $csrfTokenManager): Response
+        CsrfTokenManagerInterface $csrfTokenManager
+    ): Response
     {
-        // On récupère le token CSRF envoyé via le formulaire POST
         $submittedToken = $request->request->get('_token');
 
-        // On vérifie que le token est valide pour éviter les attaques CSRF
+        // Validate CSRF token
         if (!$csrfTokenManager->isTokenValid(new CsrfToken('cart_remove_' . $id, $submittedToken))) {
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
+        // Remove item from cart
         $cartService->remove($id);
-        // On appelle la méthode remove() pour enlever l’élément de la session panier
 
         return $this->redirectToRoute('app_shop_cart');
-        // Après suppression, on redirige encore vers la page panier
     }
 
-
+    /**
+     * Trigger checkout page (GET)
+     * - Checks if user is logged in
+     * - Checks that the cart is not empty
+     * - Provides CSRF token for next POST step
+     */
     #[Route('/shop/cart/checkout/trigger', name: 'app_shop_cart_checkout_trigger', methods: ['GET'])]
     public function checkoutTrigger(CartService $cartService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Vérifie que le panier n’est pas vide
         if (empty($cartService->getCart())) {
             $this->addFlash('warning', 'Votre panier est vide.');
             return $this->redirectToRoute('app_shop_cart');
         }
 
-        // Redirige vers un contrôleur qui va vraiment valider la commande (en POST)
         return $this->render('shop/cart/trigger_checkout.html.twig', [
             'csrf_token' => $this->container->get('security.csrf.token_manager')->getToken('cart_checkout')->getValue(),
         ]);
     }
 
-// par défaut, après le login, symfony cherche à retourner sur la page d'avant login, via un GET
-// la route ci dessus, va permettre, avec le trigger_checkout.html.twig et son js, de créer une étape intermédiaire
-// --> apres le login, le get va etre transformé en post
-// la route ci dessous est alors appelé et peut etre utilisé correctement et on est redirigé vers la page de commande
-
-
+    /**
+     * Process checkout (POST)
+     * - Creates an order and associated articles
+     * - Clears the cart
+     */
     #[Route('/shop/cart/checkout', name:'app_shop_cart_checkout', methods: ['POST'])]
     public function checkout(CartService $cartService, EntityManagerInterface $manager): Response
     {
@@ -150,13 +152,14 @@ class CartController extends AbstractController
             return $this->redirectToRoute('app_shop_cart');
         }
 
+        // Create new order entity
         $order = new Orders();
         $order->setUser($this->getUser());
         $address = $this->getUser()->getAddress();
         $order->setAddressId($address);
 
+        // Add each cart item as an Article entity
         foreach ($cartItems as $item) {
-            /** @var \App\Entity\Variants $variant */
             $variant = $item['variant'];
 
             $article = new Articles();
@@ -165,7 +168,7 @@ class CartController extends AbstractController
                 ->setQuantity($item['quantity'])
                 ->setOrder($order);
 
-            // Champ personnalisé si présent
+            // Optional custom text if product is customizable
             if ($variant->getProduct()->isCustomizable() && !empty($item['customText'])) {
                 $article->setCustomText($item['customText']);
             }
@@ -173,15 +176,16 @@ class CartController extends AbstractController
             $order->addArticle($article);
         }
 
+        // Persist order and its articles
         $manager->persist($order);
         $manager->flush();
 
+        // Clear the cart session
         $cartService->clear();
 
+        // Flash message in French confirming order creation
         $this->addFlash('success', 'Commande créée avec succès !');
 
         return $this->redirectToRoute('app_shop_order_show', ['id' => $order->getId()]);
     }
-
-
 }

@@ -14,10 +14,9 @@ h2{
 .h2-right{
     margin-left:9em;
     padding-top:1em;
-
 }
 
-/* Styles simples pour les cartes et la barre de recherche */
+/* Simple styles for cards and search bar */
 .search-container {
     margin-bottom: 20px;
     text-align: center;
@@ -50,7 +49,6 @@ h2{
 .product-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-
 }
 
 .product-image {
@@ -60,14 +58,13 @@ h2{
 }
 
 .product-image-wrapper {
-    flex: 2; /* prend tout l’espace disponible */
+    flex: 2; /* takes all available space */
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 0.5em;
 }
-
 
 .product-name {
     margin: 5px 0 5px;
@@ -80,14 +77,11 @@ h2{
     font-weight: bold;
 }
 
-
-
 a {
     display: block;
     text-decoration: none;
-    color: inherit; /* garde la couleur du texte */
+    color: inherit; /* keeps text color */
 }
-
 
 .font-weight-bold{
     font-weight: 600;
@@ -109,8 +103,6 @@ a {
     margin:2em;
 }
 
-
-
 .icones-user-shop{
     display:flex;
     flex-direction: row;
@@ -119,8 +111,7 @@ a {
     padding:1em;
 }
 
-
-/* --- Carrousel des best-sellers --- */
+/* --- Best-sellers carousel --- */
 .carousel-container {
     overflow: hidden;
     width: 100%;
@@ -136,7 +127,7 @@ a {
 
 .carousel-card {
     flex: 0 0 auto;
-    width: 180px; /* même taille que la grille */
+    width: 180px; /* same size as grid */
     text-decoration: none;
     color: inherit;
 }
@@ -146,49 +137,44 @@ a {
     100% { transform: translateX(-50%); }
 }
 
-/* Pause au survol */
+/* Pause on hover */
 .carousel-container:hover .carousel-track {
     animation-play-state: paused;
 }
 
-//Champ personnalisable
+// Customizable field
 #customText {
     display: block;
-    margin: 0 auto 3em auto; /* marge en bas de 10px avant le bouton */
+    margin: 0 auto 3em auto; /* bottom margin before button */
     padding: 4px;
-    width: 30%; /* ou la largeur souhaitée */
+    width: 30%; /* desired width */
     height:3em;
     border-radius: 1px;
     border: 1px solid #ccc;
     text-align: center;
     font-size: 1.4rem;
-
 }
 
-
-
-
-//Page CART
+// CART page
 .table-cart {
     margin-left: auto;
     margin-right: auto;
     max-width: 100%;
     width: 100%;
-    border-collapse: separate; /* pour pouvoir gérer les espacements */
-    border-spacing: 0 10px;   /* espace vertical entre les lignes */
+    border-collapse: separate; /* for spacing control */
+    border-spacing: 0 10px;   /* vertical spacing between rows */
 }
 
-/* Espacement horizontal des cellules */
+/* Horizontal spacing of cells */
 .table-cart th,
 .table-cart td {
     padding: 10px 20px;   /* 10px vertical, 20px horizontal */
     text-align: left;
 }
 
-
 .table-cart td:last-child form button{
-    width: 150px;         /* augmente l’espace pour le lien Supprimer */
-    text-align: center;   /* centre le lien */
+    width: 150px;         /* increase space for Delete link */
+    text-align: center;   /* center the link */
     background-color: inherit;
     color:$color-orange;
     border:none;
@@ -196,19 +182,17 @@ a {
     margin-top: 1em;
 }
 
-
 .table-cart td:last-child form button:hover {
     text-decoration: underline;
 }
 
-/* Style pour les en-têtes */
+/* Header style */
 .table-cart th {
     background-color: #f5f5f5;
     font-weight: bold;
 }
 
-
-//Bouton se déconnecter
+// Logout button
 .user-menu-wrapper {
     position: relative;
     display: inline-block;
@@ -260,8 +244,7 @@ a {
     background-color: transparent;
 }
 
-
-// DETAIL PRODUIT
+// PRODUCT DETAIL
 .descriptif-flex{
     display:flex;
     flex-direction:row;
@@ -274,33 +257,30 @@ a {
 .variants-container {
     display: flex;
     justify-content:center;
-    gap: 15px;          /* espace entre les cards */
-    flex-wrap: wrap;     /* passe à la ligne si trop de cards */
+    gap: 15px;          /* space between cards */
+    flex-wrap: wrap;     /* wrap if too many cards */
     margin-bottom: 20px;
 }
 
 .variant-card {
-    border: 1px solid $color-orange; /* bordure orange foncé */
+    border: 1px solid $color-orange; /* dark orange border */
     padding: 1em ;
     cursor: pointer;
-    background-color: white;    /* fond par défaut */
+    background-color: white;    /* default background */
     transition: background-color 0.3s ease;
-    flex: 0 0 auto;            /* largeur minimum, s’adapte */
+    flex: 0 0 auto;            /* minimum width, flexible */
     text-align: center;
-   font-weight:normal;
-
+    font-weight:normal;
 }
 
-.variant-card.selected {  /* classe pour le variant sélectionné */
+.variant-card.selected {  /* class for selected variant */
     background-color: #fad5c4;
-    font-weight: bold;     /* texte en gras */
+    font-weight: bold;     /* bold text */
 }
-
 
 .btn-container {
     text-align: center;
 }
-
 
 .btn-add-cart {
     display: inline-block;
@@ -326,7 +306,7 @@ a {
 }
 
 .composition-flex p{
-   // font-size:smaller;
+    // font-size:smaller;
     padding-bottom:2em;
 }
 
@@ -334,10 +314,8 @@ h3{
     padding-top:1em;
 }
 
-
 .description-contenance{
-     margin:1.5em 1em;
-
+    margin:1.5em 1em;
 }
 
 .contenance{
@@ -352,7 +330,7 @@ h3{
     cursor: pointer;
 
     .arrow {
-        display: none; // par défaut, invisible
+        display: none; // default invisible
         font-size: 0.8em;
         margin-left: 0.5em;
         color: #666;
@@ -360,13 +338,11 @@ h3{
     }
 
     &.expanded .arrow {
-        transform: rotate(180deg); // ▲ flèche vers le haut
+        transform: rotate(180deg); // ▲ arrow up
     }
 }
 
-
-
-// SLIDER IMG
+// IMG SLIDER
 .product-slider {
     position: relative;
     max-width: 500px;
@@ -378,7 +354,6 @@ h3{
     width: 100%;
     height: 400px;
     overflow: hidden;
-
 }
 
 .main-image-container img {
@@ -427,434 +402,3 @@ h3{
     opacity: 1;
     border: 2px solid #a0ab81;
 }
-
-
-
-//Pagination liste produits
-.content-wrapper {
-    display: flex;
-    gap: 2em;
-    padding: 1em 2em;
-}
-
-/* Menu à gauche, fixe en largeur */
-.category-menu {
-    flex: 0 0 220px; /* largeur fixe */
-    background-color: #FFFDF7;
-    padding: 1em;
-    border-radius: 8px;
-    height: 100%;
-}
-
-.category-menu ul {
-    list-style: none; /* supprime les puces */
-    padding-left: 0;  /* supprime padding global */
-    margin-left: 0;
-}
-
-.category-menu > ul > li {
-    margin-bottom: 0.7em;
-}
-
-.category-menu ul ul {
-    margin-top: 0.2em;       /* espace entre catégorie et sous-catégorie */
-    padding-left: 0;
-}
-
-.category-menu ul ul li {
-    margin-bottom: 0.3em;    /* un peu plus serré verticalement */
-}
-
-.category-menu ul ul li a {
-    font-size: 1.2rem;       /* taille de police plus petite */
-    color: #555;             /* couleur un peu plus claire */
-}
-
-/* Optionnel : ajouter un petit effet au hover pour les sous-catégories */
-.category-menu ul ul li a:hover {
-    color: #6f8748;
-    text-decoration: underline;
-}
-
-
-
-
-/* Grille produits à droite, prend le reste de la place */
-.products-wrapper {
-    flex: 1;
-}
-
-/* Grille 4 colonnes x 4 lignes */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: auto;
-    gap: 20px;
-}
-
-/* Pagination */
-.pagination {
-    margin: 20px 0px;
-    text-align: right;
-    padding-right:1em;
-}
-
-.pagination-link {
-    margin: 0 4px;
-    padding: 8px 12px;
-    background-color: #a0ab81;
-    border: none;
-    border-radius: 5px;
-    color: #000000;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-}
-
-.pagination-link:hover:not(:disabled) {
-    background-color: #7b8659;
-}
-
-.pagination-link:disabled {
-    background-color: #d3d3c2;
-    cursor: default;
-}
-
-
-// Redisposition barre de recherche et filtre de prix
-.search-filter-container {
-    display: flex;
-    justify-content: space-between; /* espace entre les deux blocs */
-    align-items: center; /* alignement vertical au centre */
-    gap: 30px; /* un peu d’espace entre les deux */
-}
-
-
-.search-container {
-    flex: 1; /* prend tout l’espace disponible à gauche */
-}
-
-#price-filter-form {
-    flex: 1; /* prend tout l’espace disponible à droite */
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Pour que les inputs et labels dans le formulaire soient bien alignés */
-#price-filter-form label {
-    white-space: nowrap;
-}
-
-#price-filter-form input {
-   width:5em;
-}
-
-.search-input{
-    width:15em;
-}
-
-
-#price-filter-form button {
-    all: unset; /* Réinitialise presque tous les styles */
-    cursor: pointer; /* garde le curseur pointer */
-    color: inherit; /* couleur du texte héritée */
-    font-size: 1.2rem; /* police héritée */
-    text-decoration: underline;
-}
-
-
-.cart-button{
-    display: flex;
-    flex-direction: row;
-    gap:7em;
-    justify-content: center;
-    padding-top:6em;
-}
-
-
-.back_arrow{
-    width:2em;
-    margin-left:1em;
-    margin-bottom: 2em;
-}
-
-
-
-
-.variant-unavailable {
-    opacity: 0.5;
-    pointer-events: none;
-    cursor: not-allowed;
-}
-
-
-/* Version mobile du panier */
-.cart-mobile {
-    display: none;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1em;
-    margin: 1em;
-    background: #f9f9f9;
-    font-size: 1.1rem;
-    gap: 1em;
-}
-
-.cart-item-content {
-    flex: 1;
-}
-
-.cart-item-image-wrapper {
-    flex-shrink: 0;
-}
-
-.cart-item-image {
-    max-width: 80px;
-    height: auto;
-    border-radius: 4px;
-    object-fit: cover;
-}
-
-
-//Tag isNew
-.badge {
-   // display: inline-block;
-    padding: 0.35em 0.65em;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #000000;
-    background-color: #a0ab81; // couleur personnalisée de ta boutique
-    border-radius: 0.5em;
-    animation: pulseBadge 1.5s ease-in-out infinite;
-    box-shadow: 0 0 0 rgba(160, 171, 129, 0.4);
-}
-
-@keyframes pulseBadge {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(160, 171, 129, 0.4);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 0 6px rgba(160, 171, 129, 0);
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(160, 171, 129, 0.4);
-    }
-}
-
-
-//popup formulaire contact boutique
-/* Overlay */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    display: none; /* caché par défaut */
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-/* Contenu du modal */
-.modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    max-width: 90%;
-    position: relative;
-}
-
-/* Bouton fermer */
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    border: none;
-    background: none;
-    cursor: pointer;
-}
-
-
-
-
-@media (max-width: 768px) {
-    .content-wrapper {
-        flex-direction: column;
-    }
-
-    #customText {
-        width: 40%; /* ou la largeur souhaitée */
-        font-size: 1.1rem;
-
-    }
-
-    .product-grid {
-        grid-template-columns: repeat(2, 1fr); // adapte la grille produit au mobile
-    }
-
-    .category-menu {
-        width: 100%;
-        flex: none;
-        margin-bottom: 1em;
-        flex: 1 1 100%;
-        white-space: nowrap;
-        padding: 0.5em;
-        background-color: #FFFDF7;
-        position: relative; /* nécessaire pour le positionnement absolu */
-        overflow-x: auto; /* autorise le débordement */
-        overflow-y: visible !important;
-        z-index: 1; /* basique */
-
-    }
-
-    .category-menu ul {
-        display: flex;
-        gap: 1em;
-        padding-left: 0;
-        margin: 0;
-    }
-
-    .category-menu ul li {
-        position: relative;
-        list-style: none;
-        flex-shrink: 0;
-    }
-
-    .category-menu > ul > li > a  {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.3em;
-        padding: 0.5em 1em;
-        background-color: #e7e7d8;
-        border-radius: 20px;
-        text-decoration: none;
-        color: #333;
-        font-weight: 600;
-        white-space: nowrap;
-        font-size: smaller;
-
-
-        .arrow {
-            display: inline; // flèche visible seulement ici
-
-        }
-
-        &.expanded .arrow {
-            transform: rotate(180deg);
-        }
-
-    }
-    .category-menu .subcategory-list {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: #e7e7d8;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        z-index: 99999;
-        min-width: max-content;
-        max-height:80vh;
-        padding: 0.5em;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        overflow-y: auto;
-    }
-
-    .category-menu .subcategory-list.visible {
-        display: block;
-    }
-
-    .carousel-track {
-        animation: scrollCarousel 10s linear infinite;
-    }
-
-    .description-flex{
-        display:inline-block;
-    }
-
-    .description-border{
-        border-right: none;
-        border-left:none;
-        border-bottom: 0.7px solid black;
-        border-top: 0.7px solid black;
-        padding-left:0;
-        padding-right:0;
-        margin-right:0;
-        margin-left:0;
-        margin-top:1em;
-        margin-bottom:1em;
-        padding-top:1em;
-        padding-bottom:1em;
-    }
-
-
-    .search-filter-container{
-        display: block;
-        margin: 1em 0;
-    }
-
-    #price-filter-form{
-        justify-content:center;
-        padding-top:1em;
-    }
-
-    .cart-button{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-        padding: 6em 2em 0 2em;
-    }
-    .table-cart {
-        display: none;
-    }
-
-    .cart-mobile {
-        display: block;
-        margin-bottom: 2em;
-    }
-
-    .cart-mobile form button {
-        background-color: inherit;
-        color: #a41e1e;
-        border: none;
-        font-weight: bold;
-        text-decoration: underline;
-        font-size:1.1rem;
-        padding: 2em 0;
-    }
-
-    .descriptif-flex {
-        flex-direction: column;
-        align-items: center; /* centre le contenu */
-        gap: 2em;            /* espace entre l’image et le texte */
-    }
-
-    .description-contenance{
-        margin:0 1em;
-        text-align:justify
-    }
-
-    .h2-right{
-        margin-left:0;
-    }
-
-}
-
-
-
-

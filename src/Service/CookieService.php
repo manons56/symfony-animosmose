@@ -4,28 +4,48 @@ namespace App\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * CookieService
+ * --------------------------
+ * This service provides helper methods to check the user's cookie consent status.
+ * It allows other parts of the application to know whether the user has accepted or rejected cookies.
+ */
 class CookieService
 {
-private $request; // on déclare une propriété $request qui contiendra la requete HTTP
+    private $request; // Stores the current main HTTP request
 
-public function __construct(RequestStack $requestStack)
-{
-$this->request = $requestStack->getMainRequest();
-}
-// Un objet RequestStack est injecté dnas le constructeur
-//RequestStack permet de récuperer la requete dans un service (les services n'ont pas acces directement à $request comme les controlleurs)
-//On recupere la requete avec getMainRequest()
-//$this->request contient l'objet Request qui donne accès aux cookies
+    /**
+     * Constructor
+     *
+     * @param RequestStack $requestStack Symfony service that allows access to the current HTTP request
+     *
+     * Note: Services do not have direct access to the $request object like controllers,
+     * so RequestStack is injected to retrieve it.
+     */
+    public function __construct(RequestStack $requestStack)
+    {
+        // Retrieves the main request from the request stack
+        $this->request = $requestStack->getMainRequest();
+    }
 
-public function isConsentAccepted(): bool
-{
-return $this->request?->cookies->get('cookie') === 'accepted';
-}
-//on vérifie si request est null, si oui, méthode=false, si non =true
+    /**
+     * Check if the user has accepted cookies
+     *
+     * @return bool Returns true if the "cookie" cookie is set to "accepted", false otherwise
+     */
+    public function isConsentAccepted(): bool
+    {
+        // Uses nullsafe operator (?->) to safely access cookies in case $this->request is null
+        return $this->request?->cookies->get('cookie') === 'accepted';
+    }
 
-
-public function isConsentRejected(): bool
-{
-return $this->request?->cookies->get('cookie') === 'rejected';
-}
+    /**
+     * Check if the user has rejected cookies
+     *
+     * @return bool Returns true if the "cookie" cookie is set to "rejected", false otherwise
+     */
+    public function isConsentRejected(): bool
+    {
+        return $this->request?->cookies->get('cookie') === 'rejected';
+    }
 }

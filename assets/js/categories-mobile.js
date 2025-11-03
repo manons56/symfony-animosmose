@@ -1,38 +1,52 @@
+/**
+ * category-menu-toggle.js
+ * --------------------------
+ * This script handles the interactive opening and closing of submenus in a category menu.
+ *
+ * Key functionalities:
+ * 1. Detects clicks on top-level category links in a menu.
+ * 2. Toggles the visibility of their associated subcategory lists.
+ * 3. Ensures only one submenu is open at a time.
+ * 4. Prevents default link navigation when toggling submenus.
+ */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Sélectionne tous les liens (<a>) situés dans des éléments <li> dans le menu de catégorie
+    // -----------------------------------------------------------
+    // SELECT ALL CATEGORY MENU LINKS
+    // -----------------------------------------------------------
+    // Select all <a> elements that are direct children of <li> elements inside the category menu
     document.querySelectorAll('.category-menu > ul > li > a').forEach(link => {
 
-        // Ajoute un écouteur d'événement 'click' à chaque lien
+        // -----------------------------------------------------------
+        // ADD CLICK EVENT LISTENER TO EACH LINK
+        // -----------------------------------------------------------
         link.addEventListener('click', function(e) {
-
-            // Récupère l'élément <li> parent de ce lien
+            // Get the parent <li> element of the clicked link
             const li = this.parentElement;
 
-            // Recherche un sous-menu (.subcategory-list) à l'intérieur de ce <li>
+            // Search for a submenu inside this <li> with class .subcategory-list
             const submenu = li.querySelector('.subcategory-list');
 
-            // S'il y a un sous-menu
+            // If a submenu exists
             if (submenu) {
-                // Empêche le comportement par défaut du lien (par exemple, navigation)
+                // Prevent the default action (navigation) of the link
                 e.preventDefault();
 
-                // Si le sous-menu est déjà visible
+                // If the submenu is already visible
                 if (submenu.classList.contains('visible')) {
-                    // On le masque en retirant la classe 'visible'
+                    // Hide it by removing the 'visible' class
                     submenu.classList.remove('visible');
-                    return; // Arrête l'exécution ici
+                    return; // Stop further execution
                 }
 
-                // Si un autre sous-menu est ouvert, on le ferme
+                // Close any other currently open submenus
                 document.querySelectorAll('.subcategory-list.visible').forEach(openMenu => {
                     openMenu.classList.remove('visible');
                 });
 
-                // Enfin, on affiche le sous-menu en ajoutant la classe 'visible'
+                // Show the clicked submenu by adding the 'visible' class
                 submenu.classList.add('visible');
             }
         });
     });
-
 });

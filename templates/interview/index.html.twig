@@ -12,7 +12,7 @@
 
             <div class="posts-insta {% if not cookieService.isConsentAccepted() %}blurred{% endif %}">
                 <div class="post-insta" id="dailymotion-container">
-                    {# L’iframe Dailymotion sera injectée par le JS si l’utilisateur accepte #}
+                    {# The Dailymotion iframe is injected by JS if the user accepts. #}
                 </div>
 
                 {% if not cookieService.isConsentAccepted() %}
@@ -26,7 +26,7 @@
         </section>
 
 
-        {# --- Liste d'articles de presse --- #}
+        {# --- List of press articles --- #}
         <section role="region" aria-labelledby="articles-presse">
             <h2 id="articles-presse">Les articles qui parlent de nous :</h2>
             <ul>

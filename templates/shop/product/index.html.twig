@@ -55,7 +55,7 @@
         </div>
 
         <h2>Nos best-seller</h2>
-        {# Carrousel des best-sellers #}
+        {# Carrousel of best-sellers #}
         {% set bestSellers = bestSellers %}
 
         {% if bestSellers is not empty %}
@@ -90,12 +90,12 @@
 
 
         <div class="search-filter-container">
-            {# Barre de recherche #}
+            {# Search bar  #}
             <div class="search-container">
                 <input type="text" id="search" class="search-input" placeholder="Rechercher un produit..." aria-label="Rechercher un produit">
             </div>
 
-            {# Filtre de prix #}
+            {# Price filter  #}
             <form method="GET" id="price-filter-form" aria-label="Filtrer par prix">
                 <label for="min-price">Prix min :</label>
                 <input type="number" name="min" id="min-price" value="{{ app.request.get('min') ?? 0 }}" min="0">
@@ -111,7 +111,7 @@
 
 
         <div class="content-wrapper">
-            {# Menu latéral  #}
+            {# Lateral menu #}
             <nav class="category-menu" aria-label="Menu des catégories">
                 <ul>
                     <li>
@@ -120,7 +120,7 @@
 
                     {% for cat in categories %}
                         <li>
-                            {# Lien principal de la catégorie #}
+                            {# Main link of the catagory  #}
                             {% if cat.subcategories|length > 0 %}
                                 <a href="#" class="category-toggle" data-cat-id="cat-{{ cat.id }}" aria-expanded="false" aria-controls="cat-{{ cat.id }}">
                                     {{ cat.name }} <span class="arrow">▼</span>
@@ -131,7 +131,7 @@
                                 </a>
                             {% endif %}
 
-                            {# Sous-catégories #}
+                            {# Subcategories #}
                             {% if cat.subcategories|length > 0 %}
                                 <ul class="subcategory-list" id="cat-{{ cat.id }}" aria-hidden="true">
                                     {% for sub in cat.subcategories %}
@@ -194,7 +194,7 @@
     <div id="contact-modal" class="fixed inset-0 hidden bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white rounded-xl shadow-xl p-6 w-96 relative">
             <div class="modal-body">
-                {# Formulaire chargé via AJAX ici #}
+                {# Form loaded via AJAX here #}
             </div>
         </div>
     </div>

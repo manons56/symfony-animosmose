@@ -2,11 +2,12 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><!-- Permet d'adapter la largeur de la page à la largeur de l'écran du device pour activer le responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><!-- Enables responsive design -->
     <title>{% block title %}{% endblock %}</title>
     <meta name="description" content="Animosmose">
+    <meta name="keywords" content="animosmose pension chien chevaux chats alimentation croquettes Berric 56 Morbihan Bretagne éducation canine garde à domicile">
 
-    {# --- POLICES & ICONES --- #}
+    {# --- FONTS & ICONS --- #}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,14 +15,14 @@
 
     <link rel="icon" type="image/png" href="{{ asset('build/images/logonavigateur.png')}}">
 
-    {# --- CSS PRINCIPAL COMPILÉ PAR ENCORE --- #}
+    {# --- MAIN CSS COMPILED BY ENCORE --- #}
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
 </head>
 <body>
 
-{# --- Banniere cookie --- #}
+{# --- Cookie banner --- #}
 {% if not cookieService.isConsentAccepted() and not cookieService.isConsentRejected() %}
     <div id="cookie-banner" class="cookie-banner">
         <p>Ce site utilise des cookies pour améliorer votre expérience.
@@ -61,22 +62,22 @@
     </nav>
 </header>
 
-{# --- CONTENU DES PAGES --- #}
+{# --- PAGE CONTENT --- #}
 <main>
     {% block body %}{% endblock %}
 </main>
 
 <footer class="footer">
     <div class="footer-flex">
-        <!-- Colonne gauche : Logo + réseaux -->
+        <!-- Left column: Logo + social media -->
         <div class="footer-col-left">
             <img src="{{ asset('build/images/logo-animosmose.png')}}" alt='logo animosmose'/>
             <div class="footer-flex-reseaux">
-                {# noopener--> Empêche le site ouvert de manipuler ton onglet d’origine-->Sécurité
-                   noreferrer-->Masque ton URL d’origine au site externe-->Confidentialité #}
-               {# aria-hidden="true" pour dire au lecteur d’écran :
-               L’icône est juste visuelle, elle décore, elle n’ajoute rien au sens.
-                Ignore cette icône, elle n’a pas d’intérêt pour toi. » #}
+                {# noopener --> Prevents the opened site from manipulating your original tab --> Security
+                   noreferrer --> Hides your origin URL from the external site --> Privacy #}
+                {# aria-hidden="true" tells the screen reader:
+               “The icon is purely decorative, it adds no meaning.
+                Ignore this icon; it has no relevance for you.” #}
                 <a href='https://www.instagram.com/animosmose/' target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                     <i class="fa-brands fa-square-instagram fa-xl" aria-hidden="true" style="color: #000000;"></i>
                 </a>
@@ -87,7 +88,7 @@
             <span class="copyright">Copyright 2025 © Animosmose</span>
         </div>
 
-        <!-- Colonne navigation principale (boutique + pages) -->
+        <!-- Main navigation column (shop + pages) -->
         <div class="footer-nav">
             <p><a href="{{ path('app_product_list') }}">La boutique</a></p>
             <p><a href="{{ path('app_breeding') }}">Élevage</a></p>
@@ -96,7 +97,7 @@
             <p><a href="{{ path('app_contact') }}">Contact</a></p>
         </div>
 
-        <!-- Colonne contact + "On parle de nous" -->
+        <!-- Contact column + “They talk about us” -->
         <div class="footer-nav">
             <p>5 Le Petit Bodo</p>
             <p>56230 Berric</p>
@@ -105,7 +106,7 @@
             <p><a href="{{ path('app_interview') }}">On parle de nous !</a></p>
         </div>
 
-        <!-- Colonne CGV, FAQ, Mentions légales -->
+        <!-- Column CGV, FAQ, Legal notices -->
         <div class="footer-nav">
             <p><a href='{{ path('app_content_cgv') }}'>CGV</a></p>
             {# <p><a href=''>FAQ</a></p>#}
@@ -115,7 +116,7 @@
     </div>
 </footer>
 
-{# --- SCRIPTS PRINCIPAUX (APP.JS) --- #}
+{# --- MAIN SCRIPTS (APP.JS) --- #}
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
 {% endblock %}

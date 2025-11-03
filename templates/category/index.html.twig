@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategoryController!{% endblock %}
+{% block title %}Catégories produits{% endblock %}
 
 {% block body %}
 <style>
@@ -29,38 +29,60 @@
     <div id="products">Cliquez sur une sous-catégorie pour voir les produits.</div>
 
     <script>
+        // Select all submenu items
         const subItems = document.querySelectorAll('#menu li ul li');
+
+        // Get the div where products will be displayed
         const productsDiv = document.getElementById('products');
 
+        // Add click event to each submenu item
         subItems.forEach(sub => {
             sub.addEventListener('click', (e) => {
-                e.stopPropagation(); // empêche le menu parent de se fermer
+                e.stopPropagation(); // Prevent the click from bubbling up to parent (keeps the menu open)
+
+                // Get the category id from the data-id attribute
                 const categoryId = sub.getAttribute('data-id');
 
+                // Fetch products for this category
                 fetch(`/category/${categoryId}/products`)
-                    .then(response => response.json())
+                    .then(response => response.json()) // Convert response to JSON
                     .then(products => {
-                        productsDiv.innerHTML = products.length
-                            ? products.map(p => `<div class="product">${p.name} - ${p.price}€</div>`).join('')
-                            : 'Aucun produit disponible.';
+                        // Transform each product into an HTML block
+                        const productHtmlArray = products.map(product => {
+                            return `<div class="product">${product.name} - ${product.price}€</div>`;
+                        });
+
+                        // Combine all HTML blocks into a single string
+                        const productHtml = productHtmlArray.join('');
+
+                        // Display the products or a message if none are available
+                        productsDiv.innerHTML = productHtml || 'Aucun produit disponible.';
                     })
                     .catch(err => {
+                        // Display error message and log the error
                         productsDiv.innerHTML = 'Erreur lors du chargement des produits.';
                         console.error(err);
                     });
             });
         });
 
-        // Menu déroulant simple
+        // Handle simple dropdown menu
         const menuItems = document.querySelectorAll('#menu > li');
+
         menuItems.forEach(item => {
             const subMenu = item.querySelector('ul');
-            if(subMenu){
+            if (subMenu) {
+                // Toggle submenu visibility on click
                 item.addEventListener('click', () => {
-                    subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
+                    if (subMenu.style.display === 'block') {
+                        subMenu.style.display = 'none'; // Hide submenu if currently visible
+                    } else {
+                        subMenu.style.display = 'block'; // Show submenu if currently hidden
+                    }
                 });
             }
         });
+
     </script>
 
     <style>

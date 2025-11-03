@@ -51,14 +51,14 @@
 
 
 
-{# Rôle : Formulaire “mot de passe oublié”.
-Fonction : Afficher le ResetPasswordRequestFormType pour que l’utilisateur entre son email. #}
+{# Role: “Forgot password” form.
+Function: Display the ResetPasswordRequestFormType so that the user can enter their email address. #}
 
 
 
-{# L’utilisateur clique sur “Mot de passe oublié” → formulaire request.html.twig avec ResetPasswordRequestFormType.
-Il soumet son email → ResetPasswordRequest est créé, un token est généré.
-Après soumission → page check_email.html.twig pour informer l’utilisateur.
-Email envoyé → email.html.twig contient le lien avec token.
-L’utilisateur clique sur le lien → formulaire reset.html.twig avec ChangePasswordFormType.
-Nouveau mot de passe validé → hashé et enregistré, token supprimé. #}
+{# User clicks on “Forgot password” → request.html.twig form with ResetPasswordRequestFormType.
+They submit their email address → ResetPasswordRequest is created, a token is generated.
+After submission → check_email.html.twig page to inform the user.
+Email sent → email.html.twig contains the link with token.
+The user clicks on the link → reset.html.twig form with ChangePasswordFormType.
+New password validated → hashed and saved, token deleted. #}

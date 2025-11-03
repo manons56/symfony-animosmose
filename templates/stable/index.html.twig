@@ -4,8 +4,8 @@
 {% block title %}Les écuries{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }} {# conserve app.css #}
-    {{ encore_entry_link_tags('stable') }} {# ajoute stable.scss compilé #}
+    {{ parent() }} {# preserve app.css #}
+    {{ encore_entry_link_tags('stable') }} {# add stable.scss compiled #}
 {% endblock %}
 
 {% block body %}
@@ -147,7 +147,7 @@
             <p>Polyvalent, généreux et accessible, le cheval réformé de course représente une magnifique opportunité pour qui recherche un compagnon fiable et adapté à diverses disciplines, à un prix abordable.
             </p>
 
-            <!-- ✅ Trois images non rognées -->
+            <!--  Three uncropped images -->
             <div class="triple-images">
                 <img src="{{ asset('build/images/trotteur.jpg')}}" alt="portrait d'un trotteur" class="media-item not-cropped" loading="lazy"/>
                 <img src="{{ asset('build/images/novae.jpg')}}" alt="portrait d'un trotteur" class="media-item not-cropped" loading="lazy"/>
@@ -163,7 +163,7 @@
                 <cite>Baptiste</cite>
             </blockquote>
 
-            <!-- ✅ Bloc texte + carrousel côte à côte -->
+            <!--   Text block + carousel side by side -->
             <div class="reconversion-carousel-section">
                 <div class="reconversion-text">
                     <p class="font-weight-bold">Animosmose Reconversion, c’est:</p>

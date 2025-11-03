@@ -18,7 +18,7 @@ class Pictures
     private ?string $filename = null;
 
 
-    // Propriété pour stocker temporairement le fichier uploadé (non en base)
+    // Property to temporarily store the uploaded file (not in the database)
     private ?UploadedFile $file = null;
 
     #[ORM\ManyToOne(targetEntity: Products::class, inversedBy: 'images')]
@@ -42,7 +42,7 @@ class Pictures
     }
 
 
-    // Getter et setter pour la propriété non persistée "file"
+    // Getter and setter for the non-persisted "file" property
     public function getFile(): ?UploadedFile
     {
         return $this->file;

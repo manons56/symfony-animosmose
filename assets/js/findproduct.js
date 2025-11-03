@@ -1,57 +1,70 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Attendre que tout le DOM soit chargé avant d'exécuter le script
+//This JS allows you to search for a product in the store. You type letters into the search bar, and the corresponding products are displayed.
+//This JavaScript adds interactivity to the website: it manages the mobile hamburger menu, filters and paginates products in real time, handles delivery method selection and checkout interactions, and ensures accessibility and smooth user experience throughout.
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Wait until the entire DOM is loaded before running the script
+
+    // -----------------------------------------------------------
+    // SELECT DOM ELEMENTS
+    // -----------------------------------------------------------
     const searchInput = document.getElementById('search');
-    // Récupérer le champ de recherche (input) par son ID "search"
+    // Get the search input field by its ID "search"
 
     const productList = document.getElementById('product-list');
-    // Récupérer le conteneur qui contient tous les produits
+    // Get the container holding all product items
 
     const allProducts = Array.from(productList.querySelectorAll('.product-item'));
-    // Récupérer tous les éléments produits avec la classe "product-card"
-    // Convertir la NodeList en tableau pour pouvoir utiliser les méthodes tableau (filter, slice...)
+    // Get all product elements with class "product-item"
+    // Convert the NodeList to an array to use array methods like filter and slice
 
     const paginationControls = document.getElementById('pagination-controls');
-    // Récupérer le conteneur où on mettra les boutons de pagination
+    // Get the container where pagination buttons will be rendered
 
     const productsPerPage = 16;
-    // Nombre de produits à afficher par page
+    // Number of products to display per page
 
-    let filteredProducts = [...allProducts]; // commence avec tous les produits
-    // Tableau dynamique des produits filtrés (initialement tous les produits)
+    let filteredProducts = [...allProducts];
+    // Dynamic array of products currently matching the search/filter
+    // Initially contains all products
 
     let currentPage = 1;
-    // Variable pour garder en mémoire la page actuellement affichée
+    // Keep track of the currently displayed page
 
+    // -----------------------------------------------------------
+    // FUNCTION: Display a specific page of products
+    // -----------------------------------------------------------
     function showPage(page) {
         currentPage = page;
-        // Met à jour la page courante
+        // Update the current page
 
-        // Masquer tous les produits (on cache d'abord tout)
+        // Hide all products initially
         allProducts.forEach(p => p.style.display = 'none');
 
-        // Calculer l'index de début et de fin des produits à afficher selon la page
+        // Calculate start and end index for products on the requested page
         const start = (page - 1) * productsPerPage;
         const end = start + productsPerPage;
 
-        // Afficher uniquement les produits filtrés qui appartiennent à la page demandée
+        // Display only the filtered products belonging to the current page
         filteredProducts.slice(start, end).forEach(p => p.style.display = 'block');
 
-        // Mettre à jour les boutons de pagination en fonction de la page actuelle
+        // Update pagination buttons based on the current page
         renderPagination();
     }
 
+    // -----------------------------------------------------------
+    // FUNCTION: Render pagination buttons dynamically
+    // -----------------------------------------------------------
     function renderPagination() {
         paginationControls.innerHTML = '';
-        // Vider le conteneur des boutons pour les recréer à chaque fois
+        // Clear the container to recreate buttons each time
 
         const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-        // Calculer le nombre total de pages en fonction des produits filtrés
+        // Calculate the total number of pages based on filtered products
 
         if (totalPages <= 1) return;
-        // Si il n'y a qu'une page ou aucune, on n'affiche pas de pagination
+        // Do not render pagination if there is only one page or none
 
-        // Créer un bouton "Précédent" si on n'est pas sur la première page
+        // Create a "Previous" button if not on the first page
         if (currentPage > 1) {
             const prevBtn = document.createElement('button');
             prevBtn.textContent = 'Précédent';
@@ -60,17 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
             paginationControls.appendChild(prevBtn);
         }
 
-        // Créer un bouton pour chaque numéro de page
+        // Create a button for each page number
         for (let i = 1; i <= totalPages; i++) {
             const pageBtn = document.createElement('button');
             pageBtn.textContent = i;
             pageBtn.classList.add('pagination-link');
-            if (i === currentPage) pageBtn.disabled = true; // désactiver le bouton de la page actuelle
+            if (i === currentPage) pageBtn.disabled = true; // Disable button for current page
             pageBtn.addEventListener('click', () => showPage(i));
             paginationControls.appendChild(pageBtn);
         }
 
-        // Créer un bouton "Suivant" si on n'est pas sur la dernière page
+        // Create a "Next" button if not on the last page
         if (currentPage < totalPages) {
             const nextBtn = document.createElement('button');
             nextBtn.textContent = 'Suivant';
@@ -80,21 +93,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Quand on tape dans la barre de recherche
+    // -----------------------------------------------------------
+    // LISTENER: Filter products when typing in search input
+    // -----------------------------------------------------------
     searchInput.addEventListener('input', function () {
         const query = this.value.toLowerCase();
-        // Récupérer la valeur tapée et la mettre en minuscules pour une recherche insensible à la casse
+        // Get typed value and convert to lowercase for case-insensitive search
 
-        // Filtrer les produits en gardant seulement ceux dont le nom contient la recherche
+        // Filter products to only keep those whose name contains the search query
         filteredProducts = allProducts.filter(card => {
             const name = card.querySelector('.product-name').textContent.toLowerCase();
             return name.includes(query);
         });
 
-        currentPage = 1; // Revenir automatiquement à la première page après chaque nouvelle recherche
-        showPage(currentPage); // Afficher cette première page avec les produits filtrés
+        currentPage = 1; // Automatically return to first page on new search
+        showPage(currentPage); // Display first page with filtered products
     });
 
-    // Affiche la première page au chargement initial de la page
+    // -----------------------------------------------------------
+    // INITIALIZATION: Display first page when page loads
+    // -----------------------------------------------------------
     showPage(currentPage);
 });

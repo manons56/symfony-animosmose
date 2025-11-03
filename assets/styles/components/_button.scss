@@ -12,7 +12,7 @@ button, .button{
 }
 
 button:hover, .button:hover {
-    background-color: #b15116; /* change légèrement la couleur au survol */
+    background-color: #b15116; /* slightly changes the color on hover */
 }
 
 a{
@@ -31,24 +31,24 @@ a{
     text-decoration: none;
     width: 10em;
     text-align: center;
-    animation: pulse-color 4s ease-in-out infinite alternate; //alternate fait un aller-retour au lieu de recommencer toujours depuis le début
+    animation: pulse-color 4s ease-in-out infinite alternate; // alternate makes it go back and forth instead of restarting from the beginning
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
-//animation → contrôle un changement automatique et continu basé sur @keyframes.
-//transition → contrôle le changement déclenché par hover et le rend fluide.
+// animation → controls an automatic, continuous change based on @keyframes.
+// transition → controls a hover-triggered change and makes it smooth.
 
 
 @keyframes pulse-color {
     0% {
         background-color: $background-color;
         color: #6b3e00;
-        transform: scale(1); /* taille normale */
+        transform: scale(1); /* normal size */
     }
     50% {
         background-color: #6b3e00;
         color: $background-color;
-        transform: scale(1.1); /* zoom léger */
+        transform: scale(1.1); /* slight zoom */
     }
     100% {
         background-color: $background-color;
@@ -59,12 +59,9 @@ a{
 
 
 .button-shop:hover {
-    animation-play-state: paused; /* stoppe l’animation */
+    animation-play-state: paused; /* stops the animation */
     background-color: $color-green;
     color: $background-color;
     transform: scale(1.1);
     text-decoration: underline;
 }
-
-
-

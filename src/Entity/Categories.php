@@ -25,11 +25,11 @@ class Categories
     private Collection $products;
 
 
-    // Relation vers la catégorie parente (nullable pour les catégories principales)
+    // Relation to the parent category (nullable for main categories)
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: "subcategories")]
     private ?self $parent = null;
 
-    // Relation vers les sous-catégories
+    // Relation to subcategories
     #[ORM\OneToMany(mappedBy: "parent", targetEntity: self::class)]
     private $subcategories;
 
@@ -59,7 +59,7 @@ class Categories
 
     public function __toString(): string
     {
-        return $this->name ?? 'Catégorie';
+        return $this->name ?? 'Category';
     }
 
 

@@ -117,7 +117,7 @@ class Variants
         return $this->price;
     }
 
-    // Setter pour stocker en centimes
+    // Setter for storing in cents
     public function setPriceEuros(float $priceEuros): static
     {
         $this->price = $priceEuros;

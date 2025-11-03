@@ -12,32 +12,39 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Controller to create a test order and initiate a payment session with Payline.
+ * This is primarily for testing purposes.
+ */
 class TestOrderController extends AbstractController
 {
+    /**
+     * Route to create a test order and redirect to Payline payment.
+     */
     #[Route('/test/create-order', name: 'test_create_order')]
     public function createTestOrder(PaylineService $payline, EntityManagerInterface $em): Response
     {
-        // Récupère l'utilisateur de test
+        // Fetch a test user (user with ID 2)
         $user = $em->getRepository(User::class)->find(2);
         if (!$user) {
             $this->addFlash('error', 'Utilisateur de test introuvable.');
             return $this->redirectToRoute('cart_show');
         }
 
-        // Récupère son adresse principale (OneToOne : user->getAddress())
+        // Get the user's main address (OneToOne relation: User->Address)
         $address = $user->getAddress();
         if (!$address) {
             $this->addFlash('error', "L'utilisateur doit avoir une adresse pour créer la commande.");
             return $this->redirectToRoute('cart_show');
         }
 
-        // Crée la commande
+        // Create a new order and associate it with the user and address
         $order = new Orders();
         $order->setUser($user);
         $order->setAddressId($address);
 
-        // Crée un article test
-        $variant = $em->getRepository(Variants::class)->find(1); // variant test
+        // Create a test article
+        $variant = $em->getRepository(Variants::class)->find(1); // test variant
         if (!$variant) {
             $this->addFlash('error', "Variant test introuvable.");
             return $this->redirectToRoute('cart_show');
@@ -45,30 +52,31 @@ class TestOrderController extends AbstractController
 
         $article = new Articles();
         $article->setVariantId($variant);
-        $article->setPrice('1.00');  // prix en string comme défini
+        $article->setPrice('1.00');  // price stored as string
         $article->setQuantity(1);
 
-        // Ajoute l'article à la commande
+        // Add the article to the order
         $order->addArticle($article);
 
-        // Persiste en base
+        // Persist both the article and the order to the database
         $em->persist($article);
         $em->persist($order);
         $em->flush();
 
-        // Crée la session Payline
+        // Create a Payline payment session for this order
         $response = $payline->createPaymentSession(
-            (float)$order->getTotal(),                          // Montant
-            $this->generateUrl('payment_success', [], true),   // URL succès
-            $this->generateUrl('payment_cancel', [], true),    // URL annulation
-            $order->getReference()                              // Référence de la commande
+            (float)$order->getTotal(),                          // Payment amount
+            $this->generateUrl('payment_success', [], true),   // Success URL
+            $this->generateUrl('payment_cancel', [], true),    // Cancel URL
+            $order->getReference()                              // Order reference
         );
 
-        // Redirection vers Payline
+        // Redirect user to Payline if a redirect URL is provided
         if (!empty($response['redirectURL'])) {
             return $this->redirect($response['redirectURL']);
         }
 
+        // Flash message in case the payment session creation fails
         $this->addFlash('error', 'Impossible de créer la session de paiement.');
         return $this->redirectToRoute('app_shop_order_show', ['id' => $order->getId()]);
     }

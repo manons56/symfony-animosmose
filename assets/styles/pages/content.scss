@@ -1,26 +1,24 @@
 @use "../abstracts" as *;
 //@import 'normalize.css';
 
-
 /////////////
-//content//
+// content //
 
-
-h2{
-    padding:1em;
+h2 {
+    padding: 1em;
 }
 
-h3{
-    text-align:left;
-}
-.content-padding{
-    padding:2em;
+h3 {
+    text-align: left;
 }
 
+.content-padding {
+    padding: 2em;
+}
 
-.h3-content{
-    padding:1em 0;
-    text-align:left;
+.h3-content {
+    padding: 1em 0;
+    text-align: left;
 }
 
 .no-bullet {
@@ -28,17 +26,16 @@ h3{
     padding-left: 0;
 }
 
-.list-style li::before{
+.list-style li::before {
     content: "• ";
 }
 
 .toc {
-    background:$background-color;
+    background: $background-color;
     padding: 2em;
     border-radius: 8px;
     margin-bottom: 2em;
-    margin-top:2em;
-
+    margin-top: 2em;
 }
 
 .toc ul {
@@ -49,7 +46,7 @@ h3{
 .toc li {
     margin-bottom: 0.5em;
     font-size: smaller;
-    font-family:$font-family-nav;
+    font-family: $font-family-nav;
 }
 
 .toc a {
@@ -62,14 +59,17 @@ h3{
     text-decoration: underline;
 }
 
-
+/* RGPD form */
 .form-rgpd {
     max-width: 600px;
     margin-top: 1rem;
+    padding: 2em;
 }
+
 .form-rgpd div {
     margin-bottom: 1rem;
 }
+
 .form-rgpd input,
 .form-rgpd select,
 .form-rgpd textarea {
@@ -78,6 +78,7 @@ h3{
     border: 1px solid #ccc;
     border-radius: 6px;
 }
+
 .form-rgpd button {
     background-color: #b15116;
     color: white;
@@ -85,8 +86,4 @@ h3{
     border: none;
     border-radius: 6px;
     cursor: pointer;
-}
-
-.form-rgpd{
-    padding:2em;
 }

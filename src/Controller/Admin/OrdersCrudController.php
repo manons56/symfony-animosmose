@@ -26,24 +26,29 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use App\Enum\OrderStatus;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-
-
+/**
+ * CRUD controller for managing Orders in the admin panel.
+ * Allows admins to view, edit, and archive orders,
+ * customize the index, detail, and edit pages, and filter out archived orders.
+ */
 class OrdersCrudController extends AbstractCrudController
 {
-    private AdminUrlGenerator $adminUrlGenerator; //AdminUrlGenerator te permet de rediriger facilement vers n’importe quelle page de l’admin, sans avoir à coder les routes à la main
-    private EntityManagerInterface $entityManager;
+    private AdminUrlGenerator $adminUrlGenerator; // Helps redirect easily to any admin page without manually coding routes
+    private EntityManagerInterface $entityManager; // Used to update the database
 
     public function __construct(AdminUrlGenerator $adminUrlGenerator, EntityManagerInterface $entityManager)
     {
         $this->adminUrlGenerator = $adminUrlGenerator;
-        $this->entityManager = $entityManager; // pour màj de la bdd
+        $this->entityManager = $entityManager;
     }
 
+    // Specify which entity this CRUD controller manages
     public static function getEntityFqcn(): string
     {
         return Orders::class;
     }
 
+    // Configure labels and default sorting for CRUD pages
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -52,53 +57,39 @@ class OrdersCrudController extends AbstractCrudController
             ->setDefaultSort(['date' => 'DESC']);
     }
 
-    // === La méthode updateStatus redirige simplement vers l'index ===
-    /*public function updateStatus(Orders $order): Response
-    {
-        // On crée un message pour l'utilisateur.
-        $this->addFlash('info', 'La commande n\'a pas été mise à jour.');
-
-        // Et on redirige vers la page d'index
-        $url = $this->adminUrlGenerator
-            ->setController(self::class)
-            ->setAction(Action::INDEX)
-            ->generateUrl();
-
-        return $this->redirect($url);
-    }
-    */
-
+    // Configure the actions available in the CRUD interface
     public function configureActions(Actions $actions): Actions
     {
+        // Create a custom "Archive" action
         $archive = Action::new('archive', 'Archiver')
             ->linkToCrudAction('archiveOrder')
             ->setCssClass('btn btn-warning');
 
         return $actions
+            // Rename the "Save and Continue" button on edit page
             ->update(Crud::PAGE_EDIT, Action::SAVE_AND_CONTINUE, function (Action $action) {
                 return $action->setLabel('Enregistrer et continuer');
             })
-            ->add(Crud::PAGE_INDEX, Action::DETAIL) // on garde l’action Détails
-            ->add(Crud::PAGE_INDEX, $archive)     // on ajoute l’action Archiver
-            ->remove(Crud::PAGE_INDEX, Action::NEW) // désactive "Créer" dans la liste
-            ->remove(Crud::PAGE_INDEX, Action::DELETE); // désactive "Supprimer" dans la liste
-
+            ->add(Crud::PAGE_INDEX, Action::DETAIL) // Keep the "Detail" action
+            ->add(Crud::PAGE_INDEX, $archive)     // Add the "Archive" action
+            ->remove(Crud::PAGE_INDEX, Action::NEW) // Disable "New" action in the list
+            ->remove(Crud::PAGE_INDEX, Action::DELETE); // Disable "Delete" action in the list
     }
 
-
-
-
+    // Custom action to archive an order
     public function archiveOrder(AdminContext $context): RedirectResponse
     {
         /** @var Orders $order */
         $order = $context->getEntity()->getInstance();
         $order->setArchived(true);
 
+        // Persist changes to the database
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 
         $this->addFlash('success', 'Commande archivée avec succès !');
 
+        // Redirect back to the index page
         $url = $this->adminUrlGenerator
             ->setController(self::class)
             ->setAction(Action::INDEX)
@@ -107,11 +98,9 @@ class OrdersCrudController extends AbstractCrudController
         return $this->redirect($url);
     }
 
-
-
+    // Customize the query for the index page to exclude archived orders
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
-
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $qb->andWhere('entity.archived = :archived')
             ->setParameter('archived', false);
@@ -119,43 +108,43 @@ class OrdersCrudController extends AbstractCrudController
         return $qb;
     }
 
-
+    // Configure fields for different pages (INDEX, DETAIL, EDIT)
     public function configureFields(string $pageName): iterable
     {
+        // Prepare choices for order status
         $statusChoices = [];
         foreach (OrderStatus::cases() as $case) {
-            $statusChoices[$case->getLabel()] = $case; // label => valeur
+            $statusChoices[$case->getLabel()] = $case; // label => value
         }
 
-        // === INDEX ===
+        // === INDEX PAGE ===
         if ($pageName === Crud::PAGE_INDEX) {
             return [
-                AssociationField::new('user', 'Client'),
-                DateTimeField::new('date', 'Date'),
-                MoneyField::new('totalWithDelivery', 'Total')->setCurrency('EUR')
-                    ->setStoredAsCents(false),
+                AssociationField::new('user', 'Client'), // Client
+                DateTimeField::new('date', 'Date'), // Order date
+                MoneyField::new('totalWithDelivery', 'Total')->setCurrency('EUR')->setStoredAsCents(false), // Total amount
                 ChoiceField::new('status', 'Statut')
                     ->setChoices($statusChoices)
-                    ->renderAsBadges([
+                    ->renderAsBadges([ // Display status as colored badges
                         OrderStatus::Pending->value => 'warning',
                         OrderStatus::Paid->value => 'success',
                         OrderStatus::Failed->value => 'danger',
                         OrderStatus::Delivered->value => 'info',
                         OrderStatus::Canceled->value => 'secondary',
                     ]),
-                TextField::new('deliveryMethod', 'Livraison')
-                    ->formatValue(function ($value) {
-                        return match ($value) {
-                            'relay' => 'Mondial Relay',
-                            'home' => 'Livraison à domicile',
-                            'pickup' => 'Retrait sur place',
-                            default => ucfirst((string)$value),
-                        };
-                    }),
+                TextField::new('deliveryMethod', 'Livraison') // Delivery method
+                ->formatValue(function ($value) {
+                    return match ($value) {
+                        'relay' => 'Mondial Relay',
+                        'home' => 'Livraison à domicile',
+                        'pickup' => 'Retrait sur place',
+                        default => ucfirst((string)$value),
+                    };
+                }),
             ];
         }
 
-        // === DETAIL ===
+        // === DETAIL PAGE ===
         if ($pageName === Crud::PAGE_DETAIL) {
             return [
                 AssociationField::new('user', 'Client'),
@@ -163,7 +152,7 @@ class OrdersCrudController extends AbstractCrudController
                 DateTimeField::new('date', 'Date'),
                 ChoiceField::new('status', 'Statut')
                     ->setChoices($statusChoices)
-                    ->renderExpanded(false) // menu déroulant
+                    ->renderExpanded(false)
                     ->renderAsBadges([
                         OrderStatus::Pending->value => 'warning',
                         OrderStatus::Paid->value => 'success',
@@ -179,30 +168,27 @@ class OrdersCrudController extends AbstractCrudController
                             'relay' => 'Mondial Relay',
                             'home' => 'Livraison à domicile',
                             'pickup' => 'Retrait sur place',
-                            default => ucfirst((string)$value), //default => ... : c'est ce que le code retournera si aucune des valeurs ne correspond (relay, home, pickup).
+                            default => ucfirst((string)$value),
                         };
                     }),
-                MoneyField::new('totalWithDelivery', 'Total')->setCurrency('EUR')
-                    ->setStoredAsCents(false),
-
+                MoneyField::new('totalWithDelivery', 'Total')->setCurrency('EUR')->setStoredAsCents(false),
             ];
         }
 
-        // === EDIT ===
+        // === EDIT PAGE ===
         if ($pageName === Crud::PAGE_EDIT) {
             return [
                 ChoiceField::new('status', 'Statut')
                     ->setChoices($statusChoices)
-                    ->renderExpanded(false) // menu déroulant
+                    ->renderExpanded(false)
                     ->renderAsBadges([
                         OrderStatus::Pending->value => 'warning',
                         OrderStatus::Paid->value => 'success',
                         OrderStatus::Failed->value => 'danger',
                         OrderStatus::Delivered->value => 'info',
                         OrderStatus::Canceled->value => 'secondary',
-                    ]), // permet de modifier le statut
+                    ]), // Allows changing the status
             ];
         }
     }
-
 }

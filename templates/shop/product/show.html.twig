@@ -74,13 +74,13 @@
                 </div>
 
                 <div class="description-contenance">
-                    {# --- DESCRIPTION (au-dessus des variantes) --- #}
+                    {# --- DESCRIPTION (above variants) --- #}
                     <div class="product-description">
                         {{ product.description|raw }}
                     </div>
                     <br>
 
-                    {# --- Préparer les variants côté Twig et détecter les types présents --- #}
+                    {# --- Prepare variants on the Twig side and detect the types present --- #}
                     {% set variants = product.variants %}
                     {% set hasContenance = false %}
                     {% set hasSize = false %}
@@ -91,7 +91,7 @@
                         {% if v.color is not empty %}{% set hasColor = true %}{% endif %}
                     {% endfor %}
 
-                    {# ---------------- Contenance ---------------- #}
+                    {# ---------------- Capacity ---------------- #}
                     {% if hasContenance %}
                         <h2 class="contenance">Contenance</h2>
                         <div class="variants-container contenance">
@@ -110,14 +110,14 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {# Prix unique affiché sous le nom du produit #}
+                        {# Unique price displayed under the product name #}
                         {% if variants|length > 0 %}
                             <p><strong>Prix : {{ variants[0].getPriceEuros()|number_format(2, ',', ' ') }} €</strong></p>
 
                         {% endif %}
                     {% endif %}
 
-                    {# ---------------- Taille ---------------- #}
+                    {# ---------------- Size ---------------- #}
                     {% if hasSize %}
                         <h3>Taille</h3>
                         <div class="variants-container size" id="sizes-container">
@@ -151,7 +151,7 @@
                         </div>
                     {% endif %}
 
-                    {# ---------------- Couleur ---------------- #}
+                    {# ---------------- Color ---------------- #}
                     {% if hasColor %}
                         <h3>Couleur</h3>
                         <div class="variants-container color" id="colors-container">
@@ -184,7 +184,7 @@
                         </div>
                     {% endif %}
 
-                    {# ---------------- Préparer le tableau JS côté Twig (url + token garantis) ---------------- #}
+                    {# ---------------- Prepare the JS table on the Twig side (guaranteed URL + token) ---------------- #}
                     {% set variants_for_js = [] %}
                     {% for v in variants %}
                         {% set item = {
@@ -202,7 +202,7 @@
 
 
 
-                    {# ---------------- Formulaire d'ajout au panier ---------------- #}
+                    {# ---------------- Add to cart form ---------------- #}
                     <div class="btn-container">
                         <form id="add-to-cart-form" method="post" action="#">
                             <input type="hidden" name="_token" id="csrf-token" value="">
@@ -230,10 +230,8 @@
                             </span>
                         {% endif %}
                     </div>
-
                 </div> {# /description-contenance #}
             </div> {# /descriptif-flex #}
-
         </section>
 
 

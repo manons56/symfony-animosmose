@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-//Permet à l’utilisateur de saisir son email pour demander un lien de réinitialisation.
+// Allows the user to enter their email to request a password reset link.
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -15,7 +15,7 @@ class ResetPasswordRequestFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class, [ // Déclenche la génération du token et l’envoi du mail si l’utilisateur existe.
+            ->add('email', EmailType::class, [ // Triggers token generation and email sending if the user exists.
                 'attr' => ['autocomplete' => 'email'],
                 'constraints' => [
                     new NotBlank([

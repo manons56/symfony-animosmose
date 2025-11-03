@@ -24,9 +24,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     #[ORM\Column(length: 255)]
-    private ?string $password = null; //mot de passe haché en base
+    private ?string $password = null; // hashed password in the database
 
-    // pas d'ORM\Column ici → ce champ n'est PAS stocké en BDD; mdp en clair juste temporaire
+    // no ORM\Column here → this field is NOT stored in the DB; plain password is just temporary
     private ?string $plainPassword = null;
 
 
@@ -128,7 +128,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
-         $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
 

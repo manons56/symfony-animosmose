@@ -74,10 +74,10 @@ ul{
 
 
 
-/* --- MENU HAMBURGER RESPONSIVE --- */
+/* --- RESPONSIVE HAMBURGER MENU --- */
 
 #hamburger {
-    display: none; // caché desktop
+    display: none; // hidden on desktop
     flex-direction: column;
     justify-content: space-around;
     width: 30px;
@@ -104,11 +104,11 @@ ul{
     }
 
     .header nav ul {
-        display: none; // cacher menu desktop sur mobile
+        display: none; // hide desktop menu on mobile
         flex-direction: column;
-        background-color: $color-green; // même que la nav
+        background-color: $color-green; // same as the nav
         position: absolute;
-        top: 60px; // sous la nav (ajuste selon ta hauteur)
+        top: 60px; // below the nav (adjust according to height)
         left: 0;
         width: 100%;
         padding: 1em 0;
@@ -130,7 +130,7 @@ ul{
         margin-top:1em;
     }
 
-    /* Animation hamburger quand ouvert */
+    /* Hamburger animation when open */
     #hamburger.open span:nth-child(1) {
         transform: rotate(45deg) translate(5px, 5px);
     }

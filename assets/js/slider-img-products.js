@@ -1,45 +1,52 @@
-// Attendre que tout le DOM soit chargé avant d'exécuter le script
+//This JS manages images in the detailed description of a product: click the left/right arrows, click on an image to display it in a larger size.
+
+// Wait until the entire DOM (HTML structure) is fully loaded before executing the script.
+// This ensures that all elements (main image, thumbnails, buttons) are available to be accessed.
 document.addEventListener('DOMContentLoaded', () => {
-    // Récupère l'image principale (celle affichée en grand)
+    // Select the main product image element (the large image displayed prominently)
     const mainImage = document.getElementById('main-product-image');
 
-    // Récupère toutes les miniatures (les images cliquables en dessous)
+    // Select all thumbnail images (small clickable images below the main image)
     const thumbnails = document.querySelectorAll('.thumbnail');
 
-    // Récupère les boutons de navigation gauche et droite (flèches)
+    // Select the previous and next navigation buttons (usually arrow buttons)
     const prevBtn = document.getElementById('prev-image');
     const nextBtn = document.getElementById('next-image');
 
-    // Index de l’image actuellement affichée
+    // Store the index of the currently displayed image
     let currentIndex = 0;
 
     /**
-     * Met à jour l'image principale avec celle correspondant à l'index donné
-     * @param {number} index - L'index de la miniature sélectionnée
+     * Updates the main product image to display the image corresponding to the given index.
+     * Also updates the "active" class on thumbnails to highlight the selected one.
+     * @param {number} index - The index of the thumbnail to display in the main image.
      */
     function updateMainImage(index) {
+        // Update the current index with the selected thumbnail
         currentIndex = index;
 
-        const thumbnail = thumbnails[index]; // Récupère la miniature à cet index
-        if (!thumbnail) return; // Si elle n'existe pas, on sort
+        // Get the thumbnail element at the specified index
+        const thumbnail = thumbnails[index];
+        if (!thumbnail) return; // If no thumbnail exists at this index, exit the function
 
-        // Met à jour le src de l'image principale avec celui de la miniature
+        // Update the src attribute of the main image to match the selected thumbnail
         mainImage.src = thumbnail.src;
 
-        // Retire la classe 'active' de toutes les miniatures
+        // Remove the 'active' class from all thumbnails to reset styling
         thumbnails.forEach(t => t.classList.remove('active'));
 
-        // Ajoute la classe 'active' à la miniature actuellement sélectionnée
+        // Add the 'active' class to the selected thumbnail to highlight it
         thumbnail.classList.add('active');
     }
 
-    // Si on a au moins une miniature, on initialise l’image principale avec la première
+    // Initialize the main image with the first thumbnail if any thumbnails exist
     if (thumbnails.length > 0) {
         updateMainImage(0);
     }
 
     /**
-     * Gère le clic sur une miniature : met à jour l'image principale
+     * Handle click events on thumbnails.
+     * When a thumbnail is clicked, update the main image to match it.
      */
     thumbnails.forEach((thumb, i) => {
         thumb.addEventListener('click', () => {
@@ -48,28 +55,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /**
-     * Gère le clic sur le bouton "précédent"
-     * Affiche l’image précédente dans le carrousel (ou la dernière si on est au début)
+     * Handle click on the "previous" button.
+     * Displays the previous image in the carousel.
+     * If currently at the first image, loops around to the last image.
      */
     prevBtn?.addEventListener('click', () => {
-        if (thumbnails.length === 0) return;
+        if (thumbnails.length === 0) return; // Exit if there are no thumbnails
 
         let newIndex = currentIndex - 1;
-        if (newIndex < 0) newIndex = thumbnails.length - 1;
+        if (newIndex < 0) newIndex = thumbnails.length - 1; // Loop to last image if at the start
 
-        updateMainImage(newIndex);
+        updateMainImage(newIndex); // Update the main image to the new index
     });
 
     /**
-     * Gère le clic sur le bouton "suivant"
-     * Affiche l’image suivante dans le carrousel (ou la première si on est à la fin)
+     * Handle click on the "next" button.
+     * Displays the next image in the carousel.
+     * If currently at the last image, loops around to the first image.
      */
     nextBtn?.addEventListener('click', () => {
-        if (thumbnails.length === 0) return;
+        if (thumbnails.length === 0) return; // Exit if there are no thumbnails
 
         let newIndex = currentIndex + 1;
-        if (newIndex >= thumbnails.length) newIndex = 0;
+        if (newIndex >= thumbnails.length) newIndex = 0; // Loop to first image if at the end
 
-        updateMainImage(newIndex);
+        updateMainImage(newIndex); // Update the main image to the new index
     });
 });

@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-// permet au USer de saisir nouveau mdp après avoir cliqué sur le lien de réinitilisation
+// Allows the user to enter a new password after clicking the reset link
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -18,7 +18,7 @@ class ChangePasswordFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('plainPassword', RepeatedType::class, [ // récupère le mot de passe, qui sera ensuite hashé pour l'enregistrer
+            ->add('plainPassword', RepeatedType::class, [ // Retrieves the password, which will then be hashed for saving
                 'type' => PasswordType::class,
                 'options' => [
                     'attr' => [

@@ -19,12 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-
 
 class ProductsCrudController extends AbstractCrudController
 {
@@ -32,139 +27,132 @@ class ProductsCrudController extends AbstractCrudController
 
     public function __construct(CategoriesRepository $categoriesRepo)
     {
+        // Inject the categories repository for use in category-related fields
         $this->categoriesRepo = $categoriesRepo;
     }
 
     public static function getEntityFqcn(): string
     {
+        // Define the entity that this CRUD controller manages
         return Products::class;
     }
 
     public function configureActions(Actions $actions): Actions
     {
+        // Configure available actions
         return $actions
-            // Supprimer l'action "delete" uniquement sur la page INDEX
+            // Remove the "delete" action from the index page (list of products)
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-
-            ->add(Crud::PAGE_EDIT, Action::DELETE);  // ajoute sur détail
+            // Add the delete action on the detail page
+            ->add(Crud::PAGE_EDIT, Action::DELETE);
     }
+
     public function configureFields(string $pageName): iterable
     {
-
-        // Champ galerie d'images (plusieurs images)
+        // --- Images gallery field ---
         $imagesCollectionField = CollectionField::new('images', 'Galerie d\'images')
-            ->allowAdd()                              // autoriser l'ajout
-            ->allowDelete()                           // autoriser la suppression
-            ->setEntryType(PicturesType::class)   // formulaire pour chaque image
-            ->setFormTypeOptions(['by_reference' => false]) // pour que Doctrine gère correctement la collection
-            ->onlyOnForms();                          // affiché uniquement dans les formulaires (new/edit)
+            ->allowAdd()                              // allow adding new images
+            ->allowDelete()                           // allow deleting images
+            ->setEntryType(PicturesType::class)       // specify the form type for each image
+            ->setFormTypeOptions(['by_reference' => false]) // ensures Doctrine handles collection properly
+            ->onlyOnForms();                          // visible only on new/edit forms
 
-        // Champ variants (collection)
+        // --- Variants collection field ---
         $variantsFields = CollectionField::new('variants', 'Variants')
-            ->allowAdd()                              // autoriser l'ajout
-            ->allowDelete()                           // autoriser la suppression
-            ->setEntryType(VariantType::class)        // type de formulaire pour chaque variant
+            ->allowAdd()
+            ->allowDelete()
+            ->setEntryType(VariantType::class)        // form type for each variant
             ->setFormTypeOptions(['by_reference' => false]);
 
-        // Champ catégorie / sous-catégorie
+        // --- Category / Subcategory field ---
         $categoryField = AssociationField::new('category', 'Catégorie / Sous-catégorie')
             ->setCrudController(CategoriesCrudController::class)
-            ->setFormTypeOption('choice_label', 'name')
+            ->setFormTypeOption('choice_label', 'name') // display category name
             ->setFormTypeOption('group_by', function($cat) {
+                // Group subcategories under their parent
                 return $cat->getParent() ? $cat->getParent()->getName() : 'Catégorie principale';
             })
             ->setRequired(true);
 
-        // Champs communs pour formulaire new/edit/detail
+        // --- Common fields for new/edit/detail pages ---
         $commonFields = [
-            TextField::new('name', 'Nom du produit'),
-            //TextField::new('capacity', 'Contenance')
-               // ->setRequired(false)           // le champ n'est plus obligatoire
-              //  ->setFormTypeOption('empty_data', null), // si vide, Symfony met null
-            BooleanField::new('isNew', 'Nouveau')// Nouveau / formulaire
-            ->setLabel('Nouveau')      // facultatif, juste pour être clair
-            ->onlyOnForms(),            // visible uniquement dans new/edit
-
-
-            BooleanField::new('isNew', 'Nouveau')
-                ->renderAsSwitch(false)
+            TextField::new('name', 'Nom du produit'), // product name
+            BooleanField::new('isNew', 'Nouveau')    // product is new flag
+            ->setLabel('Nouveau')
+                ->onlyOnForms(),                      // visible only in forms
+            BooleanField::new('isNew', 'Nouveau')    // display as badge on index
+            ->renderAsSwitch(false)
                 ->formatValue(function ($value, $entity) {
                     return $value ? '<span class="badge bg-success">Nouveau</span>' : '';
                 })
                 ->onlyOnIndex(),
-            BooleanField::new('isBestSeller', 'Best Seller'),
-            BooleanField::new('isOutOfStock', 'Rupture de stock'),
-
-            BooleanField::new('isCustomizable', 'Personnalisable')
-                ->setLabel('Personnalisable')
+            BooleanField::new('isBestSeller', 'Best Seller'),       // bestseller flag
+            BooleanField::new('isOutOfStock', 'Rupture de stock'),  // out of stock flag
+            BooleanField::new('isCustomizable', 'Personnalisable')  // customizable flag
+            ->setLabel('Personnalisable')
                 ->onlyOnForms(),
-
-            BooleanField::new('isCustomizable', 'Personnalisable')
-                ->renderAsSwitch(false)
+            BooleanField::new('isCustomizable', 'Personnalisable')  // display as badge on index
+            ->renderAsSwitch(false)
                 ->formatValue(function ($value, $entity) {
                     return $value ? '<span class="badge bg-info">Personnalisable</span>' : '';
                 })
                 ->onlyOnIndex(),
 
-            $imagesCollectionField, // Galerie multiple
-            $categoryField,
-            $variantsFields,
-            TextEditorField::new('description', 'Description du produit'),
+            $imagesCollectionField,  // image gallery
+            $categoryField,          // category/subcategory
+            $variantsFields,         // product variants
+            TextEditorField::new('description', 'Description du produit'), // rich text description
             TextField::new('composition', 'Composition'),
             TextField::new('analytics_components', 'Composants analytiques'),
             TextField::new('nutritionnal_additive', 'Additifs'),
-
         ];
 
-        // Page index : on n'affiche que le nom du produit
+        // --- Index page: show only product name ---
         if ($pageName === Crud::PAGE_INDEX) {
             return [TextField::new('name', 'Nom du produit')];
         }
 
-        // Page détail : on affiche les champs communs + id
+        // --- Detail page: show common fields + ID ---
         if ($pageName === Crud::PAGE_DETAIL) {
             return array_merge([IdField::new('id')->hideOnForm()], $commonFields);
         }
 
-        // Page new/edit : on affiche tous les champs communs
+        // --- New/Edit page: show all common fields ---
         return $commonFields;
     }
 
-
-//Sans PersistEntity :
-//Dans  PicturesType,  utilisation d'un FileType pour le champ filename.
-//Symfony ne va pas automatiquement déplacer le fichier uploadé dans le dossier public/img/products.
-//Au moment de persister l’entité, Doctrine va juste stocker l’objet UploadedFile ou la valeur vide dans la base, selon la configuration.
-//Résultat : les fichiers ne sont pas réellement sauvegardés, ou le nom du fichier n’est pas enregistré correctement dans la table ProductImage.
+    // --- Handle persistence of uploaded files ---
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance instanceof Products) return;
 
-        // Vérification obligatoire : au moins une image
+        // Ensure at least one image exists
         if (count($entityInstance->getImages()) === 0) {
             throw new \InvalidArgumentException('Le produit doit contenir au moins une image.');
         }
 
-        // Traitement des fichiers uploadés pour la galerie
+        // Loop through uploaded files in the images collection
         foreach ($entityInstance->getImages() as $image) {
             $file = $image->getFile();
             if ($file instanceof UploadedFile) {
+                // Generate unique filename and move to products images directory
                 $newFilename = uniqid() . '.' . $file->guessExtension();
                 $file->move($this->getParameter('products_images_directory'), $newFilename);
                 $image->setFilename($newFilename);
             }
         }
 
+        // Call parent to persist entity
         parent::persistEntity($entityManager, $entityInstance);
     }
 
-
+    // --- Update entity (reuse persistEntity logic) ---
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         $this->persistEntity($entityManager, $entityInstance);
     }
 
-
+    // --- Include additional JS assets in admin pages ---
     public function configureAssets(Assets $assets): Assets
     {
         return $assets->addJsFile('js/admin-products.js');

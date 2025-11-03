@@ -15,7 +15,7 @@
 
 .content-wrapper.blurred {
     filter: blur(4px);
-    pointer-events: none; /* Désactive les clics sur l'arrière-plan */
+    pointer-events: none; /* Disables clicks on the background */
 }
 
 
@@ -34,9 +34,9 @@
     z-index: 20;
     pointer-events: none;
     width: 80%;
-    max-width: 800px; /* limite la largeur sur grand écran */
-    max-height: 90vh; /* limite la hauteur visible à 90% de l’écran */
-    overflow-y: auto; /* permet le scroll vertical à l’intérieur */
+    max-width: 800px; /* limits width on large screens */
+    max-height: 90vh; /* limits visible height to 90% of the screen */
+    overflow-y: auto; /* allows vertical scroll inside */
 }
 
 .modal.active {
@@ -151,7 +151,7 @@
 
     .tarif-item .price {
         margin-top: 0.3em;
-       // font-size: 1rem;
+        // font-size: 1rem;
     }
 }
 
@@ -159,19 +159,19 @@
 
 
 .video-container {
-    width: 100%;            /* prend toute la largeur disponible */
-    max-width: 1450px;      /* optionnel : limite la largeur si tu veux */
-    margin: 0 auto;         /* centre le conteneur horizontalement */
-    overflow: hidden;       /* cache les parties qui dépassent */
+    width: 100%;            /* takes full available width */
+    max-width: 1450px;      /* optional: limits width if desired */
+    margin: 0 auto;         /* horizontally center container */
+    overflow: hidden;       /* hides overflowing parts */
 }
 
 .video-container video {
-    width: 100%;            /* la vidéo s’adapte à la largeur du conteneur */
-    height: auto;           /* conserve les proportions */
-    max-height: 500px;      /* optionnel : limite la hauteur */
-    display: block;         /* supprime les espaces blancs en dessous */
-    margin: 0 auto;         /* centre la vidéo si elle est plus petite que le conteneur */
-    object-fit: cover;      /* : remplie le conteneur tout en gardant proportions */
+    width: 100%;            /* video adapts to container width */
+    height: auto;           /* keeps proportions */
+    max-height: 500px;      /* optional: limits height */
+    display: block;         /* removes whitespace below */
+    margin: 0 auto;         /* centers video if smaller than container */
+    object-fit: cover;      /* fills container while keeping proportions */
 }
 
 .flex {
@@ -182,11 +182,11 @@
     padding: 3em 0;
     max-width: 90%;
 
-    // Pour petits écrans
+    // For small screens
     @media (max-width: 768px) {
         flex-direction: column;
-        align-items: center; // optionnel, pour centrer l'image et le texte
-        text-align: center;  // si tu veux centrer aussi le texte
+        align-items: center; // optional, centers image and text
+        text-align: center;  // if you want to also center text
     }
 }
 
@@ -195,9 +195,9 @@
     flex: 1;
     min-width: 0;
 
-    // Pour petits écrans
+    // For small screens
     @media (max-width: 768px) {
-        width: 100%;       // prend toute la largeur
+        width: 100%;       // takes full width
         text-align: justify;
     }
 }
@@ -215,7 +215,7 @@
     object-fit: cover;
 
     @media (max-width: 768px) {
-        width: 90%;       // prend toute la largeur
+        width: 90%;       // takes full width
         text-align: justify;
     }
 }
@@ -231,7 +231,7 @@
 
 
 button{
-   margin-top:3em;
+    margin-top:3em;
 }
 
 
@@ -266,7 +266,7 @@ button{
     margin-bottom: 0.5em;
 }
 
- .font-weight-bold {
+.font-weight-bold {
     font-weight: 600;
     margin-top: 0.5em;
 }
@@ -285,9 +285,9 @@ h2{
     padding-bottom: 3em;
 }
 
-//partie reconversion : mise en page texte/img/videos
+// reconversion section: layout text/img/videos
 
-/* ✅ Les 3 images non rognées */
+/* ✅ The 3 untrimmed images */
 .triple-images {
     display: flex;
     justify-content: center;
@@ -308,7 +308,7 @@ h2{
 
 
 
-/* Bloc texte + carrousel côte à côte */
+/* Text block + carousel side by side */
 .reconversion-carousel-section {
     display: flex;
     align-items: start;
@@ -323,7 +323,7 @@ h2{
     min-width: 280px;
 }
 
-/* Carrousel simple en CSS */
+/* Simple CSS carousel */
 .carousel {
     flex: 1;
     min-width: 300px;
@@ -346,13 +346,13 @@ h2{
 
 }
 
-/* Animation de défilement automatique */
+/* Automatic scrolling animation */
 @keyframes scrollCarousel {
     0% { transform: translateX(0); }
     100% { transform: translateX(-500%); } /* 5 images = 500% */
 }
 
-/* ✅ Galerie vidéos */
+/* ✅ Video gallery */
 .video-gallery {
     display: flex;
     justify-content: center;
@@ -360,17 +360,17 @@ h2{
     gap: 0.8rem;
     margin: 3rem auto;
     max-width: 100%;
-    overflow-x: auto; /* permet de scroller horizontalement si l'écran est trop petit */
+    overflow-x: auto; /* allows horizontal scroll if screen is too small */
     padding: 1rem;
     scroll-behavior: smooth;
 }
 
 .video-gallery video {
-    height: 250px; /* 👈 réduit la hauteur des vidéos */
+    height: 250px; /* 👈 reduces video height */
     width: auto;
     border-radius: 1rem;
     object-fit: cover;
-    flex-shrink: 0; /* évite que les vidéos se compressent */
+    flex-shrink: 0; /* prevents videos from shrinking */
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     transition: transform 0.3s ease, filter 0.3s ease;
 }
@@ -388,7 +388,7 @@ h2{
 
     .equipement-item {
         flex-direction: row;
-        align-items: center; /* avant: flex-start */
+        align-items: center; /* was: flex-start */
         width: 100%;
         text-align: left;
         padding:0.3em;
@@ -422,14 +422,14 @@ h2{
 
     .video-gallery {
         display: grid;
-        grid-template-columns: repeat(2, 1fr); /* 2 vidéos par ligne */
+        grid-template-columns: repeat(2, 1fr); /* 2 videos per row */
         gap: 1rem;
-        overflow-x: hidden; /* plus de scroll horizontal */
+        overflow-x: hidden; /* no more horizontal scroll */
     }
 
     .video-gallery video {
         width: 100%;
-        //height: 180px; /* légèrement plus petit sur mobile */
+        //height: 180px; /* slightly smaller on mobile */
     }
 
     .triple-images img {

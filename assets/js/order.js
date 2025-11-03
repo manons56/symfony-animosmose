@@ -1,36 +1,37 @@
 /**
  * order.js
  * --------------------------
- * Gère la sélection de la méthode de livraison, l'intégration du widget Mondial Relay,
- * la mise à jour du prix total, et l'affichage des bons boutons (Payline / Valider).
+ * Handles the selection of delivery methods, integrates the Mondial Relay widget,
+ * updates the total price dynamically, and controls the visibility of appropriate
+ * buttons (Payline / Submit).
  * --------------------------
  */
 
 $(document).ready(function () {
 
     // ===============================
-    //  Sélection des éléments du DOM
+    //  SELECT DOM ELEMENTS
     // ===============================
     const radios = $('input[type="radio"][name$="[delivery_method]"], input[type="radio"][name$=".delivery_method"]');
-    const relayContainer = $('#mondial-relay-container');
-    const confirmRelayBtn = $('#confirm-relay');
-    const paylineBtn = $('#payline-button');
-    const submitBtn = $('button[type="submit"]'); // bouton principal "Valider ma commande"
+    const relayContainer = $('#mondial-relay-container'); // Container for Mondial Relay map & options
+    const confirmRelayBtn = $('#confirm-relay');          // Button to confirm chosen relay
+    const paylineBtn = $('#payline-button');             // Payline payment button
+    const submitBtn = $('button[type="submit"]');        // Main form submit button ("Valider ma commande")
 
-    // Eléments de calcul du total
-    const baseTotalEl = $('#base-total');
-    const deliveryPriceEl = $('#delivery-price');
-    const finalTotalEl = $('#final-total');
+    // Elements used for dynamic total price calculations
+    const baseTotalEl = $('#base-total');       // Base order total
+    const deliveryPriceEl = $('#delivery-price'); // Delivery price display
+    const finalTotalEl = $('#final-total');     // Final total display including delivery
 
     // ===========================================================
-    //  Fonction utilitaire : met à jour les totaux dynamiquement
+    //  UTILITY FUNCTION: Update dynamic totals
     // ===========================================================
     function updateTotals(deliveryMethod) {
-        // Récupère le prix total de base
+        // Parse the base total from the DOM, fallback to 0 if missing
         let baseTotal = parseFloat(baseTotalEl.text().replace(' ', '')) || 0;
         let deliveryPrice = 0;
 
-        // Si une méthode est sélectionnée, on prend le prix associé via data-price
+        // If a delivery method is selected, retrieve its price from data-price attribute
         if (deliveryMethod) {
             const selectedRadio = radios.filter(':checked');
             if (selectedRadio.length) {
@@ -38,143 +39,142 @@ $(document).ready(function () {
             }
         }
 
-        // Met à jour les champs visibles dans le DOM
+        // Update visible DOM elements with calculated prices
         deliveryPriceEl.text(deliveryPrice.toFixed(2) + ' €');
         finalTotalEl.text((baseTotal + deliveryPrice).toFixed(2) + ' €');
     }
 
     // ===========================================================
-    //  Initialisation : si une méthode est déjà cochée au chargement
+    //  INITIALIZATION: Handle pre-selected delivery method
     // ===========================================================
     const initiallyChecked = radios.filter(':checked').val();
     if (initiallyChecked) {
         updateTotals(initiallyChecked);
 
         if (initiallyChecked === 'relay') {
-            // Si "point relais" est déjà sélectionné, on affiche directement la carte
+            // If "relay point" was pre-selected, show the map immediately
             relayContainer.show();
-            submitBtn.hide();   // Cache le bouton "Valider ma commande"
-            paylineBtn.hide();  // Cache Payline tant que le relais n’est pas confirmé
+            submitBtn.hide();   // Hide the main submit button
+            paylineBtn.hide();  // Hide Payline until relay is confirmed
         }
     }
 
     // ===========================================================
-    //  Réagit au changement de méthode de livraison
+    //  LISTENER: Delivery method change
     // ===========================================================
     radios.on('change', function () {
-        const selected = $(this).val(); // "relay", "home", "pickup", etc.
+        const selected = $(this).val(); // e.g., "relay", "home", "pickup", etc.
         updateTotals(selected);
 
         if (selected === 'relay') {
-            // Si l’utilisateur choisit "Point relais"
-            relayContainer.show();    // Affiche la carte Mondial Relay
-            paylineBtn.hide();        // Cache le bouton Payline pour l’instant
-            submitBtn.hide();         // Cache le bouton principal
-            confirmRelayBtn.prop('disabled', true); // Désactive le bouton tant qu’aucun relais choisi
+            // User selects a relay point
+            relayContainer.show();       // Display Mondial Relay widget
+            paylineBtn.hide();           // Hide Payline temporarily
+            submitBtn.hide();            // Hide main submit button
+            confirmRelayBtn.prop('disabled', true); // Disable confirm button until a relay is chosen
 
-            // Initialise ou recharge le widget Mondial Relay
+            // Initialize or refresh the Mondial Relay widget
             initMondialRelayWidget();
 
         } else {
-            // Toute autre méthode → on masque la zone relais
+            // Any other delivery method → hide relay-related UI
             relayContainer.hide();
-            paylineBtn.hide();   // Cache Payline
-            submitBtn.show();    // Réaffiche "Valider ma commande"
-            confirmRelayBtn.prop('disabled', true);
+            paylineBtn.hide();
+            submitBtn.show();            // Show main submit button
+            confirmRelayBtn.prop('disabled', true); // Ensure confirm button is disabled
         }
     });
 
     // ===========================================================
-    //  Confirmation d’un point relais
+    //  RELAY CONFIRMATION
     // ===========================================================
     confirmRelayBtn.on('click', function() {
-        // Quand l'utilisateur clique sur "Confirmer le point relais"
-        paylineBtn.show();       // Montre le bouton Payline
-        confirmRelayBtn.prop('disabled', true); // Désactive le bouton pour éviter un double clic
-        submitBtn.hide();        // Cache le bouton principal du formulaire
+        // User clicks "Confirm relay point"
+        paylineBtn.show();             // Show Payline button for payment
+        confirmRelayBtn.prop('disabled', true); // Disable confirm to prevent double-clicks
+        submitBtn.hide();              // Hide the main submit button
 
-        // Défilement fluide vers le bouton Payline
+        // Smooth scroll to Payline button for better UX
         $('html, body').animate({scrollTop: paylineBtn.offset().top}, 500);
     });
 
     // ===========================================================
-    //  Fonction d’initialisation du widget Mondial Relay
+    //  INITIALIZE MONDIAL RELAY WIDGET
     // ===========================================================
     function initMondialRelayWidget() {
         const initWidget = () => {
-            // Vérifie si le plugin Mondial Relay est bien chargé
+            // Ensure the Mondial Relay plugin is loaded
             if (typeof $.fn.MR_ParcelShopPicker === 'undefined') {
-                console.warn('⏳ Plugin Mondial Relay non encore chargé, nouvel essai dans 300ms...');
-                setTimeout(initWidget, 300); // Réessaie après 300ms
+                console.warn('⏳ Mondial Relay plugin not loaded yet, retrying in 300ms...');
+                setTimeout(initWidget, 300); // Retry after 300ms
                 return;
             }
 
-            // Si déjà initialisé, on le rafraîchit simplement
+            // Refresh the widget if already initialized
             if ($("#Zone_Widget").data('MRWidgetInitialized')) {
-                console.log(' Rafraîchissement du widget Mondial Relay');
+                console.log('Refreshing Mondial Relay widget');
                 $("#Zone_Widget").MR_ParcelShopPicker('refresh');
                 return;
             }
 
-            // Initialisation du widget
-            console.log(' Initialisation du widget Mondial Relay');
+            // Initial widget setup
+            console.log('Initializing Mondial Relay widget');
             $("#Zone_Widget").MR_ParcelShopPicker({
-                Target: "Zone_Widget",  // ID du conteneur
-                Brand: "CC20SXK2",      // Identifiant Mondial Relay de la boutique
-                Country: "FR",          // Pays
-                PostCode: "56000",      // Code postal par défaut
-                NbResults: 10,          // Nombre de points affichés
-                ShowResultsOnMap: true, // Affiche la carte Leaflet
-                ColLivMod: "24R",       // Type de livraison (standard)
+                Target: "Zone_Widget",          // Container ID
+                Brand: "CC20SXK2",              // Shop-specific Mondial Relay ID
+                Country: "FR",                  // Country for search
+                PostCode: "56000",              // Default postal code
+                NbResults: 10,                  // Number of relay points displayed
+                ShowResultsOnMap: true,         // Display Leaflet map
+                ColLivMod: "24R",               // Delivery type
                 OnParcelShopSelected: function (data) {
-                    // ⚡ Callback : quand un relais est sélectionné
+                    // Callback: when a relay is selected
                     $('#relay-info').html(`
                         <strong>${data.Nom}</strong><br>
                         ${data.Adresse1}<br>
                         ${data.CP} ${data.Ville}
                     `);
 
-                    // Enregistre les infos dans les champs cachés du formulaire
+                    // Store selected relay information in hidden form fields
                     $('#relay_name').val(data.Nom);
                     $('#relay_address').val(data.Adresse1);
                     $('#relay_cp').val(data.CP);
                     $('#relay_city').val(data.Ville);
 
-                    // Active le bouton "Confirmer le point relais"
+                    // Enable the confirm relay button
                     confirmRelayBtn.prop('disabled', false);
                 }
             });
 
-            // Empêche les initialisations multiples
+            // Prevent multiple widget initializations
             $("#Zone_Widget").data('MRWidgetInitialized', true);
 
-            // Forcer le resize Leaflet après l'initialisation pour mobile
+            // Adjust Leaflet map size after initialization for mobile responsiveness
             setTimeout(adjustLeafletMap, 500);
         };
 
-
-
-        // Démarre la vérification/initialisation
+        // Start initialization check
         initWidget();
     }
 
     // ===========================================================
-    //  Fonction utilitaire : ajuste la carte Leaflet
+    //  UTILITY FUNCTION: Adjust Leaflet map
     // ===========================================================
     function adjustLeafletMap() {
         const mapContainer = $("#Zone_Widget .leaflet-container");
+        // Ensure the Leaflet map exists before calling invalidateSize
         if (mapContainer.length && mapContainer[0]._leaflet_map) {
-            mapContainer[0]._leaflet_map.invalidateSize(); // Redessine correctement la carte
+            mapContainer[0]._leaflet_map.invalidateSize(); // Redraw map correctly
         }
     }
 
     // ===========================================================
-    //  Rafraîchit la carte Mondial Relay si on redimensionne la fenêtre
+    //  REFRESH MONDIAL RELAY MAP ON WINDOW RESIZE
     // ===========================================================
     $(window).on('resize', function () {
         if ($("#Zone_Widget").data('MRWidgetInitialized')) {
-            $("#Zone_Widget").MR_ParcelShopPicker('refresh');
-            setTimeout(adjustLeafletMap, 300);
+            $("#Zone_Widget").MR_ParcelShopPicker('refresh'); // Refresh widget to adapt to new size
+            setTimeout(adjustLeafletMap, 300);               // Re-adjust Leaflet map
         }
     });
 });

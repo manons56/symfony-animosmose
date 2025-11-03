@@ -1,58 +1,74 @@
-// On attend que le DOM soit complètement chargé avant d'exécuter le script
+/**
+ * new-carousel.js
+ * --------------------------
+ * This script manages a horizontal carousel with previous/next buttons.
+ * It supports responsive behavior, displaying a different number of items
+ * depending on screen width, and resets the carousel on window resize.
+ *
+ * Features:
+ * 1. Tracks the current carousel position using an index.
+ * 2. Calculates how many items are visible per view based on viewport width.
+ * 3. Moves the carousel left/right when navigation buttons are clicked.
+ * 4. Resets the carousel to the first items when the window is resized.
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
+    // -----------------------------------------------------------
+    // SELECT DOM ELEMENTS
+    // -----------------------------------------------------------
+    const track = document.querySelector('.new-carousel-track');       // The container holding all carousel items
+    const prevBtn = document.querySelector('.new-carousel-btn.prev');  // Button to scroll to previous items
+    const nextBtn = document.querySelector('.new-carousel-btn.next');  // Button to scroll to next items
+    const items = Array.from(track.children);                          // Array of all carousel items
 
-    // Sélectionne le conteneur "piste" du carrousel (celui qui contient tous les items)
-    const track = document.querySelector('.new-carousel-track');
+    let index = 0; // Tracks the first visible item in the carousel
 
-    // Sélectionne le bouton "précédent" du carrousel
-    const prevBtn = document.querySelector('.new-carousel-btn.prev');
-
-    // Sélectionne le bouton "suivant" du carrousel
-    const nextBtn = document.querySelector('.new-carousel-btn.next');
-
-    // Transforme les enfants de la piste (les items) en tableau pour pouvoir les manipuler facilement
-    const items = Array.from(track.children);
-
-    // Index de départ pour suivre quelle position de carrousel est affichée
-    let index = 0;
-
-    // Fonction qui retourne le nombre d'items visibles selon la largeur de l'écran
+    // -----------------------------------------------------------
+    // FUNCTION: Determine number of items visible based on viewport
+    // -----------------------------------------------------------
     function itemsPerView() {
-        // Si l'écran est supérieur ou égal à 768px (desktop), on affiche 2 items
-        // Sinon (mobile), on affiche 1 item
+        // Desktop: 2 items visible, Mobile: 1 item visible
         return window.innerWidth >= 768 ? 2 : 1;
     }
 
-    // Fonction qui met à jour la position de la piste en fonction de l'index actuel
+    // -----------------------------------------------------------
+    // FUNCTION: Update carousel transform based on current index
+    // -----------------------------------------------------------
     function updateCarousel() {
-        const perView = itemsPerView(); // Récupère combien d'items sont visibles
-        // Décale la piste vers la gauche pour montrer l'item correspondant à l'index
+        const perView = itemsPerView();
+        // Move the track to the left by a percentage of its width, based on index and items per view
         track.style.transform = `translateX(-${(100 / perView) * index}%)`;
     }
 
-    // Quand on clique sur le bouton "suivant"
+    // -----------------------------------------------------------
+    // EVENT: Click "Next" button
+    // -----------------------------------------------------------
     nextBtn.addEventListener('click', () => {
-        const perView = itemsPerView(); // Récupère combien d'items sont visibles
-        // Si on n'est pas encore au dernier bloc visible, on incrémente l'index
+        const perView = itemsPerView();
+        // Only increment index if there are more items to show
         if (index < items.length - perView) index++;
-        // On met à jour le carrousel avec la nouvelle position
         updateCarousel();
     });
 
-    // Quand on clique sur le bouton "précédent"
+    // -----------------------------------------------------------
+    // EVENT: Click "Previous" button
+    // -----------------------------------------------------------
     prevBtn.addEventListener('click', () => {
-        // Si on n'est pas au début, on décrémente l'index
+        // Only decrement index if not at the start
         if (index > 0) index--;
-        // On met à jour le carrousel avec la nouvelle position
         updateCarousel();
     });
 
-    // Quand la fenêtre est redimensionnée
+    // -----------------------------------------------------------
+    // EVENT: Reset carousel on window resize
+    // -----------------------------------------------------------
     window.addEventListener('resize', () => {
-        index = 0;          // On remet le carrousel au début
-        updateCarousel();   // On met à jour l'affichage pour correspondre à la nouvelle largeur
+        index = 0;        // Reset index to 0 to prevent misalignment
+        updateCarousel(); // Update transform according to new viewport
     });
 
-    // Initialisation : on affiche le carrousel à la bonne position au chargement
-    updateCarousel();
+    // -----------------------------------------------------------
+    // INITIALIZATION
+    // -----------------------------------------------------------
+    updateCarousel(); // Set initial transform on page load
 });

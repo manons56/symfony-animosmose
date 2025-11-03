@@ -1,21 +1,44 @@
-// Récupère l'élément avec l'ID 'hamburger' (l'icône de menu, trois barres)
+// ===========================================================
+// HAMBURGER MENU TOGGLE SCRIPT
+// ===========================================================
+// This script handles the opening and closing of a hamburger-style
+// navigation menu. It updates ARIA attributes for accessibility,
+// toggles CSS classes for animation, and controls the menu visibility.
+
+// -----------------------------------------------------------
+// SELECT DOM ELEMENTS
+// -----------------------------------------------------------
+// Get the hamburger icon element (the button with three bars)
 const hamburger = document.getElementById('hamburger');
 
-// Récupère l'élément avec l'ID 'menu-list' (le menu déroulant ou la liste des liens de navigation)
+// Get the menu list element (the dropdown or nav links container)
 const menu = document.getElementById('menu-list');
 
-// Ajoute un écouteur d'événement sur le clic du bouton hamburger
+// -----------------------------------------------------------
+// EVENT LISTENER: Toggle menu on click
+// -----------------------------------------------------------
+// When the user clicks the hamburger icon:
 hamburger.addEventListener('click', () => {
-    // Vérifie l'état actuel de l'attribut 'aria-expanded' pour savoir si le menu est ouvert
-    // Si l'attribut est égal à 'true', alors expanded vaut true, sinon false
+
+    // -----------------------------------------------------------
+    // ACCESSIBILITY: Determine current state
+    // -----------------------------------------------------------
+    // Check the current 'aria-expanded' attribute to know if the menu is open
+    // 'aria-expanded' is 'true' when menu is open, 'false' when closed
     const expanded = hamburger.getAttribute('aria-expanded') === 'true' || false;
 
-    // Met à jour l'attribut 'aria-expanded' avec la valeur opposée (true devient false, et inversement)
+    // Update 'aria-expanded' with the opposite value
+    // This ensures assistive technologies know the menu's current state
     hamburger.setAttribute('aria-expanded', !expanded);
 
-    // Bascule la classe CSS 'open' sur l'élément hamburger (utile pour les animations ou les styles d'état ouvert)
+    // -----------------------------------------------------------
+    // CSS ANIMATIONS: Toggle classes
+    // -----------------------------------------------------------
+    // Toggle the 'open' class on the hamburger button itself
+    // Useful for animating the icon (e.g., changing bars to an X)
     hamburger.classList.toggle('open');
 
-    // Bascule la classe CSS 'show' sur le menu, pour l'afficher ou le cacher (souvent via `display: none/block` ou `opacity`)
+    // Toggle the 'show' class on the menu container
+    // This typically controls visibility via CSS (e.g., display or opacity)
     menu.classList.toggle('show');
 });

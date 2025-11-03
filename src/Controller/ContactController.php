@@ -11,32 +11,42 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
-
+/**
+ * ContactController
+ * --------------------------
+ * Handles contact form submissions and shop-related questions.
+ * Key responsibilities:
+ * 1. Render and process the general contact form
+ * 2. Handle shop-specific question forms (AJAX)
+ * 3. Send emails to the admin with form data
+ * --------------------------
+ */
 final class ContactController extends AbstractController
 {
+    /**
+     * Render and process the general contact form.
+     * URL: /contact
+     */
     #[Route('/contact', name: 'app_contact')]
     public function contact(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ContactType::class);
-        $form->handleRequest($request); // symfony vérifie le token pour POST
-        // on appelle la méthode handleRequest($request), symfony récupère la valeur du champ _token dans le POST
-        //puis compare cette valeur avec le token qu'il a généré en interne(via le servie CsrfTokenManagerInterface)
-        //si le token ne correspond pas, le formulaire est invalide
-
+        $form->handleRequest($request);
+        // handleRequest checks CSRF token automatically and validates POST data
 
         if ($form->isSubmitted()) {
-            // Honeypot
+            // Honeypot anti-spam check
             if (!empty($form->get('website')->getData())) {
                 $this->addFlash('contact_error', 'Spam détecté !');
             }
 
-            // Formulaire valide
-            if ($form->isValid() /* Token CSRF vérifié ici*/ && empty($form->get('website')->getData())) {
+            // Form is valid and honeypot is empty → send email
+            if ($form->isValid() && empty($form->get('website')->getData())) {
                 $data = $form->getData();
 
                 $email = (new Email())
                     ->from('manon.sara@3wa.io')
-                    ->to('manon.sara96@gmail.com') // email de l'admin
+                    ->to('manon.sara96@gmail.com') // admin email
                     ->replyTo($data['email'])
                     ->subject('Nouveau message depuis le formulaire de contact')
                     ->text(
@@ -58,16 +68,17 @@ final class ContactController extends AbstractController
             }
         }
 
-        //Rendu du formulaire, toujours exécuté même si formulaire pas soumis ou invalide
+        // Render the form (even if not submitted or invalid)
         return $this->render('contact/index.html.twig', [
             'current_page' => 'contact',
             'contactForm' => $form->createView(),
         ]);
     }
 
-
-
-
+    /**
+     * Handle shop-related question form submissions via AJAX (POST)
+     * URL: /shop/question
+     */
     #[Route('/shop/question', name: 'shop_question', methods: ['POST'])]
     public function send(Request $request, MailerInterface $mailer): Response
     {
@@ -79,7 +90,7 @@ final class ContactController extends AbstractController
 
             $email = (new Email())
                 ->from($data['email'])
-                ->to('manon.sara96@gmail.com') // email de l'admin
+                ->to('manon.sara96@gmail.com') // admin email
                 ->replyTo($data['email'])
                 ->subject('Nouveau message depuis la boutique')
                 ->text(sprintf(
@@ -98,10 +109,11 @@ final class ContactController extends AbstractController
         return $this->json(['success' => false], 400);
     }
 
-    //shop_question → POST → reçoit les données du formulaire et envoie l’email.
-    //shop_question_form → GET → sert juste à rendre le formulaire HTML, pour que la popup puisse le charger via AJAX après 5 secondes.
-
-
+    /**
+     * Render the shop question form (GET)
+     * Used to load the form via AJAX in a popup
+     * URL: /shop/question/form
+     */
     #[Route('/shop/question/form', name: 'shop_question_form', methods: ['GET'])]
     public function questionForm(): Response
     {

@@ -3,7 +3,6 @@
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Mailer\MailerInterface;
 
 class ContactControllerTest extends WebTestCase
 {
@@ -20,28 +19,32 @@ class ContactControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
+        // Récupérer la page du formulaire de contact
         $crawler = $client->request('GET', '/contact');
+        $this->assertResponseIsSuccessful();
+
+        // Récupérer le formulaire via le bouton "Envoyer"
         $form = $crawler->selectButton('Envoyer')->form();
 
-        $formData = [
-            'contact[nom]' => 'Dupont',
-            'contact[prenom]' => 'Jean',
-            'contact[telephone]' => '0102030405',
-            'contact[email]' => 'jean.dupont@test.com',
-            'contact[message]' => 'Bonjour, ceci est un test !',
-            'contact[consent]' => 1,   // checkbox obligatoire
-            'contact[website]' => '',  // honeypot vide
-        ];
+        // Remplir les champs
+        $form['contact[nom]'] = 'Dupont';
+        $form['contact[prenom]'] = 'Jean';
+        $form['contact[telephone]'] = '0102030405';
+        $form['contact[email]'] = 'jean.dupont@test.com';
+        $form['contact[message]'] = 'Bonjour, ceci est un test !';
+        $form['contact[consent]'] = 1; // checkbox RGPD
+        $form['contact[website]'] = ''; // honeypot vide
 
-        $client->submit($form, $formData);
+        // Soumettre le formulaire
+        $client->submit($form);
 
         // Vérifier la redirection
         $this->assertResponseRedirects('/contact');
         $client->followRedirect();
         $this->assertResponseIsSuccessful();
 
-        // Vérifier que le flash message est présent
-        $this->assertSelectorExists('.flash-contact_success, .flash-contact_error');
+        // Vérifier qu’au moins un flash message est présent
+        $this->assertSelectorExists('.flash-success, .flash-danger');
     }
 
     public function testShopQuestionFormLoads(): void
@@ -57,16 +60,22 @@ class ContactControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $formData = [
-            'shop[name]' => 'Dupont',
-            'shop[phone]' => '0102030405',
-            'shop[email]' => 'jean.dupont@test.com',
-            'shop[message]' => 'Question sur le produit',
-            'shop[website]' => '', // honeypot vide
-        ];
+        // Récupérer le formulaire via la route GET
+        $crawler = $client->request('GET', '/shop/question/form');
+        $this->assertResponseIsSuccessful();
 
-        $client->request('POST', '/shop/question', $formData);
+        $form = $crawler->selectButton('Envoyer')->form();
 
+        // Remplir les champs du formulaire
+        $form['shop[name]'] = 'Jean Dupont';
+        $form['shop[phone]'] = '0601020304';
+        $form['shop[email]'] = 'client@example.com';
+        $form['shop[message]'] = 'Bonjour, ceci est un test depuis PHPUnit.';
+
+        // Soumettre le formulaire → POST automatique vers /shop/question
+        $client->submit($form);
+
+        // Vérifier la réponse JSON
         $this->assertResponseIsSuccessful();
         $this->assertJson($client->getResponse()->getContent());
 
@@ -78,7 +87,7 @@ class ContactControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        // On envoie un formulaire vide pour provoquer l'erreur
+        // On envoie un formulaire vide directement en POST
         $client->request('POST', '/shop/question', []);
 
         $this->assertResponseStatusCodeSame(400);

@@ -7,7 +7,7 @@
 }
 
 
-//Bouton se déconnecter
+// Logout button
 .user-menu-wrapper {
     position: relative;
     display: inline-block;
@@ -84,18 +84,18 @@
     padding-right:2em;
 }
 
-/* ===== Table des produits ===== */
+/* ===== Products table ===== */
 .order-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px; /* espace sous le tableau */
+    margin-bottom: 20px; /* space below the table */
 
 }
 
 .order-table th,
 .order-table td {
     border: 1px solid #ddd;
-    padding: 12px 15px; /* plus d'espace dans les cellules */
+    padding: 12px 15px; /* more space inside cells */
     text-align: left;
 }
 
@@ -104,7 +104,7 @@
     font-weight: 600;
 }
 
-/* ===== Totaux ===== */
+/* ===== Totals ===== */
 .order-totals{
     padding-top:2em;
 }
@@ -119,9 +119,9 @@
     font-weight: 600;
 }
 
-/* ===== Formulaire livraison ===== */
+/* ===== Delivery form ===== */
 .delivery-methods {
-   margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .delivery-methods label {
@@ -142,22 +142,22 @@
     font-size: 14px;
 }
 
-/* ===== Conditions générales de vente ===== */
+/* ===== Terms and Conditions ===== */
 .cgv-container {
     font-size: 13px;
-    color: #888; /* gris clair */
+    color: #888; /* light gray */
     margin-bottom: 2em;
     padding-bottom: 2em;
 }
 
 .cgv-container a {
-    color: #000; /* lien noir */
+    color: #000; /* black link */
     text-decoration: underline;
 }
 
 
 
-/* ===== Espacement général ===== */
+/* ===== General spacing ===== */
 body {
     line-height: 1.6;
 }
@@ -168,12 +168,12 @@ h2 {
 
 
 button {
-   margin-top:2em;
+    margin-top:2em;
 }
 
 
 
-/* Par défaut : on masque la version mobile */
+/* By default: hide the mobile version */
 .order-mobile {
     display: none;
 }
@@ -210,7 +210,7 @@ button {
 
 
 
-//"merci pour votre commnade"
+// "thank you for your order"
 .logo-alimosmose{
     width:15em !important;
     padding-top:2em;
@@ -258,7 +258,7 @@ select {
 }
 
 
-/* Focus visible pour clavier */
+/* Focus visible for keyboard */
 input:focus-visible,
 select:focus-visible,
 button:focus-visible {
@@ -278,7 +278,7 @@ button[type="submit"] {
     margin-top: 0.3em;
 }
 
-/* Champ caché */
+/* Hidden field */
 input[type="hidden"] {
     display: none;
 }
@@ -286,7 +286,7 @@ input[type="hidden"] {
 
 
 
-/* Version mobile */
+/* Mobile version */
 @media (max-width: 768px) {
     .order-table {
         display: none;
@@ -297,10 +297,10 @@ input[type="hidden"] {
     }
 
     .widget-container {
-        min-height: 50vh; /* mobile : moitié de la hauteur de l'écran */
+        min-height: 50vh; /* mobile: half of screen height */
     }
 
-    //"merci pour votre commande"
+    // "thank you for your order"
     .example-wrapper {
         padding: 0 1.5em;
     }
@@ -321,5 +321,3 @@ input[type="hidden"] {
 
 
 }
-
-

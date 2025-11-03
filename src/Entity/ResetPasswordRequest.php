@@ -3,8 +3,8 @@
 namespace App\Entity;
 
 
-// Role de l'entité : stocker les tokens de réinitialisation et leur date d'expiration
-//Permet de vérifier que le lien reçu par email est valide et n’a pas expiré.
+// Role of the entity: store reset tokens and their expiration date
+// Allows verifying that the link received by email is valid and has not expired.
 
 use App\Repository\ResetPasswordRequestRepository;
 use Doctrine\ORM\Mapping as ORM;

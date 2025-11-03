@@ -18,7 +18,7 @@ class UserType extends AbstractType
     {
         $isEdit = $options['is_edit'] ?? false;
 
-        // En mode édition, on ne montre pas le mot de passe ni la certification
+        // In edit mode, we do not show the password or the certification
         if (!$isEdit) {
             $builder
                 ->add('plainPassword', PasswordType::class, [
@@ -50,14 +50,14 @@ class UserType extends AbstractType
                 ]);
         }
 
-        //  Ces champs sont communs à l'inscription ET à la modification
+        // These fields are common to both registration and editing
         $builder
             ->add('name', TextType::class)
             ->add('surname', TextType::class)
             ->add('phone', TextType::class)
             ->add('email', EmailType::class)
             ->add('address', AddressType::class, [
-                'label' => false, // masque le label "Adresse" automatique
+                'label' => false, // hides the automatic "Address" label
             ]);
     }
 
@@ -65,7 +65,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'is_edit' => false, // par défaut, c’est une inscription
+            'is_edit' => false, // by default, it is a registration
         ]);
     }
 }

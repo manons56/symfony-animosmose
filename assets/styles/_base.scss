@@ -74,7 +74,7 @@ article{
 
 
 ////////////////////////////
-// acceptation des cookies//
+// cookie acceptance //
 .cookie-banner {
     position: fixed;
     bottom: 0;
@@ -87,7 +87,7 @@ article{
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-    z-index: 9999; /* Très au-dessus */
+    z-index: 9999; /* Very on top */
 }
 
 .cookie-banner p {
@@ -122,8 +122,8 @@ article{
     background-color: transparent;
     color:black;
     text-decoration: underline;
-    pointer-events: auto; /* le bouton reste cliquable malgré l'overlay */
-    position: relative;   /* pour être au-dessus de l'overlay */
+    pointer-events: auto; /* button remains clickable despite overlay */
+    position: relative;   /* to be above the overlay */
     z-index: 3;
 }
 
@@ -145,11 +145,11 @@ article{
 
 .posts-insta.blurred .post-insta {
     filter: blur(6px);
-    pointer-events: none; /* interdit les clics */
-    user-select: none;    /* interdit la sélection du texte */
+    pointer-events: none; /* disables clicks */
+    user-select: none;    /* disables text selection */
 }
 
-/* Overlay pour le message */
+/* Overlay for the message */
 .posts-insta .insta-overlay {
     position: absolute;
     top: 0;
@@ -167,7 +167,7 @@ article{
 }
 
 
-/* Overlay Instagram */
+/* Instagram Overlay */
 .posts-insta.blurred .insta-overlay {
     position: absolute;
     top: 0;
@@ -180,12 +180,12 @@ article{
     background: rgba(255,255,255,0.6);
     text-align:center;
     font-weight:bold;
-    z-index: 10; /* < 9999 pour bannière */
+    z-index: 10; /* < 9999 for banner */
     pointer-events: auto;
 }
 
 
-/* Flou sur les posts */
+/* Blur on posts */
 .posts-insta.blurred .post-insta {
     filter: blur(6px);
     pointer-events: none;

@@ -117,7 +117,7 @@
 }
 
 .carousel-item {
-    flex: 0 0 calc(100% - 8px); /* mobile : un petit espace entre les bords */
+    flex: 0 0 calc(100% - 8px); /* mobile: small space between edges */
     margin-right: 8px;
 
 }
@@ -125,11 +125,11 @@
 
 @media (min-width: 768px) {
     .carousel-item {
-        flex: 0 0 calc(33.333% - 16px); /* 3 éléments visibles avec gap fluide */
+        flex: 0 0 calc(33.333% - 16px); /* 3 visible items with fluid gap */
         margin-right: 16px;
     }
     .carousel-item:last-child {
-        margin-right: 0; /* évite un espace vide à la fin */
+        margin-right: 0; /* avoid empty space at the end */
     }
 }
 
@@ -148,9 +148,9 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center; // centre tous les éléments
+    align-items: center; // center all elements
     justify-content: space-between;
-    gap: 1rem; // espace vertical régulier
+    gap: 1rem; // regular vertical spacing
 
 
     img {
@@ -165,7 +165,7 @@
         font-size: $font-size-p;
         text-align:center;
         font-weight: bold;
-        margin: 0; // évite les sauts d’espace involontaires
+        margin: 0; // avoids unwanted line breaks
     }
 
     button {
@@ -209,7 +209,7 @@ h2{
     padding-bottom: 1em;
 }
 
-/* Par défaut : on cache la flèche */
+/* By default: hide the arrow */
 .toggle-arrow {
     display: none;
 }
@@ -223,7 +223,7 @@ h2{
     }
 
     .carousel-item {
-        flex: 0 0 calc(100% - 8px); /* cohérent avec le JS */
+        flex: 0 0 calc(100% - 8px); /* consistent with JS */
         margin-right: 8px;
         padding: 1rem;
         height: auto;
@@ -238,19 +238,19 @@ h2{
     }
 
     .team-picture {
-        height: 50vh;  // hauteur réduite sur mobile pour que ça ne prenne pas trop de place
-        background-position: center center; // recentre l’image au milieu sur mobile
+        height: 50vh;  // reduced height on mobile so it doesn't take too much space
+        background-position: center center; // recenter image in the middle on mobile
     }
 
     .home-container article {
-        display: block;  /* plus de flex, empilement vertical */
+        display: block;  /* no more flex, vertical stacking */
     }
 
     .home-article-s2 a {
-        display: inline-flex;        /* inline-flex prend seulement la largeur de son contenu */
-        justify-content: center;     /* centre le texte à l’intérieur du bouton */
-        margin: 0 auto;              /* centre le bouton dans l’article */
-        padding: 0.5em 1.5em;        /* ajuste la taille si besoin */
+        display: inline-flex;        /* inline-flex only takes content width */
+        justify-content: center;     /* center text inside button */
+        margin: 0 auto;              /* center button in article */
+        padding: 0.5em 1.5em;        /* adjust size if needed */
     }
 
     .home-container .personne {
@@ -264,38 +264,38 @@ h2{
     .home-container .description,
     .home-container .description-franck{
         width: 100%;
-        max-height: 10em; /* plus de lignes visibles (~6 lignes) */
+        max-height: 10em; /* more visible lines (~6 lines) */
         overflow: hidden;
         position: relative;
         transition: max-height 0.3s ease;
-        /* retirer cursor pointer du texte pour éviter confusion */
+        /* remove cursor pointer from text to avoid confusion */
         cursor: default;
-        margin-bottom: 0.5em; /* espace entre texte et flèche */
+        margin-bottom: 0.5em; /* space between text and arrow */
     }
 
     .home-container .description.expanded,
     .home-container .description-franck.expanded {
-        max-height: 1000px; /* tout afficher */
+        max-height: 1000px; /* show everything */
     }
 
-    /* Conteneur pour la flèche */
+    /* Container for the arrow */
     .toggle-arrow {
-        display: block;              /* fait que le conteneur prenne toute la largeur */
-        text-align: center;          /* centre horizontalement le contenu */
-        font-size: 2.5rem;           /* flèche plus grosse */
+        display: block;              /* makes the container full width */
+        text-align: center;          /* center content horizontally */
+        font-size: 2.5rem;           /* bigger arrow */
         color: $color-green;
         cursor: pointer;
         user-select: none;
         transition: transform 0.3s ease;
         margin-bottom: 2em;
-        transform: rotate(90deg);    /* flèche vers le bas par défaut */
-        line-height: 1;              /* évite un espace vertical supplémentaire */
+        transform: rotate(90deg);    /* arrow pointing down by default */
+        line-height: 1;              /* avoids extra vertical space */
         font-weight: bold;
     }
 
-    /* Flèche tournée vers le bas quand texte fermé, vers le haut quand ouvert */
+    /* Arrow rotated down when text closed, up when opened */
     .toggle-arrow.expanded {
-        transform: rotate(-90deg); /* flèche tournée vers le haut quand ouvert */
+        transform: rotate(-90deg); /* arrow pointing up when opened */
     }
 
 
@@ -303,7 +303,7 @@ h2{
 
 
 
-// carroussel de commentaires
+// comments carousel
 .new-carousel-container {
     position: relative;
     width: 80%;
@@ -318,7 +318,7 @@ h2{
 }
 
 .new-carousel-item {
-    flex: 0 0 100%; /* mobile : 1 item visible */
+    flex: 0 0 100%; /* mobile: 1 visible item */
     box-sizing: border-box;
     padding: 1rem;
 }
@@ -333,7 +333,7 @@ h2{
 
 @media (min-width: 768px) {
     .new-carousel-item {
-        flex: 0 0 50%; /* desktop : 2 items visibles */
+        flex: 0 0 50%; /* desktop: 2 visible items */
     }
 }
 
@@ -371,10 +371,10 @@ h2{
 
 .post-insta{
     display:grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 colonnes égales */
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
     gap: 1em;
-   // padding-left: 2em;
-    max-width: 100%; /* par exemple */
+    // padding-left: 2em;
+    max-width: 100%;
 
 }
 
@@ -390,7 +390,7 @@ h2{
 @media (max-width: 768px) {
     .post-insta{
         grid-template-columns: repeat(1, 1fr);
-       max-width: 600px; /* par exemple */
+        max-width: 600px;
     }
 
     .instagram-media {
@@ -398,6 +398,6 @@ h2{
     }
 
     .insta-overlay {
-      margin-top:2em;
+        margin-top:2em;
     }
 }

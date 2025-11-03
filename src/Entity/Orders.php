@@ -43,7 +43,7 @@ class Orders
     private ?string $deliveryMethod = null;
 
 
-    #[ORM\Column(length: 255, unique: true)] // unique:true permet de créer un index unique
+    #[ORM\Column(length: 255, unique: true)] // unique:true creates a unique index
     private ?string $reference = null;
 
 
@@ -54,7 +54,7 @@ class Orders
         $this->date = new \DateTimeImmutable();
         $this->total = 0;
         $this->status = OrderStatus::Pending;
-        $this->reference = uniqid('CMD-'); // Génère une référence unique automatiquement
+        $this->reference = uniqid('CMD-'); // Automatically generates a unique reference
 
     }
 
@@ -113,15 +113,15 @@ class Orders
         return $this;
     }
 
-    public function getArticles(): Collection  //renvoie la collection complète d’articles liés à cette commande.
+    public function getArticles(): Collection  // returns the full collection of articles linked to this order
     {
         return $this->articles;
     }
 
-    public function addArticle(Articles $article): self  // permet d’ajouter un article à la commande.
+    public function addArticle(Articles $article): self  // allows adding an article to the order
     {
-        if (!$this->articles->contains($article)) { //Vérifie si l’article est déjà dans la collection, si non, on l'ajoute
-            $this->articles[] = $article; //Ajoute l’article à la collection $articles.
+        if (!$this->articles->contains($article)) { // Checks if the article is already in the collection; if not, adds it
+            $this->articles[] = $article; // Adds the article to the $articles collection
             $article->setOrder($this);
             $this->total += $article->getPrice() * $article->getQuantity();
 
@@ -131,9 +131,9 @@ class Orders
 
     public function getTotal(): float { return $this->total; }
 
-    // getTotal() permet simplement de lire le total
-    //Le total est géré automatiquement par la logique interne (addArticle()), donc il n’a pas besoin d’être modifiable directement.
-    // donc pas de setter nécessaire
+    // getTotal() simply reads the total
+    // The total is managed automatically by the internal logic (addArticle()), so it does not need to be directly editable
+    // therefore no setter is needed
 
     public function isArchived(): bool
     {

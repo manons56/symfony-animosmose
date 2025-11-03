@@ -13,7 +13,7 @@
         <tr>
             <td>{{ article.getVariantId().getProduct.getName() }}</td>
             <td>{{ article.getQuantity() }}</td>
-            <td>{{ article.customText ?: '-' }}</td> {# Affiche le texte ou '-' si vide #}
+            <td>{{ article.customText ?: '-' }}</td> {# Displays the text or ‘-’ if empty #}
             <td>{{ article.getPrice() }} €</td>
             <td>{{ article.getPrice() * article.getQuantity() }} €</td>
         </tr>

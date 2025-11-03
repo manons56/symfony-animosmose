@@ -1,27 +1,50 @@
+/**
+ * carousel-clone.js
+ * --------------------------
+ * This script enables an "infinite scroll" effect for a carousel by duplicating
+ * all carousel items and appending the clones at the end of the track.
+ * This allows the carousel to loop seamlessly without any visible gaps.
+ *
+ * Key functionalities:
+ * 1. Selects the carousel track (the container holding all items/cards).
+ * 2. Duplicates each carousel item and appends it to the track.
+ * 3. Hides the cloned items from screen readers (aria-hidden).
+ * 4. Disables keyboard focus on cloned items to prevent navigation issues.
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Sélectionne la "piste" du carrousel (le conteneur qui contient les cartes)
+    // -----------------------------------------------------------
+    // SELECT THE CAROUSEL TRACK
+    // -----------------------------------------------------------
+    // The track is the container that holds all carousel items
     const track = document.querySelector('.carousel-track');
 
-    // Vérifie qu'il y a bien un carrousel sur la page avant de continuer
+    // Only proceed if a carousel exists on the page
     if (track) {
 
-        // Récupère toutes les cartes du carrousel sous forme de tableau
+        // -----------------------------------------------------------
+        // GET ALL CAROUSEL ITEMS
+        // -----------------------------------------------------------
+        // Convert the children NodeList into an array for easy iteration
         const items = Array.from(track.children);
 
-        // Pour chaque carte, on crée une copie identique et on l'ajoute à la suite
-        // Cela permet d'avoir deux séries de produits à la suite,
-        // créant un effet de "boucle infinie" sans coupure visible
+        // -----------------------------------------------------------
+        // DUPLICATE EACH ITEM
+        // -----------------------------------------------------------
+        // Append clones at the end to create a continuous loop effect
         items.forEach(item => {
-            const clone = item.cloneNode(true); // clone la carte
-            clone.setAttribute('aria-hidden', 'true'); // masque aux lecteurs d'écran
+            const clone = item.cloneNode(true); // Deep clone the carousel item
 
-            // Empêche le focus clavier sur les éléments dupliqués
+            // Hide cloned items from screen readers
+            clone.setAttribute('aria-hidden', 'true');
+
+            // Prevent keyboard focus on cloned elements to avoid confusion
             clone.querySelectorAll('a, button, input').forEach(el => {
                 el.setAttribute('tabindex', '-1');
             });
 
+            // Append the clone to the end of the track
             track.appendChild(clone);
         });
     }
 });
-

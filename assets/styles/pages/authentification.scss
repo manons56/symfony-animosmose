@@ -1,8 +1,6 @@
 @use "../abstracts" as *;
 //@import 'normalize.css';
 
-
-
 .logo-alimosmose {
     width: 15em !important;
     padding-top: 2em;
@@ -33,11 +31,11 @@ body {
 }
 
 .form-row {
-    margin: 2.5em 0; /* garde l'espacement initial entre les champs */
+    margin: 2.5em 0; /* keep the initial spacing between fields */
 }
 
 .form-row div {
-    padding-bottom: 0.3em; /* ajusté pour ne pas augmenter l'espace global */
+    padding-bottom: 0.3em; /* adjusted to not increase overall space */
 }
 
 .form-row p {
@@ -65,13 +63,13 @@ input[type="email"],
 input[type="password"],
 select {
     width: 100%;
-    padding: 0.7em 1em; /* padding inchangé pour garder la hauteur du champ */
+    padding: 0.7em 1em; /* padding unchanged to keep field height */
     border: 1.2px solid #ccc;
     background: transparent;
     transition: border-color 0.3s ease;
 }
 
-/* Focus visible pour utilisateurs clavier */
+/* Visible focus for keyboard users */
 input:focus-visible,
 select:focus-visible,
 button:focus-visible {
@@ -81,9 +79,9 @@ button:focus-visible {
 
 button[type="submit"] {
     font-weight: 600;
-    padding: 0.85em; /* padding réduit pour éviter trop d'espace */
-    margin-top: 0.5em; /* petit espace au-dessus du bouton */
-    margin-bottom: 0.5em; /* petit espace en dessous */
+    padding: 0.85em; /* reduced padding to avoid too much space */
+    margin-top: 0.5em; /* small space above button */
+    margin-bottom: 0.5em; /* small space below button */
     width: 100%;
     border: none;
     border-radius: 8px;
@@ -95,7 +93,7 @@ button[type="submit"] {
     margin-top: 0.3em;
 }
 
-/* Champ caché */
+/* Hidden field */
 input[type="hidden"] {
     display: none;
 }

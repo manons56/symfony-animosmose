@@ -97,14 +97,14 @@ class ContactType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('website', HiddenType::class, [ // Honeypot invisible
+            ->add('website', HiddenType::class, [ // Invisible honeypot
                 'attr' => ['style' => 'display:none;'],
                 'mapped' => false,
                 'required' => false,
             ])
             ->add('consent', CheckboxType::class, [
                 'label' => 'J’accepte que mes données soient utilisées pour être recontacté(e).',
-                'mapped' => false, // n’est pas lié à une propriété de l’entité
+                'mapped' => false, // not linked to an entity property
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepter le traitement de vos données pour envoyer le formulaire.',
@@ -116,7 +116,7 @@ class ContactType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => null, // le formulaire n'est pas lié à une entité
+            'data_class' => null, // the form is not linked to an entity
         ]);
     }
 }

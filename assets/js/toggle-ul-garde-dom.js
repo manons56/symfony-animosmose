@@ -1,18 +1,21 @@
-// Sélectionne tous les éléments <p> du document
-// (on suppose que chaque <p> agit comme un "titre" cliquable)
+//On the dog pension page, in the home care section, there are toggles to view more information.
+// This JS is used to open or close these toggles, to view or hide additional information.
+
+// Selects all <p> elements in the document
+// (we assume each <p> acts as a clickable "title")
 const titles = document.querySelectorAll("p");
 
-// Parcourt chaque <p> sélectionné
+// Loops through each selected <p>
 titles.forEach((title) => {
-    // Ajoute un écouteur d'événement sur le clic pour chaque <p>
+    // Adds a click event listener to each <p>
     title.addEventListener("click", () => {
-        // Récupère l’élément suivant dans le DOM
+        // Gets the next element in the DOM
         const nextList = title.nextElementSibling;
 
-        // Vérifie si cet élément existe ET si c’est bien une liste <ul>
+        // Checks if this element exists AND if it’s a <ul> list
         if (nextList && nextList.tagName === "UL") {
-            // Bascule la classe "visible" sur cette liste
-            // → si elle est présente, elle est retirée ; sinon, elle est ajoutée
+            // Toggles the "visible" class on this list
+            // → if it’s present, it’s removed; otherwise, it’s added
             nextList.classList.toggle("visible");
         }
     });

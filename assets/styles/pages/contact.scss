@@ -22,7 +22,7 @@
 }
 
 .whatsapp {
-   padding-right:0.5em;
+    padding-right:0.5em;
     padding-bottom: 1em;
 
 }
@@ -41,7 +41,7 @@
 }
 
 .space-p p:last-of-type {
-   margin-bottom: 4em;
+    margin-bottom: 4em;
 }
 
 
@@ -64,7 +64,7 @@ a:focus-visible {
 
 .input:focus {
     outline: none;
-    border-color: #9aa584; /* couleur accent */
+    border-color: #9aa584; /* accent color */
 }
 
 .textarea {
@@ -89,7 +89,7 @@ a:focus-visible {
 }
 
 
-/* Chaque champ occupe 100% largeur du conteneur */
+/* Each field occupies 100% width of the container */
 .field {
     margin-bottom: 1.5em;
     width: 100%;
@@ -109,7 +109,7 @@ a:focus-visible {
 
 
 .form-container {
-    max-width: 600px; /* largeur max pour desktop */
+    max-width: 600px; /* max width for desktop */
     margin: 0 auto;
     padding: 2em 1em;
 }
@@ -156,7 +156,7 @@ button[type="submit"] {
 
 input[type="checkbox"] {
     margin-left: 0.5em;
-    vertical-align: middle; /* aligne mieux avec le texte */
+    vertical-align: middle; /* better aligns with the text */
 }
 
 
@@ -167,8 +167,8 @@ input[type="checkbox"] {
     }
 
     .google-map {
-        width: 100%; /* Pour forcer la map à 100% de la largeur de son conteneur */
-        height: 300px; /* réduire la hauteur sur mobile */
+        width: 100%; /* Forces the map to 100% of its container width */
+        height: 300px; /* reduce height on mobile */
         margin: 1.5em 0;
     }
 

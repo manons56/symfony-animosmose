@@ -1,7 +1,7 @@
 @use "../abstracts" as *;
 //@import 'normalize.css';
 
-//modal prix
+// price modal
 
 .content-wrapper {
     transition: filter 0.3s ease-in-out;
@@ -11,7 +11,7 @@
 
 .content-wrapper.blurred {
     filter: blur(4px);
-    pointer-events: none; /* Désactive les clics sur l'arrière-plan */
+    pointer-events: none; /* Disables clicks on the background */
 }
 
 .modal {
@@ -29,9 +29,9 @@
     z-index: 20;
     pointer-events: none;
     width: 80%;
-    max-width: 800px; /* limite la largeur sur grand écran */
-    max-height: 90vh; /* limite la hauteur visible à 90% de l’écran */
-    overflow-y: auto; /* permet le scroll vertical à l’intérieur */
+    max-width: 800px; /* limits width on large screens */
+    max-height: 90vh; /* limits visible height to 90% of the screen */
+    overflow-y: auto; /* allows vertical scroll inside */
 }
 
 .modal.active {
@@ -100,7 +100,7 @@
 
 .tarif-item {
     display: flex;
-    align-items: center; /* prix aligné avec la première ligne */
+    align-items: center; /* price aligned with the first line */
     justify-content: space-between;
     padding: 1em 0;
     border-bottom: 1px solid rgba(0,0,0,0.1);
@@ -110,7 +110,7 @@
 
 .description-wrapper {
     display: flex;
-    flex-direction: column; /* ligne secondaire en dessous */
+    flex-direction: column; /* secondary line below */
 }
 
 
@@ -122,7 +122,7 @@
 .tarif-item .dots {
     flex: 1;
     border-bottom: 1px dotted #888;
-    margin: 0 1em; /* espace entre description et prix */
+    margin: 0 1em; /* space between description and price */
 }
 
 
@@ -191,7 +191,7 @@ button, .button{
     font-size:1.4rem;
 }
 
-//liste dépliables garde à domicile
+// collapsible list for home care
 .garde-dom p {
     font-weight: bold;
     cursor: pointer;
@@ -218,7 +218,7 @@ button, .button{
 
 .garde-dom ul {
     //margin-left: 10px;
-    display: none; /* caché par défaut */
+    display: none; /* hidden by default */
 }
 
 .garde-dom ul.visible {
@@ -234,7 +234,7 @@ button, .button{
 }
 
 .video-container{
-   text-align: center;
+    text-align: center;
 }
 
 .text-videopension-flex{
@@ -247,13 +247,13 @@ button, .button{
 @media (max-width: 768px) {
     .tarif-item {
         flex-direction: column;
-        align-items: center; /* centre tous les éléments horizontalement */
-        text-align: center; /* centre le texte dans les spans */
+        align-items: center; /* horizontally centers all elements */
+        text-align: center; /* centers text in spans */
     }
 
     .tarif-item .description-wrapper {
         width:100%;
-        text-align: center; /* pour les lignes secondaires */
+        text-align: center; /* for secondary lines */
     }
 
     .tarif-item .description,

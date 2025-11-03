@@ -32,8 +32,7 @@
     justify-content:center;
     gap: 2em;
     margin: 1em auto;
-    padding: 3em 0
-
+    padding: 3em 0;
 }
 
 
@@ -81,7 +80,7 @@
 @media (max-width: 768px) {
     .section-flex {
         flex-direction: column;
-        gap: 1.5em; /* moins d'espace vertical */
+        gap: 1.5em;
         padding: 2em 1em;
     }
 

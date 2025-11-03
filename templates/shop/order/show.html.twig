@@ -98,8 +98,8 @@
         <div id="relay-info" class="mt-3"></div>
     </div>
 
-    {# Ce bloc sert à afficher la liste de méthodes de livraison sous forme de boutons radio ou de cases à cocher,
-     avec des données supplémentaires (prix et description) associées à chaque option. #}
+    {# This block is used to display the list of delivery methods as radio buttons or checkboxes,
+     with additional data (price and description) associated with each option. #}
     <div class="delivery-methods">
         {% for child in form.delivery_method %}
             {% set key = child.vars.value %}
@@ -134,13 +134,13 @@
 
 
 
-    {# Bouton Payline – Mondial Relay seulement #}
-    {# Bouton Payline – toujours présent mais masqué par défaut #}
+    {# Payline button – Mondial Relay only #}
+    {# Payline button – always present but hidden by default #}
     <button type="button" name="payline" class="btn" id="payline-button" data-order-id="{{ order.id }}" style="display:none;">
        Payer avec Payline
     </button>
 
-    <!-- Champs cachés pour stocker les infos du relais -->
+    <!-- Hidden fields for storing relay information -->
     <input type="hidden" name="relay_name" id="relay_name">
     <input type="hidden" name="relay_address" id="relay_address">
     <input type="hidden" name="relay_cp" id="relay_cp">

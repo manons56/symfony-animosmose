@@ -280,10 +280,10 @@ class Products
         return $this;
     }
 
-    // ---------- Champ temporaire pour EasyAdmin ----------
+    // ---------- Temporary field for EasyAdmin ----------
 
     /**
-     * Champ temporaire pour la catégorie principale (non mappé)
+     * Temporary field for the main category (unmapped)
      *
      * @var int|null
      */
