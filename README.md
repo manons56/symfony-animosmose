@@ -7,14 +7,16 @@ This guide will walk you step by step through the installation and configuration
 
 ## Prerequisites
 
-Before starting, make sure you have the following installed on your machine:
+### Before starting
 
-* **PHP ≥ 8.3** (included with MAMP/WAMP)
-* **Composer** (PHP dependency manager)
-* **MAMP** (macOS) or **WAMP** (Windows)
-* **Node.js** and **npm**
-* **Git** (to clone the repository)
-* *(optional)* **FileZilla** (for FTP deployment)
+Make sure you have the following installed on your machine:
+
+* **PHP ≥ 8.2** (recommended: 8.3 — included with MAMP)
+* **Composer** — PHP dependency manager
+* **Node.js** and **npm** — for front-end assets
+* **Git** — to clone the repository
+* **MAMP** — used only for the **MySQL database**
+* *(optional)* **FileZilla** — for deployment
 
 ---
 
@@ -42,14 +44,37 @@ git clone https://github.com/manons56/symfony-animosmose.git
 
 ### 2. Local server configuration
 
-1. Launch **MAMP** (macOS) or **WAMP** (Windows).
-2. Ensure **Apache** and **MySQL** are running.
-3. Note the **Apache port** (often `8888` on macOS MAMP, `80` on WAMP).
-4. The application will be accessible at:
+1. Make sure all dependencies are installed:
+   ```bash
+   composer install
+   npm install
+   ```
+   
+2. Launch MAMP to start the MySQL database server.
 
-   * macOS MAMP: `http://localhost:8888/symfony-animosmose/public`
-   * Windows WAMP: `http://localhost/symfony-animosmose/public`
+💡 By default, MySQL runs on port 8889 in MAMP.
+You can check or change this in MAMP → Preferences → Ports.
 
+3. Start the Symfony built-in web server:
+    ```bash
+    symfony serve
+    ```
+
+4. Once started, the terminal will display a local URL, for example:
+
+    Web server listening on http://127.0.0.1:8005
+
+
+5. Open this URL in your browser to access the application:
+
+    http://127.0.0.1:8005/home
+
+    
+    💡 If the port 8005 is already in use, Symfony may automatically pick another one (e.g. 8000).
+    You can manually specify a port with:
+    ```bash
+    symfony serve --port=8005
+    ```
 ---
 
 ### 3. Create the `.env.local` file
@@ -67,13 +92,13 @@ Then update the database configuration according to your settings:
 * **MAMP macOS**:
 
 ```env
-DATABASE_URL="mysql://root:root@127.0.0.1:8889/bungalow_tropic"
+DATABASE_URL="mysql://root:root@localhost/symfony-animosmose?unix_socket=/Applications/MAMP/tmp/mysql/mysql.sock&serverVersion=5.7&charset=utf8mb4"
 ```
 
 * **WAMP Windows**:
 
 ```env
-DATABASE_URL="mysql://root:@127.0.0.1:3306/bungalow_tropic"
+DATABASE_URL="mysql://root:@127.0.0.1:3306/symfony-animosmose"
 ```
 
 > By default:
@@ -85,25 +110,26 @@ DATABASE_URL="mysql://root:@127.0.0.1:3306/bungalow_tropic"
 
 ### 4. Database configuration
 
-1. Open **phpMyAdmin**:
+1. Open **phpMyAdmin** to verify that MySQL is running:
+   * **MAMP (macOS)** → [http://localhost:8888/phpMyAdmin](http://localhost:8888/phpMyAdmin)
+   * **WAMP (Windows)** → [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
 
-   * MAMP macOS: [http://localhost:8888/phpMyAdmin](http://localhost:8888/phpMyAdmin)
-   * WAMP Windows: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
-2. Create a new database (e.g., `bungalow_tropic`).
-3. Import the provided SQL file (if available) or run:
+2. Create a new empty database named: symfony-animosmose
 
+
+
+3. In your terminal, generate the database and its schema using Doctrine:
 ```bash
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
 
----
+💡 If no SQL file is provided, these commands will automatically create all the necessary tables from your Doctrine entities and migration files.
 
 ### 5. Install PHP dependencies
 
 ```bash
 composer install
-composer update
 ```
 
 ---
@@ -121,19 +147,39 @@ npm run build
 
 ##  Running the project
 
-* MAMP macOS: [http://localhost:8888/bungalow-tropicolor/public](http://localhost:8888/bungalow-tropicolor/public)
-* WAMP Windows: [http://localhost/bungalow-tropicolor/public](http://localhost/bungalow-tropicolor/public)
+Start the Symfony built-in web server:
+
+```bash
+symfony serve
+```
+
+Once the server is running, open the URL displayed in the terminal.
+For example:
+
+http://127.0.0.1:8005/home
+
+💡 If the port 8005 is already in use, Symfony may automatically choose another one (e.g. 8000).
+You can manually specify it with:
+
+```bash
+symfony serve --port=8005
+```
+Make sur MAMP is running in the background to provide the MySQL database connection.
 
 ---
 
-##  Troubleshooting (Common issues)
 
-| Problem                       | Possible cause                  | Solution                                     |
-| ----------------------------- | ------------------------------- | -------------------------------------------- |
-| **500 error / blank page**    | Incorrect `.env.local` config   | Check the database and environment variables |
-| **Database connection error** | Wrong credentials or MySQL port | Check the credentials for MAMP/WAMP          |
-| **Composer error**            | Outdated Composer               | `composer self-update`                       |
-| **npm error**                 | Corrupted files                 | `rm -rf node_modules && npm install`         |
+## Troubleshooting (Common issues)
+
+|           Problem          |           Possible cause             |               Solution               |
+|----------------------------|--------------------------------------|--------------------------------------|
+| **500 error / blank page** | Incorrect `.env.local` configuration | Check your database credentials and environment variables.                                                                         Make sure `.env.local` matches your local setup. |
+| **Database connection error** | Wrong credentials or MySQL port | Verify the MySQL port in **MAMP → Preferences → Ports** (default: `8889`) and update `.env.local` if needed. |
+| **Composer error** | Outdated Composer version | Run `composer self-update`, then retry `composer install`. |
+| **npm error** | Corrupted or missing `node_modules` | Delete the folder and reinstall dependencies: `rm -rf node_modules && npm install`. |
+| **Port already in use** | Another local server is running on the same port | Stop other servers (MAMP, PHP, etc.) or start Symfony on a different port: `symfony serve --port=8005`. |
+| **.env.local not loaded** | File missing or misnamed | Ensure you created the `.env.local` file (copied from `.env`) and that it’s located at the project root. |
+
 
 ---
 
@@ -147,36 +193,54 @@ npm run build
 php bin/console cache:clear --env=prod
 ```
 
-### 2. Transfer files via FTP
+2. Transfer files via FTP
+Open FileZilla and connect to your FTP server.
 
-1. Open **FileZilla** and connect to your FTP server.
-2. Transfer all project files (except `/node_modules` and `/vendor` if not needed).
-3. Check permissions:
+Upload all project files except:
 
-   * Folders → `755`
-   * Files → `644`
-4. Ensure the **DocumentRoot** points to the `/public` folder.
+- /node_modules
 
----
+- /vendor (can be reinstalled on the server via Composer if available)
 
-## Quick summary
+Check file permissions:
 
-| Step                     | Command / Action               |
-| ------------------------ | ------------------------------ |
-| Clone the project        | `git clone ...`                |
-| Install PHP dependencies | `composer install`             |
-| Install JS dependencies  | `npm install && npm run build` |
-| Configure the database   | `.env.local` + migrations      |
-| Run the server           | URL depending on MAMP/WAMP     |
+- Folders → 755
 
----
+- Files → 644
 
-## Useful tips
+Ensure that the DocumentRoot (or “root directory” on your hosting) points to the /public folder.
 
-* Clear cache: `php bin/console cache:clear`
-* Create a Doctrine entity: `php bin/console make:entity`
-* Symfony internal server (alternative to MAMP/WAMP): `symfony serve`
+💡 Example: if your domain is https://www.animosmose.com,
+your server should serve files from /public, not the project root.
 
+Quick summary
+| Step | Command / Action |
+|------|------------------|
+| **Clone the project** | `git clone <repository-url>` |
+| **Install PHP dependencies** | `composer install` |
+| **Install JS dependencies** | `npm install && npm run build` |
+| **Configure the database** | `.env.local` + `php bin/console doctrine:migrations:migrate` |
+| **Run the local server** | `symfony serve` (check the URL in your terminal) |
+
+Useful tips
+- Clear cache:
+  
+```bash
+php bin/console cache:clear
+```
+
+
+- Create a new Doctrine entity:
+
+```bash
+php bin/console make:entity
+```
+
+- Start Symfony’s internal server (alternative to MAMP/WAMP):
+
+```bash
+symfony serve
+```
 ---
 
 **Author:** Animosmose Team
